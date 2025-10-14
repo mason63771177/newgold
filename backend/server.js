@@ -88,7 +88,12 @@ if (isProduction) {
 // CORS配置 - 优先处理OPTIONS请求
 app.options('*', (req, res) => {
     const allowedOrigins = isProduction 
-        ? ['https://mason63771177.github.io', 'https://mason63771177.github.io/newgold']
+        ? [
+            'https://mason63771177.github.io', 
+            'https://mason63771177.github.io/newgold',
+            'https://mason1236.github.io',
+            'https://mason1236.github.io/lijin7-h5'
+          ]
         : ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8001', 'http://127.0.0.1:8001', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:8080', 'http://127.0.0.1:8080'];
     
     const origin = req.headers.origin;
@@ -107,7 +112,12 @@ app.options('*', (req, res) => {
 app.use(cors({
     origin: function (origin, callback) {
         const allowedOrigins = isProduction 
-            ? ['https://mason63771177.github.io', 'https://mason63771177.github.io/newgold']
+            ? [
+                'https://mason63771177.github.io', 
+                'https://mason63771177.github.io/newgold',
+                'https://mason1236.github.io',
+                'https://mason1236.github.io/lijin7-h5'
+              ]
             : ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8001', 'http://127.0.0.1:8001', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:8080', 'http://127.0.0.1:8080'];
         
         // 允许没有origin的请求（如Postman）

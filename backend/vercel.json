@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "functions": {
-    "server.js": {
-      "includeFiles": "**"
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
     }
-  },
+  ],
   "routes": [
     {
       "src": "/api/(.*)",
