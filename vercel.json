@@ -10,33 +10,6 @@
       "destination": "/backend/server.js"
     }
   ],
-  "headers": [
-    {
-      "source": "/(.*\\.css)",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "text/css"
-        }
-      ]
-    },
-    {
-      "source": "/(.*\\.js)",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript"
-        }
-      ]
-    },
-    {
-      "source": "/(.*\\.html)",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "text/html"
-        }
-      ]
-    }
-  ]
+  "trailingSlash": false,
+  "cleanUrls": false
 }
