@@ -13,8 +13,8 @@ export default defineConfig({
   // 根目录
   root: '.',
   
-  // 公共基础路径
-  base: './',
+  // 公共基础路径 - GitHub Pages需要使用仓库名作为base
+  base: process.env.NODE_ENV === 'production' ? '/newgold/' : './',
   
   // 开发服务器配置
   server: {
