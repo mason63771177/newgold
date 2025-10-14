@@ -1,0 +1,70 @@
+{
+  "version": "1.0.0",
+  "created_at": "2025-10-12T00:57:26.124Z",
+  "description": "密钥管理系统访问配置",
+  "setup_type": "automated",
+  "usage": {
+    "initialization": {
+      "code": "const kms = new KeyManagementSystem(); await kms.initialize();",
+      "description": "初始化密钥管理系统"
+    },
+    "get_master_mnemonic": {
+      "code": "const mnemonic = await kms.getMasterMnemonic(masterPassword);",
+      "description": "获取主钱包助记词"
+    },
+    "get_api_key": {
+      "code": "const apiKey = await kms.getKey(kms.keyTypes.TATUM_API_KEY, masterPassword);",
+      "description": "获取 Tatum API 密钥"
+    },
+    "get_db_password": {
+      "code": "const dbPassword = await kms.getKey(kms.keyTypes.DATABASE_PASSWORD, masterPassword);",
+      "description": "获取数据库密码"
+    }
+  },
+  "key_types": {
+    "MASTER_MNEMONIC": "master_mnemonic",
+    "TATUM_API_KEY": "tatum_api_key",
+    "DATABASE_PASSWORD": "database_password",
+    "REDIS_PASSWORD": "redis_password",
+    "JWT_SECRET": "jwt_secret",
+    "WEBHOOK_SECRET": "webhook_secret"
+  },
+  "security_recommendations": [
+    "主密码必须安全保存，不得泄露",
+    "密钥访问会被记录和审计",
+    "建议定期轮换密钥（90天）",
+    "生产环境中应使用硬件安全模块(HSM)",
+    "定期备份加密文件到安全位置",
+    "监控访问日志，发现异常及时处理"
+  ],
+  "migration_guide": {
+    "from_env_vars": {
+      "before": "const apiKey = process.env.TATUM_API_KEY;",
+      "after": "const apiKey = await kms.getKey(kms.keyTypes.TATUM_API_KEY, masterPassword);",
+      "description": "从环境变量迁移到密钥管理系统"
+    },
+    "from_files": {
+      "before": "const mnemonic = fs.readFileSync(\"mnemonic.txt\", \"utf8\");",
+      "after": "const mnemonic = await kms.getMasterMnemonic(masterPassword);",
+      "description": "从文件读取迁移到安全存储"
+    }
+  },
+  "integration_examples": {
+    "tatum_service": {
+      "file": "tatumWalletService.js",
+      "changes": [
+        "导入 KeyManagementSystem",
+        "在构造函数中初始化 KMS",
+        "使用 kms.getMasterMnemonic() 替代环境变量"
+      ]
+    },
+    "user_wallet_service": {
+      "file": "userWalletAddressService.js",
+      "changes": [
+        "导入 KeyManagementSystem",
+        "使用 KMS 获取主钱包信息",
+        "实现安全的密钥缓存机制"
+      ]
+    }
+  }
+}

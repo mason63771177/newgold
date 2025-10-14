@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>检查Token</title>
+</head>
+<body>
+    <h1>检查localStorage中的Token</h1>
+    <div id="result"></div>
+    
+    <script>
+        const token = localStorage.getItem('token');
+        const authToken = localStorage.getItem('authToken');
+        const userEmail = localStorage.getItem('userEmail');
+        
+        document.getElementById('result').innerHTML = `
+            <p><strong>token:</strong> ${token || '未设置'}</p>
+            <p><strong>authToken:</strong> ${authToken || '未设置'}</p>
+            <p><strong>userEmail:</strong> ${userEmail || '未设置'}</p>
+        `;
+        
+        console.log('token:', token);
+        console.log('authToken:', authToken);
+        console.log('userEmail:', userEmail);
+    </script>
+</body>
+</html>

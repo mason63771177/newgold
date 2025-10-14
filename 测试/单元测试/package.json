@@ -1,0 +1,33 @@
+{
+  "name": "h5-unit-tests",
+  "version": "1.0.0",
+  "description": "H5项目单元测试",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --watchAll=false"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/dom": "^9.3.3",
+    "@testing-library/user-event": "^14.5.1"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
+    "testMatch": [
+      "**/__tests__/**/*.js",
+      "**/?(*.)+(spec|test).js"
+    ],
+    "collectCoverageFrom": [
+      "../../js/**/*.js",
+      "../../*.html",
+      "!**/node_modules/**"
+    ],
+    "coverageDirectory": "../coverage",
+    "coverageReporters": ["text", "lcov", "html"]
+  }
+}

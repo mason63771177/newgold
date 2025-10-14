@@ -1,0 +1,12 @@
+{
+  "testTime": "2025-10-04T02:19:45.179Z",
+  "userId": 21,
+  "depositAddress": "TYeVe8dn6NEZYwUiu7GmFpF8jsP8uMTrNZ",
+  "txHash": "0x199ad049e79d11f0d73",
+  "depositAmount": 100,
+  "initialBalance": 0,
+  "finalBalance": 100,
+  "expectedBalance": 100,
+  "verificationPassed": true,
+  "success": true
+}

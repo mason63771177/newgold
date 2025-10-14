@@ -1,0 +1,34 @@
+{
+  "timestamp": "2025-10-04T03:55:14.869Z",
+  "summary": {
+    "status": "good",
+    "totalIssues": 0,
+    "criticalIssues": 0
+  },
+  "performance": {
+    "status": "good",
+    "metrics": {
+      "avg": 0.6,
+      "max": 1,
+      "min": 0,
+      "p95": 1
+    },
+    "slowRequests": 0,
+    "verySlowRequests": 0,
+    "details": []
+  },
+  "resources": null,
+  "recommendations": [
+    {
+      "category": "通用优化",
+      "priority": "low",
+      "items": [
+        "启用 HTTP/2 提高传输效率",
+        "使用 CDN 加速静态资源",
+        "实施代码分割和懒加载",
+        "优化图片和静态资源",
+        "启用浏览器缓存策略"
+      ]
+    }
+  ]
+}

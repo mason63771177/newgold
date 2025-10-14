@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-10-04T04:02:11.775Z",
+  "summary": {
+    "totalPackages": 5,
+    "installedPackages": 0,
+    "failedPackages": 0
+  },
+  "installedPackages": [],
+  "failedPackages": [],
+  "requiredPackages": [
+    "blessed",
+    "blessed-contrib",
+    "cli-table3",
+    "chalk",
+    "commander"
+  ]
+}

@@ -1,0 +1,330 @@
+<!-- 系统设置页面 -->
+<div class="settings-page">
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-cog"></i>
+            系统设置
+        </h1>
+        <p class="page-description">管理系统配置和参数</p>
+    </div>
+
+    <!-- 设置导航 -->
+    <div class="settings-nav">
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="general">
+                <i class="fas fa-sliders-h"></i>
+                常规设置
+            </button>
+            <button class="nav-tab" data-tab="security">
+                <i class="fas fa-shield-alt"></i>
+                安全设置
+            </button>
+            <button class="nav-tab" data-tab="notification">
+                <i class="fas fa-bell"></i>
+                通知设置
+            </button>
+            <button class="nav-tab" data-tab="backup">
+                <i class="fas fa-database"></i>
+                备份设置
+            </button>
+        </div>
+    </div>
+
+    <!-- 常规设置 -->
+    <div class="settings-content" id="general-settings">
+        <div class="settings-section">
+            <div class="section-header">
+                <h3>基本配置</h3>
+                <p>系统基本参数设置</p>
+            </div>
+            <div class="settings-form">
+                <div class="form-group">
+                    <label for="system-name">系统名称</label>
+                    <input type="text" id="system-name" value="管理系统" class="form-input">
+                    <small class="form-help">显示在页面标题和导航中的系统名称</small>
+                </div>
+                <div class="form-group">
+                    <label for="system-version">系统版本</label>
+                    <input type="text" id="system-version" value="1.0.0" class="form-input" readonly>
+                    <small class="form-help">当前系统版本号</small>
+                </div>
+                <div class="form-group">
+                    <label for="timezone">时区设置</label>
+                    <select id="timezone" class="form-select">
+                        <option value="Asia/Shanghai" selected>Asia/Shanghai (UTC+8)</option>
+                        <option value="UTC">UTC (UTC+0)</option>
+                        <option value="America/New_York">America/New_York (UTC-5)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="language">默认语言</label>
+                    <select id="language" class="form-select">
+                        <option value="zh-CN" selected>简体中文</option>
+                        <option value="en-US">English</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header">
+                <h3>业务配置</h3>
+                <p>业务相关参数设置</p>
+            </div>
+            <div class="settings-form">
+                <div class="form-group">
+                    <label for="min-withdraw">最小提现金额 (USDT)</label>
+                    <input type="number" id="min-withdraw" value="10" class="form-input" min="1" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="max-withdraw">最大提现金额 (USDT)</label>
+                    <input type="number" id="max-withdraw" value="10000" class="form-input" min="1" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="withdraw-fee">提现手续费率 (%)</label>
+                    <input type="number" id="withdraw-fee" value="0.5" class="form-input" min="0" max="100" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="auto-approve" checked>
+                        <span class="checkmark"></span>
+                        自动审批小额提现
+                    </label>
+                    <small class="form-help">小于100 USDT的提现申请自动审批</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 安全设置 -->
+    <div class="settings-content" id="security-settings" style="display: none;">
+        <div class="settings-section">
+            <div class="section-header">
+                <h3>登录安全</h3>
+                <p>管理员登录相关安全设置</p>
+            </div>
+            <div class="settings-form">
+                <div class="form-group">
+                    <label for="session-timeout">会话超时时间 (分钟)</label>
+                    <input type="number" id="session-timeout" value="30" class="form-input" min="5" max="480">
+                </div>
+                <div class="form-group">
+                    <label for="max-login-attempts">最大登录尝试次数</label>
+                    <input type="number" id="max-login-attempts" value="5" class="form-input" min="3" max="10">
+                </div>
+                <div class="form-group">
+                    <label for="lockout-duration">锁定时长 (分钟)</label>
+                    <input type="number" id="lockout-duration" value="15" class="form-input" min="5" max="60">
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="require-2fa" checked>
+                        <span class="checkmark"></span>
+                        强制启用双因素认证
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="ip-whitelist">
+                        <span class="checkmark"></span>
+                        启用IP白名单
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header">
+                <h3>API安全</h3>
+                <p>API接口安全配置</p>
+            </div>
+            <div class="settings-form">
+                <div class="form-group">
+                    <label for="api-rate-limit">API请求频率限制 (次/分钟)</label>
+                    <input type="number" id="api-rate-limit" value="100" class="form-input" min="10" max="1000">
+                </div>
+                <div class="form-group">
+                    <label for="api-key-expiry">API密钥有效期 (天)</label>
+                    <input type="number" id="api-key-expiry" value="90" class="form-input" min="1" max="365">
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="api-logging" checked>
+                        <span class="checkmark"></span>
+                        记录API访问日志
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知设置 -->
+    <div class="settings-content" id="notification-settings" style="display: none;">
+        <div class="settings-section">
+            <div class="section-header">
+                <h3>邮件通知</h3>
+                <p>系统邮件通知配置</p>
+            </div>
+            <div class="settings-form">
+                <div class="form-group">
+                    <label for="smtp-server">SMTP服务器</label>
+                    <input type="text" id="smtp-server" value="smtp.gmail.com" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="smtp-port">SMTP端口</label>
+                    <input type="number" id="smtp-port" value="587" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="smtp-username">SMTP用户名</label>
+                    <input type="email" id="smtp-username" placeholder="your-email@gmail.com" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="smtp-password">SMTP密码</label>
+                    <input type="password" id="smtp-password" placeholder="应用专用密码" class="form-input">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-secondary" id="test-email">
+                        <i class="fas fa-paper-plane"></i>
+                        发送测试邮件
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header">
+                <h3>通知规则</h3>
+                <p>配置何时发送通知</p>
+            </div>
+            <div class="settings-form">
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="notify-new-user" checked>
+                        <span class="checkmark"></span>
+                        新用户注册通知
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="notify-large-transaction" checked>
+                        <span class="checkmark"></span>
+                        大额交易通知 (>1000 USDT)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="notify-withdraw-request" checked>
+                        <span class="checkmark"></span>
+                        提现申请通知
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="notify-system-error">
+                        <span class="checkmark"></span>
+                        系统错误通知
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 备份设置 -->
+    <div class="settings-content" id="backup-settings" style="display: none;">
+        <div class="settings-section">
+            <div class="section-header">
+                <h3>自动备份</h3>
+                <p>数据库自动备份配置</p>
+            </div>
+            <div class="settings-form">
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="auto-backup" checked>
+                        <span class="checkmark"></span>
+                        启用自动备份
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="backup-frequency">备份频率</label>
+                    <select id="backup-frequency" class="form-select">
+                        <option value="daily" selected>每日</option>
+                        <option value="weekly">每周</option>
+                        <option value="monthly">每月</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="backup-time">备份时间</label>
+                    <input type="time" id="backup-time" value="02:00" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="backup-retention">保留天数</label>
+                    <input type="number" id="backup-retention" value="30" class="form-input" min="1" max="365">
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header">
+                <h3>手动备份</h3>
+                <p>立即创建数据备份</p>
+            </div>
+            <div class="backup-actions">
+                <button class="btn btn-primary" id="create-backup">
+                    <i class="fas fa-download"></i>
+                    创建备份
+                </button>
+                <button class="btn btn-secondary" id="restore-backup">
+                    <i class="fas fa-upload"></i>
+                    恢复备份
+                </button>
+            </div>
+            
+            <div class="backup-list">
+                <h4>备份历史</h4>
+                <div class="backup-item">
+                    <div class="backup-info">
+                        <div class="backup-name">backup_2024-01-20_02-00.sql</div>
+                        <div class="backup-date">2024-01-20 02:00:15</div>
+                        <div class="backup-size">15.2 MB</div>
+                    </div>
+                    <div class="backup-actions">
+                        <button class="btn-icon" title="下载">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="btn-icon" title="删除">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="backup-item">
+                    <div class="backup-info">
+                        <div class="backup-name">backup_2024-01-19_02-00.sql</div>
+                        <div class="backup-date">2024-01-19 02:00:12</div>
+                        <div class="backup-size">14.8 MB</div>
+                    </div>
+                    <div class="backup-actions">
+                        <button class="btn-icon" title="下载">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="btn-icon" title="删除">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 保存按钮 -->
+    <div class="settings-footer">
+        <button class="btn btn-primary" id="save-settings">
+            <i class="fas fa-save"></i>
+            保存设置
+        </button>
+        <button class="btn btn-secondary" id="reset-settings">
+            <i class="fas fa-undo"></i>
+            重置为默认
+        </button>
+    </div>
+</div>

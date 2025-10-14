@@ -1,0 +1,25 @@
+{
+  "id": "key_tatum_api_key_7703c0be",
+  "type": "tatum_api_key",
+  "encrypted_data": {
+    "encrypted": "hSnafiZ7wmQdeXXvWUSeGs+2Y6LFKj01PgH/IYFnwQ/+ve9H8FQM2qGnWsx+DamoQHXe7vfJJ2Eysv0l1mqTdQ==",
+    "salt": "e1yl9+77igZCwHw8vCdutXIIaSHYyVzSc4Gg84b6u/Y=",
+    "iv": "yu6mSn5k8yeFr6PzWba3iw==",
+    "algorithm": "aes-256-cbc",
+    "iterations": 100000,
+    "timestamp": "2025-10-12T00:57:26.072Z"
+  },
+  "metadata": {
+    "description": "Tatum API 密钥",
+    "source": "auto_setup",
+    "created_by": "setup_script",
+    "created_at": "2025-10-12T00:57:26.073Z",
+    "last_accessed": "2025-10-12T02:12:16.233Z",
+    "access_count": 18
+  },
+  "permissions": {
+    "read": true,
+    "write": true,
+    "delete": false
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "h5-ui-tests",
+  "version": "1.0.0",
+  "description": "H5项目UI自动化测试",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report ../报告/playwright-report",
+    "install-browsers": "playwright install",
+    "test:e2e": "node e2e-browser-test.js",
+    "test:e2e:headless": "HEADLESS=true node e2e-browser-test.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "puppeteer": "^21.5.2"
+  }
+}

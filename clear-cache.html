@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清除缓存和重置Token</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        button:hover { background: #0056b3; }
+        button.danger { background: #dc3545; }
+        button.danger:hover { background: #c82333; }
+        button.success { background: #28a745; }
+        button.success:hover { background: #218838; }
+        #tokenInfo {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 清除缓存和重置Token工具</h1>
+        
+        <div class="step">
+            <h3>步骤1: 检查当前Token状态</h3>
+            <button onclick="checkCurrentToken()">检查当前Token</button>
+            <div id="tokenInfo"></div>
+        </div>
+        
+        <div class="step">
+            <h3>步骤2: 清除所有缓存数据</h3>
+            <button class="danger" onclick="clearAllCache()">清除所有localStorage数据</button>
+            <div id="clearStatus"></div>
+        </div>
+        
+        <div class="step">
+            <h3>步骤3: 设置新的测试Token</h3>
+            <button class="success" onclick="setNewToken()">生成新的mock-token</button>
+            <div id="tokenStatus"></div>
+        </div>
+        
+        <div class="step">
+            <h3>步骤4: 验证修复效果</h3>
+            <button onclick="testWebSocket()">测试WebSocket连接</button>
+            <button onclick="goToMainPage()">返回主页面</button>
+            <div id="testStatus"></div>
+        </div>
+    </div>
+
+    <script>
+        function showStatus(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        function checkCurrentToken() {
+            const token = localStorage.getItem('token');
+            const authToken = localStorage.getItem('authToken');
+            const currentUser = localStorage.getItem('currentUser');
+            const userEmail = localStorage.getItem('userEmail');
+            
+            let info = '<strong>当前localStorage内容:</strong><br>';
+            info += `token: ${token || '未设置'}<br>`;
+            info += `authToken: ${authToken || '未设置'}<br>`;
+            info += `userEmail: ${userEmail || '未设置'}<br>`;
+            info += `currentUser: ${currentUser ? '已设置' : '未设置'}<br>`;
+            
+            document.getElementById('tokenInfo').innerHTML = info;
+            
+            if (token && token.startsWith('test-token-')) {
+                showStatus('tokenInfo', '⚠️ 发现旧格式token (test-token-)，需要清除', 'warning');
+            } else if (token && token.startsWith('mock-token-')) {
+                showStatus('tokenInfo', '✅ Token格式正确 (mock-token-)', 'success');
+            } else {
+                showStatus('tokenInfo', 'ℹ️ 未找到有效token', 'info');
+            }
+        }
+        
+        function clearAllCache() {
+            try {
+                // 清除所有localStorage数据
+                localStorage.clear();
+                
+                // 清除sessionStorage数据
+                sessionStorage.clear();
+                
+                showStatus('clearStatus', '✅ 所有缓存数据已清除', 'success');
+                
+                // 更新token信息显示
+                setTimeout(checkCurrentToken, 500);
+                
+            } catch (error) {
+                showStatus('clearStatus', `❌ 清除缓存失败: ${error.message}`, 'error');
+            }
+        }
+        
+        function setNewToken() {
+            try {
+                // 生成新的mock-token
+                const newToken = 'mock-token-' + Date.now();
+                
+                // 设置测试用户数据
+                const testUser = {
+                    id: 1,
+                    email: 'test@gold7.com',
+                    inviteCode: 'TEST001',
+                    status: 2,
+                    balance: 1000.00,
+                    teamCount: 5,
+                    activationCount: 1,
+                    countdownEndTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+                };
+                
+                // 保存到localStorage
+                localStorage.setItem('token', newToken);
+                localStorage.setItem('authToken', newToken);
+                localStorage.setItem('currentUser', JSON.stringify(testUser));
+                localStorage.setItem('userEmail', testUser.email);
+                
+                showStatus('tokenStatus', `✅ 新token已生成: ${newToken}`, 'success');
+                
+                // 更新token信息显示
+                setTimeout(checkCurrentToken, 500);
+                
+            } catch (error) {
+                showStatus('tokenStatus', `❌ 生成token失败: ${error.message}`, 'error');
+            }
+        }
+        
+        function testWebSocket() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showStatus('testStatus', '❌ 请先生成token', 'error');
+                return;
+            }
+            
+            showStatus('testStatus', '🔄 正在测试WebSocket连接...', 'info');
+            
+            try {
+                const ws = new WebSocket(`ws://localhost:3000/ws?token=${encodeURIComponent(token)}`);
+                
+                const timeout = setTimeout(() => {
+                    ws.close();
+                    showStatus('testStatus', '❌ WebSocket连接超时', 'error');
+                }, 5000);
+                
+                let connectionSuccessful = false;
+                
+                ws.onopen = function() {
+                    clearTimeout(timeout);
+                    connectionSuccessful = true;
+                    showStatus('testStatus', '✅ WebSocket连接成功！', 'success');
+                    // 延迟关闭，确保成功消息显示
+                    setTimeout(() => ws.close(), 1000);
+                };
+                
+                ws.onerror = function(error) {
+                    clearTimeout(timeout);
+                    showStatus('testStatus', `❌ WebSocket连接失败: ${error}`, 'error');
+                };
+                
+                ws.onclose = function(event) {
+                    // 只有在连接未成功建立时才显示错误
+                    if (!connectionSuccessful && event.code !== 1000) {
+                        showStatus('testStatus', `❌ WebSocket连接被拒绝 (code: ${event.code})`, 'error');
+                    }
+                };
+                
+            } catch (error) {
+                showStatus('testStatus', `❌ WebSocket测试异常: ${error.message}`, 'error');
+            }
+        }
+        
+        function goToMainPage() {
+            window.location.href = 'index.html';
+        }
+        
+        // 页面加载时自动检查token状态
+        window.onload = function() {
+            checkCurrentToken();
+        };
+    </script>
+</body>
+</html>

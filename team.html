@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>裂金7日 · 我的团队</title>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ6GQ79K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-QQ6GQ79K7G');
+  </script>
+  
+  <link rel="stylesheet" href="themes.css">
+  <link rel="stylesheet" href="css/global-background.css">
+  
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #111823;
+      --card: #0e141d;
+      --brand: #56ccf2;
+      --brand-2: #2f80ed;
+      --text: #e6efff;
+      --muted: #9fb3cd;
+      --accent-border: rgba(111, 158, 255, 0.18);
+      --safe: env(safe-area-inset-bottom, 0px);
+    }
+    html, body { margin: 0; padding: 0; height: 100vh; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; overflow: hidden; }
+    .container { height: 100vh; display: flex; flex-direction: column; }
+    .header { position: relative; flex: 0 0 15%; display: flex; align-items: center; justify-content: center; padding-top: 20px; }
+    .header h1 { font-size: 20px; font-weight: 700; background: linear-gradient(45deg, #2193b0, #6dd5ed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 12px rgba(109,213,237,0.5)) drop-shadow(0 0 24px rgba(109,213,237,0.3)); margin: 0; }
+    .logo-small {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-right: 8px;
+      filter: drop-shadow(0 0 8px rgba(109, 213, 237, 0.4)) drop-shadow(0 0 16px rgba(109, 213, 237, 0.2));
+    }
+
+    .content { flex: 1; padding: 0 16px; overflow-y: auto; overflow-x: hidden; }
+    .stats-section {
+      background: linear-gradient(180deg, rgba(15,21,32,0.85), rgba(15,21,32,0.9));
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid var(--accent-border);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 12px;
+      background: rgba(86,204,242,0.1);
+      border-radius: 12px;
+      border: 1px solid rgba(86,204,242,0.2);
+    }
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--brand);
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .invite-section {
+      background: rgba(47,128,237,0.1);
+      border-radius: 12px;
+      padding: 12px;
+      border: 1px solid rgba(47,128,237,0.2);
+    }
+    .invite-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--brand);
+    }
+    .invite-link {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(86,204,242,0.3);
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 12px;
+      word-break: break-all;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .copy-btn {
+      width: 100%;
+      padding: 8px;
+      background: linear-gradient(180deg, var(--brand), var(--brand-2));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .levels-section {
+      background: linear-gradient(180deg, rgba(15,21,32,0.85), rgba(15,21,32,0.9));
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid var(--accent-border);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+    .levels-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .level-item {
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .level-header {
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.2s ease;
+    }
+    .level-header:hover {
+      background: rgba(255,255,255,0.05);
+    }
+    .level-info {
+      flex: 1;
+    }
+    .level-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .level-stats {
+      display: flex;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .level-count {
+      color: var(--brand);
+      font-weight: 600;
+    }
+    .level-commission {
+      color: #4CAF50;
+      font-weight: 600;
+    }
+    .level-earnings {
+      color: #FFD700;
+      font-weight: 600;
+    }
+    .toggle-icon {
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 0.2s ease;
+    }
+    .level-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .level-content.active {
+      max-height: 1000px;
+      padding: 0 16px 16px;
+    }
+    .member-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .member-info {
+      flex: 1;
+    }
+    .member-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .member-stats {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .like-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .like-btn:hover {
+      background: rgba(255,255,255,0.15);
+      transform: scale(1.05);
+    }
+    .like-btn.liked {
+      background: linear-gradient(45deg, #FF6B6B, #FF8E8E);
+      border-color: #FF6B6B;
+      color: white;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .bottom { flex: 0 0 auto; padding: 14px 16px calc(24px + var(--safe)); display: flex; background: rgba(255,255,255,0.04); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.06); margin: 0 12px 12px; border-radius: 20px; }
+    .bottom button {
+      flex: 1;
+      margin: 0 6px;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 0;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.08s ease, filter 0.2s ease, box-shadow 0.2s ease;
+      background-image: linear-gradient(180deg, var(--brand), var(--brand-2));
+      box-shadow: 0 8px 24px rgba(47,128,237,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
+      white-space: nowrap;
+    }
+    .bottom button:hover { transform: translateY(-3px); filter: brightness(1.2); }
+    .bottom button:active { transform: translateY(0); filter: brightness(0.95); }
+
+    /* 高级弹窗样式 */
+    .dialog {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(8px);
+    }
+    .dialog.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .dialog .dialog-box {
+      background: var(--panel);
+      border-radius: 20px;
+      padding: 28px 32px;
+      max-width: 85%;
+      min-width: 280px;
+      color: var(--text);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--accent-border);
+      transform: scale(0.7) translateY(20px);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .dialog.show .dialog-box {
+      transform: scale(1) translateY(0);
+    }
+    .dialog .dialog-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.6s;
+    }
+    .dialog.show .dialog-box::before {
+      left: 100%;
+    }
+    .dialog .dialog-box h3 {
+      margin: 0 0 16px 0;
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .dialog .dialog-box p {
+      margin: 0 0 24px 0;
+      font-size: 16px;
+      line-height: 1.5;
+      text-align: center;
+      color: var(--muted);
+    }
+    .dialog .dialog-box p {
+      margin: 0 0 24px 0;
+      line-height: 1.6;
+      text-align: center;
+      font-size: 16px;
+      white-space: pre-line;
+    }
+    .dialog .dialog-box button {
+      background: linear-gradient(135deg, var(--btn-primary), #0066cc);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      margin: 0 6px;
+      box-shadow: 0 4px 16px rgba(0, 102, 204, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .dialog .dialog-box button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 102, 204, 0.4);
+    }
+    .dialog .dialog-box button:active {
+      transform: translateY(0);
+      color: var(--text-primary);
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--btn-shadow);
+      margin: 0 5px;
+    }
+    
+    .dialog .dialog-box .secondary-btn {
+      background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+      color: white;
+    }
+    
+    .dialog .dialog-box .danger-btn {
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+      color: white;
+    }
+    
+    #dialogButtons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <script src="js/smart-back.js"></script>
+  <div class="container">
+    <div class="header">
+
+      <img src="logo_gold7.png" alt="Logo" class="logo-small" />
+      <h1>我的团队</h1>
+    </div>
+    <div class="content">
+      <div class="stats-section">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value" id="totalMembers">0</div>
+            <div class="stat-label">团队总人数</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="directMembers">0</div>
+            <div class="stat-label">直推人数</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="teamEarnings">0.00</div>
+            <div class="stat-label">团队收益</div>
+          </div>
+        </div>
+        
+        <div class="invite-section">
+          <div class="invite-title">我的邀请链接</div>
+          <div class="invite-link" id="inviteLink">生成中...</div>
+          <button class="copy-btn" onclick="copyInviteLink()">复制链接</button>
+        </div>
+      </div>
+      
+      <div class="levels-section">
+        <div class="levels-title">团队层级</div>
+        <div id="levelsList">
+          <div class="empty-state">暂无团队成员</div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom">
+      <button onclick="smartBack()">返回</button>
+    </div>
+  </div>
+  <script>
+    const API_BASE_URL = 'http://localhost:3001';
+    
+    let teamData = {
+      totalMembers: 15,
+      directMembers: 6,
+      teamEarnings: 150.00,
+      inviteLink: '',
+      levels: [
+        {
+          level: 1,
+          name: '直推成员',
+          count: 6,
+          commission: '10 USDT',
+          earnings: 60.00,
+          members: [
+            { id: 1, name: 'User001', earnings: 10.00, likes: 3, liked: false, joinDate: '2024-01-15' },
+            { id: 2, name: 'User002', earnings: 10.00, likes: 5, liked: true, joinDate: '2024-01-16' },
+            { id: 3, name: 'User003', earnings: 10.00, likes: 2, liked: false, joinDate: '2024-01-17' },
+            { id: 4, name: 'User004', earnings: 10.00, likes: 4, liked: false, joinDate: '2024-01-18' },
+            { id: 5, name: 'User005', earnings: 10.00, likes: 1, liked: false, joinDate: '2024-01-19' },
+            { id: 6, name: 'User006', earnings: 10.00, likes: 6, liked: true, joinDate: '2024-01-20' }
+          ]
+        },
+        {
+          level: 2,
+          name: '二级成员',
+          count: 5,
+          commission: '10 USDT',
+          earnings: 50.00,
+          members: [
+            { id: 7, name: 'User007', earnings: 10.00, likes: 2, liked: false, joinDate: '2024-01-21' },
+            { id: 8, name: 'User008', earnings: 10.00, likes: 3, liked: false, joinDate: '2024-01-22' },
+            { id: 9, name: 'User009', earnings: 10.00, likes: 1, liked: false, joinDate: '2024-01-23' },
+            { id: 10, name: 'User010', earnings: 10.00, likes: 4, liked: true, joinDate: '2024-01-24' },
+            { id: 11, name: 'User011', earnings: 10.00, likes: 2, liked: false, joinDate: '2024-01-25' }
+          ]
+        },
+        {
+          level: 3,
+          name: '三级成员',
+          count: 4,
+          commission: '10 USDT',
+          earnings: 40.00,
+          members: [
+            { id: 12, name: 'User012', earnings: 10.00, likes: 1, liked: false, joinDate: '2024-01-26' },
+            { id: 13, name: 'User013', earnings: 10.00, likes: 2, liked: false, joinDate: '2024-01-27' },
+            { id: 14, name: 'User014', earnings: 10.00, likes: 3, liked: true, joinDate: '2024-01-28' },
+            { id: 15, name: 'User015', earnings: 10.00, likes: 1, liked: false, joinDate: '2024-01-29' }
+          ]
+        }
+      ]
+    };
+    
+    // 从后端API加载团队数据
+    async function loadTeamData() {
+      try {
+        const userId = localStorage.getItem('userId') || 'default';
+        
+        // 确保默认数据完整，包含中文内容
+        if (!teamData.inviteLink) {
+          teamData.inviteLink = generateInviteLink();
+        }
+        
+        // 立即显示默认数据，确保页面有内容
+        updateDisplay();
+        
+        // 尝试从API获取最新数据
+        const teamInfoResponse = await fetch(`${API_BASE_URL}/api/team/info?userId=${userId}`);
+        if (teamInfoResponse.ok) {
+          const teamInfo = await teamInfoResponse.json();
+          
+          if (teamInfo.success) {
+            const data = teamInfo.data;
+            teamData.totalMembers = data.teamStats.totalMembers || teamData.totalMembers;
+            teamData.directMembers = data.teamStructure.directInvites || teamData.directMembers;
+            teamData.teamEarnings = data.teamStats.totalRewards || teamData.teamEarnings;
+            
+            // 获取邀请链接
+            const inviteLinkResponse = await fetch(`${API_BASE_URL}/api/team/invite?userId=${userId}`);
+            if (inviteLinkResponse.ok) {
+              const inviteData = await inviteLinkResponse.json();
+              if (inviteData.success) {
+                teamData.inviteLink = inviteData.data.inviteLink;
+              }
+            }
+            
+            // 加载各层级成员数据
+            await loadTeamLevels(userId);
+            
+            updateDisplay();
+          }
+        }
+      } catch (error) {
+        console.log('API连接失败，使用默认团队数据显示');
+        // 确保使用默认数据，包含完整的中文内容
+        teamData.inviteLink = generateInviteLink();
+        updateDisplay();
+      }
+    }
+    
+    // 加载各层级成员数据
+    async function loadTeamLevels(userId) {
+      teamData.levels = [];
+      
+      for (let level = 1; level <= 7; level++) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/team/members?userId=${userId}&level=${level}`);
+          if (response.ok) {
+            const result = await response.json();
+            if (result.success && result.data.members.length > 0) {
+              teamData.levels.push({
+                level: level,
+                name: `${level === 1 ? '直推' : level === 2 ? '二级' : level === 3 ? '三级' : level === 4 ? '四级' : level === 5 ? '五级' : level === 6 ? '六级' : '七级'}成员`,
+                count: result.data.members.length,
+                members: result.data.members.map(member => ({
+                  id: member.id,
+                  name: member.username,
+                  earnings: member.earnings,
+                  likes: member.likes || 0,
+                  liked: member.liked || false,
+                  joinDate: member.joinDate
+                }))
+              });
+            }
+          }
+        } catch (error) {
+          console.error(`加载第${level}级成员失败:`, error);
+        }
+      }
+    }
+    
+    // 使用本地存储数据作为后备
+    function loadLocalTeamData() {
+      const savedTeamData = localStorage.getItem('teamData');
+      if (savedTeamData) {
+        try {
+          const parsedData = JSON.parse(savedTeamData);
+          teamData = {
+            totalMembers: parsedData.totalMembers || 0,
+            directMembers: parsedData.directMembers || 0,
+            teamEarnings: parsedData.teamEarnings || 0,
+            inviteLink: parsedData.inviteLink || generateInviteLink(),
+            levels: parsedData.levels || []
+          };
+        } catch (error) {
+          console.error('解析本地团队数据失败:', error);
+          // 使用默认数据
+          teamData = {
+            totalMembers: 0,
+            directMembers: 0,
+            teamEarnings: 0,
+            inviteLink: generateInviteLink(),
+            levels: []
+          };
+        }
+      } else {
+        // 使用默认数据
+        teamData = {
+          totalMembers: 0,
+          directMembers: 0,
+          teamEarnings: 0,
+          inviteLink: generateInviteLink(),
+          levels: []
+        };
+      }
+      
+      updateDisplay();
+    }
+    
+    // 生成邀请链接
+    function generateInviteLink() {
+      const userInviteCode = localStorage.getItem('userInviteCode') || '';
+      return `https://gold7.com/login.html?invite=${userInviteCode}`;
+    }
+    
+    function updateDisplay() {
+      // 确保所有数据都是有效的数值和字符串
+      const totalMembers = Number(teamData.totalMembers) || 0;
+      const directMembers = Number(teamData.directMembers) || 0;
+      const teamEarnings = Number(teamData.teamEarnings) || 0;
+      const inviteLink = teamData.inviteLink || '生成中...';
+      
+      // 使用安全的方式更新DOM元素
+      const totalMembersEl = document.getElementById('totalMembers');
+      const directMembersEl = document.getElementById('directMembers');
+      const teamEarningsEl = document.getElementById('teamEarnings');
+      const inviteLinkEl = document.getElementById('inviteLink');
+      
+      if (totalMembersEl) totalMembersEl.textContent = totalMembers;
+      if (directMembersEl) directMembersEl.textContent = directMembers;
+      if (teamEarningsEl) teamEarningsEl.textContent = teamEarnings.toFixed(2);
+      if (inviteLinkEl) inviteLinkEl.textContent = inviteLink;
+      
+      renderLevels();
+    }
+    
+    function renderLevels() {
+      const container = document.getElementById('levelsList');
+      
+      if (!teamData.levels || teamData.levels.length === 0) {
+        container.innerHTML = '<div class="empty-state">暂无团队成员</div>';
+        return;
+      }
+      
+      const html = teamData.levels.map(level => `
+        <div class="level-item">
+          <div class="level-header" onclick="toggleLevel(${level.level})">
+            <div class="level-info">
+              <div class="level-name">${level.name}</div>
+              <div class="level-stats">
+                <span class="level-count">${level.count}人</span>
+                <span class="level-commission">分佣${level.commission}</span>
+                <span class="level-earnings">${level.earnings.toFixed(2)} USDT</span>
+              </div>
+            </div>
+            <div class="toggle-icon">▼</div>
+          </div>
+          <div class="level-content" id="level-${level.level}">
+            ${level.members.map(member => `
+              <div class="member-item">
+                <div class="member-info">
+                  <div class="member-name">${member.name}</div>
+                  <div class="member-stats">收益: ${(member.earnings || 0).toFixed(2)} USDT | 加入: ${new Date(member.joinDate).toLocaleDateString()}</div>
+                </div>
+                <button class="like-btn ${member.liked ? 'liked' : ''}" onclick="likeMember(${member.id})">
+                  ❤️ ${member.likes}
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+      
+      container.innerHTML = html;
+    }
+    
+    function toggleLevel(level) {
+      const content = document.getElementById(`level-${level}`);
+      const icon = content.parentElement.querySelector('.toggle-icon');
+      
+      if (content.classList.contains('active')) {
+        content.classList.remove('active');
+        icon.style.transform = 'rotate(0deg)';
+      } else {
+        content.classList.add('active');
+        icon.style.transform = 'rotate(180deg)';
+      }
+    }
+    
+    function likeMember(memberId) {
+      // 在本地数据中更新点赞状态
+      for (let level of teamData.levels) {
+        const member = level.members.find(m => m.id === memberId);
+        if (member) {
+          if (!member.liked) {
+            member.likes++;
+            member.liked = true;
+          } else {
+            member.likes--;
+            member.liked = false;
+          }
+          
+          // 保存到本地存储
+          localStorage.setItem('teamData', JSON.stringify(teamData));
+          renderLevels();
+          
+          // TODO: 可以在这里添加向后端同步点赞状态的API调用
+          // syncLikeToServer(memberId, member.liked);
+          break;
+        }
+      }
+    }
+    
+    // 同步点赞状态到服务器（预留接口）
+    async function syncLikeToServer(memberId, liked) {
+      try {
+        const userId = localStorage.getItem('userId') || 'default';
+        const response = await fetch(`${API_BASE_URL}/team/like`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userId: userId,
+            memberId: memberId,
+            liked: liked
+          })
+        });
+        
+        if (!response.ok) {
+          console.error('同步点赞状态失败');
+        }
+      } catch (error) {
+        console.error('同步点赞状态错误:', error);
+      }
+    }
+    
+    function copyInviteLink() {
+      const link = teamData.inviteLink;
+      
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(link).then(() => {
+          showDialog('复制成功', '邀请链接已复制到剪贴板！');
+        }).catch(() => {
+          fallbackCopy(link);
+        });
+      } else {
+        fallbackCopy(link);
+      }
+    }
+    
+    function fallbackCopy(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      
+      try {
+        document.execCommand('copy');
+        showDialog('复制成功', '邀请链接已复制到剪贴板！');
+      } catch (err) {
+        showDialog('复制失败', '复制失败，请手动复制链接');
+      } finally {
+        document.body.removeChild(textArea);
+      }
+    }
+    
+    // 弹窗相关函数
+    function showDialog(title, message, buttons = [{ text: '确定', action: 'closeDialog', primary: true }]) {
+      const dialog = document.getElementById('dialog');
+      const dialogTitle = document.getElementById('dialogTitle');
+      const dialogMsg = document.getElementById('dialogMsg');
+      const dialogButtons = document.getElementById('dialogButtons');
+      
+      dialogTitle.textContent = title;
+      dialogMsg.textContent = message;
+      
+      // 生成按钮
+      dialogButtons.innerHTML = buttons.map(btn => 
+        `<button class="${btn.primary ? 'primary' : ''}" onclick="${btn.action}()">${btn.text}</button>`
+      ).join('');
+      
+      dialog.classList.add('show');
+    }
+    
+    function closeDialog() {
+      const dialog = document.getElementById('dialog');
+      dialog.classList.remove('show');
+    }
+    
+    // 点击背景关闭弹窗
+    document.addEventListener('click', function(e) {
+      const dialog = document.getElementById('dialog');
+      if (e.target === dialog) {
+        closeDialog();
+      }
+    });
+
+    /**
+     * 获取用户当前状态
+     * @returns {number} 用户状态 (1, 2, 3)
+     */
+    function getUserState() {
+      try {
+        // 优先从localStorage的appState获取状态
+        const appState = JSON.parse(localStorage.getItem('appState') || '{}');
+        if (appState.currentState) {
+          return parseInt(appState.currentState);
+        }
+        
+        // 尝试从父窗口获取currentState
+        if (window.parent && window.parent.currentState !== undefined) {
+          return parseInt(window.parent.currentState);
+        }
+        
+        // 默认返回状态1
+        return 1;
+      } catch (error) {
+        console.warn('获取用户状态失败:', error);
+        return 1;
+      }
+    }
+
+    /**
+     * 根据用户状态控制邀请链接显示
+     */
+    function controlInviteLinkDisplay() {
+      const userState = getUserState();
+      const inviteSection = document.querySelector('.invite-section');
+      
+      if (inviteSection) {
+        if (userState === 3) {
+          // 状态3：隐藏邀请链接部分
+          inviteSection.style.display = 'none';
+          console.log('用户处于状态3，已隐藏邀请链接');
+        } else {
+          // 状态1或状态2：显示邀请链接部分
+          inviteSection.style.display = 'block';
+          console.log(`用户处于状态${userState}，显示邀请链接`);
+        }
+      }
+    }
+
+    window.onload = () => {
+      loadTeamData();
+      // 页面加载完成后检查用户状态并控制邀请链接显示
+      controlInviteLinkDisplay();
+    };
+  </script>
+  
+  <!-- 自定义弹窗 -->
+  <div id="dialog" class="dialog">
+    <div class="dialog-box">
+        <h3 id="dialogTitle">提示</h3>
+        <p id="dialogMsg">消息内容</p>
+        <div id="dialogButtons">
+          <button onclick="closeDialog()">确定</button>
+        </div>
+      </div>
+  </div>
+  
+  <script src="js/global-background.js"></script>
+</body>
+</html>

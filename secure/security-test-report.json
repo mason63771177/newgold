@@ -1,0 +1,170 @@
+{
+  "test_run": {
+    "timestamp": "2025-10-12T00:58:28.554Z",
+    "duration": 125,
+    "total_tests": 19,
+    "passed": 15,
+    "failed": 4
+  },
+  "summary": {
+    "success_rate": "78.95%",
+    "critical_failures": 0,
+    "warnings": 0
+  },
+  "test_results": [
+    {
+      "name": "KMS初始化",
+      "passed": true,
+      "message": "密钥管理系统初始化成功",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.449Z"
+    },
+    {
+      "name": "主密码加载",
+      "passed": true,
+      "message": "主密码文件加载成功",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.450Z"
+    },
+    {
+      "name": "主密码验证",
+      "passed": true,
+      "message": "主密码验证通过",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.461Z"
+    },
+    {
+      "name": "主助记词获取",
+      "passed": true,
+      "message": "助记词格式正确",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.475Z"
+    },
+    {
+      "name": "tatum_api_key获取",
+      "passed": true,
+      "message": "密钥获取成功",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.488Z"
+    },
+    {
+      "name": "database_password获取",
+      "passed": true,
+      "message": "密钥获取成功",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.501Z"
+    },
+    {
+      "name": "redis_password获取",
+      "passed": true,
+      "message": "密钥获取成功",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.514Z"
+    },
+    {
+      "name": "jwt_secret获取",
+      "passed": true,
+      "message": "密钥获取成功",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.526Z"
+    },
+    {
+      "name": "webhook_secret获取",
+      "passed": true,
+      "message": "密钥获取成功",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.539Z"
+    },
+    {
+      "name": "密钥缓存",
+      "passed": false,
+      "message": "首次: 0ms, 缓存: 0ms",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.539Z"
+    },
+    {
+      "name": "访问日志",
+      "passed": true,
+      "message": "总访问: 15, 错误: 0",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.540Z"
+    },
+    {
+      "name": "TatumWalletService集成",
+      "passed": false,
+      "message": "TatumWalletService is not a constructor",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.540Z"
+    },
+    {
+      "name": "UserWalletAddressService集成",
+      "passed": false,
+      "message": "UserWalletAddressService is not a constructor",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.540Z"
+    },
+    {
+      "name": "TatumBasicWalletService方法",
+      "passed": false,
+      "message": "缺少安全方法",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.540Z"
+    },
+    {
+      "name": "错误密码处理",
+      "passed": true,
+      "message": "正确拒绝了错误密码",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.553Z"
+    },
+    {
+      "name": "文件权限",
+      "passed": true,
+      "message": "所有文件权限安全",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.553Z"
+    },
+    {
+      "name": "敏感信息清理",
+      "passed": true,
+      "message": "敏感信息已清理",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.553Z"
+    },
+    {
+      "name": "密钥获取性能",
+      "passed": true,
+      "message": "平均时间: 0.00ms (10次)",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.553Z"
+    },
+    {
+      "name": "内存效率",
+      "passed": true,
+      "message": "内存增长: -0.30MB",
+      "category": "normal",
+      "timestamp": "2025-10-12T00:58:28.554Z"
+    }
+  ],
+  "recommendations": [
+    "⚠️ 发现以下需要改进的地方：",
+    "- 密钥缓存: 首次: 0ms, 缓存: 0ms",
+    "- TatumWalletService集成: TatumWalletService is not a constructor",
+    "- UserWalletAddressService集成: UserWalletAddressService is not a constructor",
+    "- TatumBasicWalletService方法: 缺少安全方法",
+    "",
+    "🔒 通用安全建议：",
+    "- 定期轮换密钥（建议90天）",
+    "- 监控访问日志，发现异常及时处理",
+    "- 定期备份加密文件到安全位置",
+    "- 考虑使用硬件安全模块(HSM)",
+    "- 实施多因素认证"
+  ],
+  "security_status": {
+    "encryption": "✅ AES-256-CBC 加密已启用",
+    "key_management": "✅ 统一密钥管理系统已部署",
+    "access_control": "✅ 访问日志和审计已启用",
+    "file_permissions": "✅ 安全文件权限已设置",
+    "sensitive_data": "✅ 敏感信息已从代码中移除"
+  }
+}

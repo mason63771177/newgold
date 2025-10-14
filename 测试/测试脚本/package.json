@@ -1,0 +1,49 @@
+{
+  "name": "h5-project-test-suite",
+  "version": "1.0.0",
+  "description": "H5项目综合测试套件",
+  "type": "module",
+  "main": "run-all-tests.js",
+  "scripts": {
+    "test": "node run-all-tests.js",
+    "test:quality": "node ../代码质量检查/code-quality-analysis.js",
+    "test:security": "node ../安全测试/security-audit.js",
+    "test:regression": "node ../回归测试/regression-test.js",
+    "test:ui": "node ../UI测试/ui-automation.js",
+    "test:performance": "node ../性能测试/performance-test.js",
+    "report": "node generate-report.js",
+    "clean": "rm -rf ../报告/*"
+  },
+  "keywords": [
+    "testing",
+    "h5",
+    "quality-assurance",
+    "automation",
+    "security",
+    "performance",
+    "ui-testing"
+  ],
+  "author": "H5测试智能体",
+  "license": "MIT",
+  "dependencies": {
+    "fs-extra": "^11.1.1",
+    "chalk": "^4.1.2",
+    "commander": "^9.4.1",
+    "inquirer": "^8.2.5"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/dom": "^9.3.1",
+    "jsdom": "^22.1.0",
+    "puppeteer": "^20.5.0",
+    "lighthouse": "^10.2.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "local"
+  }
+}

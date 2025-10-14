@@ -1,0 +1,252 @@
+[
+  {
+    "timestamp": "2025-10-12T01:08:33.265Z",
+    "action": "CLEANUP",
+    "variable": "TATUM_API_KEY,TATUM_MASTER_WALLET_MNEMONIC,JWT_SECRET",
+    "success": true,
+    "details": "清理了 3 个敏感环境变量",
+    "caller": "process.processTicksAndRejections",
+    "process_id": 18577,
+    "session_id": "6a5aee39da603c9b"
+  },
+  {
+    "timestamp": "2025-10-12T01:08:33.340Z",
+    "action": "ACCESS_DENIED",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: TestCaller",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 18577,
+    "session_id": "9881a917750b37c7"
+  },
+  {
+    "timestamp": "2025-10-12T01:08:33.340Z",
+    "action": "GET_ERROR",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: TATUM_API_KEY (调用者: TestCaller)",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 18577,
+    "session_id": "ce64526c7eb835f8"
+  },
+  {
+    "timestamp": "2025-10-12T01:08:33.340Z",
+    "action": "ACCESS_DENIED",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: UnauthorizedCaller",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 18577,
+    "session_id": "1b33939e7a905f10"
+  },
+  {
+    "timestamp": "2025-10-12T01:08:33.340Z",
+    "action": "GET_ERROR",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: TATUM_API_KEY (调用者: UnauthorizedCaller)",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 18577,
+    "session_id": "59bbbd30d5d43103"
+  },
+  {
+    "timestamp": "2025-10-12T01:10:28.783Z",
+    "action": "CLEANUP",
+    "variable": "TATUM_API_KEY,TATUM_MASTER_WALLET_MNEMONIC,JWT_SECRET",
+    "success": true,
+    "details": "清理了 3 个敏感环境变量",
+    "caller": "process.processTicksAndRejections",
+    "process_id": 18956,
+    "session_id": "ac12d9e2a6bd1e74"
+  },
+  {
+    "timestamp": "2025-10-12T01:10:28.860Z",
+    "action": "ACCESS_DENIED",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: TestCaller",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 18956,
+    "session_id": "45cf06e0008f7363"
+  },
+  {
+    "timestamp": "2025-10-12T01:10:28.860Z",
+    "action": "GET_ERROR",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: TATUM_API_KEY (调用者: TestCaller)",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 18956,
+    "session_id": "b0b9bb07c88964e4"
+  },
+  {
+    "timestamp": "2025-10-12T01:10:28.861Z",
+    "action": "ACCESS_DENIED",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: UnauthorizedCaller",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 18956,
+    "session_id": "c2c2fe0b7c4630c7"
+  },
+  {
+    "timestamp": "2025-10-12T01:10:28.861Z",
+    "action": "GET_ERROR",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: TATUM_API_KEY (调用者: UnauthorizedCaller)",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 18956,
+    "session_id": "709a7b27f6f6caf2"
+  },
+  {
+    "timestamp": "2025-10-12T02:09:08.372Z",
+    "action": "CLEANUP",
+    "variable": "TATUM_API_KEY,TATUM_MASTER_WALLET_MNEMONIC,JWT_SECRET",
+    "success": true,
+    "details": "清理了 3 个敏感环境变量",
+    "caller": "process.processTicksAndRejections",
+    "process_id": 25129,
+    "session_id": "bae7dd72054cb0fe"
+  },
+  {
+    "timestamp": "2025-10-12T02:09:08.449Z",
+    "action": "ACCESS_DENIED",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: TestCaller",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 25129,
+    "session_id": "7b4cbff7cac519bf"
+  },
+  {
+    "timestamp": "2025-10-12T02:09:08.450Z",
+    "action": "GET_ERROR",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: TATUM_API_KEY (调用者: TestCaller)",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 25129,
+    "session_id": "d3bd51e5e1968730"
+  },
+  {
+    "timestamp": "2025-10-12T02:09:08.450Z",
+    "action": "ACCESS_DENIED",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: UnauthorizedCaller",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 25129,
+    "session_id": "16b549f51cb20684"
+  },
+  {
+    "timestamp": "2025-10-12T02:09:08.450Z",
+    "action": "GET_ERROR",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: TATUM_API_KEY (调用者: UnauthorizedCaller)",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 25129,
+    "session_id": "5da1de7d1f682533"
+  },
+  {
+    "timestamp": "2025-10-12T02:11:09.611Z",
+    "action": "CLEANUP",
+    "variable": "TATUM_API_KEY,TATUM_MASTER_WALLET_MNEMONIC,JWT_SECRET",
+    "success": true,
+    "details": "清理了 3 个敏感环境变量",
+    "caller": "process.processTicksAndRejections",
+    "process_id": 25451,
+    "session_id": "749fd5c887045275"
+  },
+  {
+    "timestamp": "2025-10-12T02:11:09.688Z",
+    "action": "PERMISSION_ADDED",
+    "variable": "tatum_api_key",
+    "success": true,
+    "details": "为 TestCaller 添加访问权限",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 25451,
+    "session_id": "1be6bf2424a45283"
+  },
+  {
+    "timestamp": "2025-10-12T02:11:09.700Z",
+    "action": "GET_SUCCESS",
+    "variable": "TATUM_API_KEY",
+    "success": true,
+    "details": "成功获取: TestCaller",
+    "caller": "process.processTicksAndRejections",
+    "process_id": 25451,
+    "session_id": "a455de8d8222a921"
+  },
+  {
+    "timestamp": "2025-10-12T02:11:09.700Z",
+    "action": "ACCESS_DENIED",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: UnauthorizedCaller",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 25451,
+    "session_id": "30b8865f5c443b1e"
+  },
+  {
+    "timestamp": "2025-10-12T02:11:09.700Z",
+    "action": "GET_ERROR",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: TATUM_API_KEY (调用者: UnauthorizedCaller)",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 25451,
+    "session_id": "b60aa72bcec86c6c"
+  },
+  {
+    "timestamp": "2025-10-12T02:12:15.657Z",
+    "action": "CLEANUP",
+    "variable": "TATUM_API_KEY,TATUM_MASTER_WALLET_MNEMONIC,JWT_SECRET",
+    "success": true,
+    "details": "清理了 3 个敏感环境变量",
+    "caller": "process.processTicksAndRejections",
+    "process_id": 25647,
+    "session_id": "4d87e32ea8e7d057"
+  },
+  {
+    "timestamp": "2025-10-12T02:12:15.734Z",
+    "action": "PERMISSION_ADDED",
+    "variable": "tatum_api_key",
+    "success": true,
+    "details": "为 TestCaller 添加访问权限",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 25647,
+    "session_id": "b55b214ae2cb0874"
+  },
+  {
+    "timestamp": "2025-10-12T02:12:15.747Z",
+    "action": "GET_SUCCESS",
+    "variable": "TATUM_API_KEY",
+    "success": true,
+    "details": "成功获取: TestCaller",
+    "caller": "process.processTicksAndRejections",
+    "process_id": 25647,
+    "session_id": "7a1f0287c50cb85b"
+  },
+  {
+    "timestamp": "2025-10-12T02:12:15.747Z",
+    "action": "ACCESS_DENIED",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: UnauthorizedCaller",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 25647,
+    "session_id": "e905df9bcbb35a3b"
+  },
+  {
+    "timestamp": "2025-10-12T02:12:15.747Z",
+    "action": "GET_ERROR",
+    "variable": "TATUM_API_KEY",
+    "success": false,
+    "details": "访问被拒绝: TATUM_API_KEY (调用者: UnauthorizedCaller)",
+    "caller": "SecurityImprovementTesterFixed.testEnvironmentSecurity",
+    "process_id": 25647,
+    "session_id": "12aeff4af0d74b4c"
+  }
+]

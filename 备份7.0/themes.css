@@ -1,0 +1,58 @@
+/* Premium Wallet Style 主题 - 参考 wallet.html 风格 */
+:root {
+  /* 深色科技风格 - 与 wallet.html 保持一致 */
+  --bg-primary: linear-gradient(135deg, #0b0f14 0%, #111823 50%, #0e141d 100%);
+  --bg-secondary: rgba(17, 24, 35, 0.95);
+  --bg-card: linear-gradient(180deg, rgba(15,21,32,0.85), rgba(15,21,32,0.9));
+  --text-primary: #e6efff;
+  --text-secondary: #9fb3cd;
+  --text-accent: #56ccf2;
+  --btn-gradient: linear-gradient(180deg, #56ccf2, #2f80ed);
+  --btn-shadow: 0 8px 24px rgba(47,128,237,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
+  --btn-glow: 0 0 12px rgba(86, 204, 242, 0.5);
+  --border-color: rgba(111, 158, 255, 0.18);
+  --accent-color: #56ccf2;
+  --accent-secondary: #2f80ed;
+  --logo-filter: drop-shadow(0 0 8px rgba(109, 213, 237, 0.4)) drop-shadow(0 0 16px rgba(109, 213, 237, 0.2));
+  --title-gradient: linear-gradient(45deg, #2193b0, #6dd5ed);
+  --card-shadow: 0 6px 20px rgba(0,0,0,0.35) inset, 0 12px 28px rgba(0,0,0,0.35);
+  --backdrop-blur: blur(16px);
+}
+
+/* 通用样式应用CSS变量 */
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.header {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card, .content-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+.btn {
+  background: var(--btn-gradient);
+  box-shadow: var(--btn-shadow), var(--btn-glow);
+  border: 1px solid var(--border-color);
+}
+
+.logo-small, .logo-img {
+  filter: var(--logo-filter);
+}
+
+h1, h2, h3 {
+  color: var(--text-primary);
+}
+
+.accent-text {
+  color: var(--accent-color);
+}
+
+.secondary-text {
+  color: var(--text-secondary);
+}

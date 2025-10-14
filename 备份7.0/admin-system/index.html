@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理系统 - H5网页工程师智能体</title>
+    <meta name="description" content="现代化后台管理系统，基于Context7 MCP标准开发">
+    
+    <!-- 样式文件 -->
+    <link rel="stylesheet" href="./assets/css/base.css">
+    <link rel="stylesheet" href="./assets/css/components.css">
+    <link rel="stylesheet" href="./assets/css/layout.css">
+    <link rel="stylesheet" href="./assets/css/dashboard.css">
+    
+    <!-- 图标字体 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 预加载关键资源 -->
+    <link rel="preload" href="./config/admin-config.json" as="fetch" crossorigin>
+    <link rel="preload" href="./config/theme-config.json" as="fetch" crossorigin>
+    <link rel="preload" href="./config/api-config.json" as="fetch" crossorigin>
+</head>
+<body>
+    <!-- 加载屏幕 -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="spinner spinner-lg"></div>
+            <div class="loading-text">正在加载管理系统...</div>
+        </div>
+    </div>
+
+    <!-- 主容器 -->
+    <div id="admin-container" class="admin-container" style="display: none;">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar">
+            <!-- 侧边栏头部 -->
+            <div class="sidebar-header">
+                <a href="#" class="sidebar-logo">
+                    <span class="logo-icon">🎯</span>
+                    <span class="logo-text">管理系统</span>
+                </a>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <!-- 侧边栏导航 -->
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">主要功能</div>
+                    <ul id="main-nav" class="nav-menu">
+                        <!-- 导航项将通过JavaScript动态生成 -->
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- 侧边栏遮罩（移动端） -->
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <!-- 顶部导航栏 -->
+            <header class="top-navbar">
+                <div class="navbar-left">
+                    <button id="mobile-menu-toggle" class="mobile-menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <nav class="breadcrumb" id="breadcrumb">
+                        <!-- 面包屑导航将通过JavaScript动态生成 -->
+                    </nav>
+                </div>
+
+                <div class="navbar-right">
+                    <!-- 搜索框 -->
+                    <div class="navbar-search">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="搜索功能...">
+                    </div>
+
+                    <!-- 通知 -->
+                    <div class="navbar-notifications">
+                        <i class="fas fa-bell notification-icon"></i>
+                        <span class="notification-badge" id="notification-count">3</span>
+                    </div>
+
+                    <!-- 用户信息 -->
+                    <div class="navbar-user" id="user-dropdown">
+                        <div class="user-avatar">A</div>
+                        <div class="user-info">
+                            <div class="user-name">管理员</div>
+                            <div class="user-role">系统管理员</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="page-content">
+                <div id="page-container">
+                    <!-- 页面内容将通过JavaScript动态加载 -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 页面加载器容器 -->
+    <div id="page-loader-container"></div>
+    
+    <!-- 通知容器 -->
+    <div id="notification-container"></div>
+    
+    <!-- 模态框容器 -->
+    <div id="modal-container"></div>
+
+    <!-- Utility Scripts -->
+    <script src="assets/js/utils/config-loader.js"></script>
+    <script src="assets/js/utils/api-client.js"></script>
+    <script src="assets/js/utils/event-bus.js"></script>
+    
+    <!-- Component Scripts -->
+    <script src="assets/js/components/base-component.js"></script>
+    <script src="assets/js/components/navigation.js"></script>
+    <script src="assets/js/components/breadcrumb.js"></script>
+    <script src="assets/js/components/page-loader.js"></script>
+    <script src="assets/js/components/notification.js"></script>
+    <script src="assets/js/components/modal.js"></script>
+    
+    <!-- Main Application Script -->
+    <script src="assets/js/main.js"></script>
+
+    <style>
+        /* 加载屏幕样式 */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-lg);
+        }
+
+        .loading-text {
+            font-size: var(--font-size-base);
+            color: var(--color-secondary-600);
+        }
+
+        /* 通知容器样式 */
+        .notification-container {
+            position: fixed;
+            top: var(--spacing-lg);
+            right: var(--spacing-lg);
+            z-index: var(--z-tooltip);
+            max-width: 400px;
+        }
+
+        .notification {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-secondary-200);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+            transform: translateX(100%);
+            transition: transform var(--transition-normal);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .notification-title {
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-sm);
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--color-secondary-500);
+            padding: 0;
+        }
+
+        .notification-body {
+            font-size: var(--font-size-sm);
+            color: var(--color-secondary-600);
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--color-success);
+        }
+
+        .notification.warning {
+            border-left: 4px solid var(--color-warning);
+        }
+
+        .notification.error {
+            border-left: 4px solid var(--color-error);
+        }
+
+        .notification.info {
+            border-left: 4px solid var(--color-info);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 640px) {
+            .notification-container {
+                left: var(--spacing-sm);
+                right: var(--spacing-sm);
+                max-width: none;
+            }
+        }
+    </style>
+
+    <script>
+        /**
+         * 应用程序初始化
+         * 基于Context7 MCP标准的模块化管理系统
+         */
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                // 显示加载屏幕
+                const loadingScreen = document.getElementById('loading-screen');
+                const adminContainer = document.getElementById('admin-container');
+
+                // 初始化配置加载器
+                await window.ConfigLoader.init();
+                
+                // 初始化API客户端
+                await window.ApiClient.init();
+                
+                // 初始化事件总线
+                window.EventBus.init();
+                
+                // 初始化组件系统
+                await initializeComponents();
+                
+                // 初始化导航系统
+                await window.Navigation.init();
+                
+                // 初始化页面加载器
+                await window.PageLoader.init();
+                
+                // 加载默认页面
+                await window.AdminApp.loadPage('dashboard');
+                
+                // 隐藏加载屏幕，显示主界面
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    adminContainer.style.display = 'flex';
+                    
+                    // 触发应用就绪事件
+                    window.EventBus.emit('app:ready');
+                }, 500);
+                
+            } catch (error) {
+                console.error('应用初始化失败:', error);
+                showErrorMessage('系统初始化失败，请刷新页面重试');
+            }
+        });
+
+        /**
+         * 初始化组件系统
+         */
+        async function initializeComponents() {
+            // 初始化基础组件
+            window.BaseComponent.init();
+            
+            // 初始化导航组件
+            window.Navigation.init();
+            
+            // 初始化面包屑组件
+            window.Breadcrumb.init();
+            
+            // 初始化通知组件
+            window.Notification.init();
+            
+            // 初始化模态框组件
+            window.Modal.init();
+        }
+
+        /**
+         * 显示错误消息
+         */
+        function showErrorMessage(message) {
+            const loadingScreen = document.getElementById('loading-screen');
+            const loadingContent = loadingScreen.querySelector('.loading-content');
+            
+            loadingContent.innerHTML = `
+                <div class="error-icon" style="font-size: 3rem; color: var(--color-error); margin-bottom: var(--spacing-lg);">⚠️</div>
+                <div class="error-message" style="color: var(--color-error); text-align: center;">
+                    <div style="font-weight: var(--font-weight-semibold); margin-bottom: var(--spacing-sm);">系统错误</div>
+                    <div style="font-size: var(--font-size-sm);">${message}</div>
+                    <button onclick="location.reload()" class="btn btn-primary" style="margin-top: var(--spacing-lg);">
+                        重新加载
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * 全局错误处理
+         */
+        window.addEventListener('error', function(event) {
+            console.error('全局错误:', event.error);
+            if (window.Notification) {
+                window.Notification.show('系统错误', '发生了未预期的错误，请联系管理员', 'error');
+            }
+        });
+
+        /**
+         * 未处理的Promise拒绝
+         */
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('未处理的Promise拒绝:', event.reason);
+            if (window.Notification) {
+                window.Notification.show('网络错误', '请检查网络连接或稍后重试', 'warning');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+{
+  "pageInfo": {
+    "title": "后台管理系统",
+    "description": "H5网页工程师智能体管理面板",
+    "version": "1.0.0",
+    "author": "H5 Engineer AI"
+  },
+  "layout": {
+    "header": {
+      "height": "60px",
+      "showLogo": true,
+      "showUserInfo": true,
+      "showNotifications": true
+    },
+    "sidebar": {
+      "width": "250px",
+      "collapsible": true,
+      "defaultCollapsed": false
+    },
+    "content": {
+      "padding": "20px",
+      "maxWidth": "100%"
+    }
+  },
+  "navigation": {
+    "sections": [
+      {
+        "name": "仪表盘",
+        "icon": "📊",
+        "id": "dashboard",
+        "type": "page",
+        "path": "dashboard",
+        "permissions": ["admin", "user"]
+      },
+      {
+        "name": "用户管理",
+        "icon": "👥",
+        "id": "users",
+        "type": "page",
+        "path": "users",
+        "permissions": ["admin"]
+      },
+      {
+        "name": "钱包管理",
+        "icon": "💰",
+        "id": "wallet",
+        "type": "page",
+        "path": "wallet",
+        "permissions": ["admin"]
+      },
+      {
+        "name": "交易管理",
+        "icon": "💳",
+        "id": "transactions",
+        "type": "page",
+        "path": "transactions",
+        "permissions": ["admin"]
+      },
+      {
+        "name": "任务管理",
+        "icon": "📋",
+        "id": "tasks",
+        "type": "page",
+        "path": "tasks",
+        "permissions": ["admin"]
+      },
+      {
+        "name": "红包管理",
+        "icon": "🧧",
+        "id": "redpackets",
+        "type": "page",
+        "path": "redpackets",
+        "permissions": ["admin"]
+      },
+      {
+        "name": "团队管理",
+        "icon": "🏢",
+        "id": "teams",
+        "type": "page",
+        "path": "teams",
+        "permissions": ["admin"]
+      },
+      {
+        "name": "系统监控",
+        "icon": "📈",
+        "id": "system-monitoring",
+        "type": "page",
+        "path": "system-monitoring",
+        "permissions": ["admin"]
+      },
+      {
+        "name": "数据备份",
+        "icon": "💾",
+        "id": "data-backup",
+        "type": "page",
+        "path": "data-backup",
+        "permissions": ["admin"]
+      }
+    ]
+  },
+  "components": {
+    "dashboard": {
+      "widgets": [
+        {
+          "type": "stats-card",
+          "title": "用户统计",
+          "api": "/api/admin/stats/users",
+          "icon": "👥",
+          "color": "blue"
+        },
+        {
+          "type": "stats-card",
+          "title": "交易统计",
+          "api": "/api/admin/stats/transactions",
+          "icon": "💳",
+          "color": "green"
+        },
+        {
+          "type": "stats-card",
+          "title": "任务统计",
+          "api": "/api/admin/stats/tasks",
+          "icon": "📋",
+          "color": "orange"
+        },
+        {
+          "type": "chart",
+          "title": "用户增长趋势",
+          "api": "/api/admin/charts/user-growth",
+          "chartType": "line"
+        }
+      ]
+    }
+  },
+  "api": {
+    "baseUrl": "/api/admin",
+    "timeout": 10000,
+    "retryAttempts": 3
+  },
+  "security": {
+    "requireAuth": true,
+    "sessionTimeout": 3600000,
+    "csrfProtection": true
+  }
+}

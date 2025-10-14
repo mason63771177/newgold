@@ -1,0 +1,1209 @@
+
+🔍 助记词安全审计报告
+扫描时间: 2025年10月12日 星期日 07时19分49秒 +07
+=========================================
+
+📁 扫描 环境配置文件...
+路径: /Users/mason1236/0930
+文件模式: *.env*
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/.env
+   关键词: course match choose salon
+   上下文:
+50:MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+75:TATUM_MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/.env.example
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+51:MASTER_WALLET_MNEMONIC=your-master-wallet-mnemonic-here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/.env
+   关键词: course match choose salon
+   上下文:
+50:MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+75:TATUM_MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/.env.example
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+51:MASTER_WALLET_MNEMONIC=your-master-wallet-mnemonic-here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/.env
+   关键词: course match choose salon
+   上下文:
+50:MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+75:TATUM_MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/.env.example
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+51:MASTER_WALLET_MNEMONIC=your-master-wallet-mnemonic-here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/.env
+   关键词: course match choose salon
+   上下文:
+50:MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+75:TATUM_MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/.env.example
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+51:MASTER_WALLET_MNEMONIC=your-master-wallet-mnemonic-here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.3/backend/.env
+   关键词: bachelor material excess
+   上下文:
+48:TATUM_MASTER_WALLET_MNEMONIC="bachelor material excess room myth torch option wasp nose police chalk glove"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.3/backend/.env.example
+   关键词: private_key
+   上下文:
+32:TRON_PRIVATE_KEY=your_tron_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.4/backend/.env
+   关键词: bachelor material excess
+   上下文:
+48:TATUM_MASTER_WALLET_MNEMONIC="bachelor material excess room myth torch option wasp nose police chalk glove"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.4/backend/.env.example
+   关键词: private_key
+   上下文:
+32:TRON_PRIVATE_KEY=your_tron_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/.env
+   关键词: course match choose salon
+   上下文:
+77:TATUM_MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/.env.example
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+51:MASTER_WALLET_MNEMONIC=your-master-wallet-mnemonic-here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.3/backend/.env
+   关键词: bachelor material excess
+   上下文:
+48:TATUM_MASTER_WALLET_MNEMONIC="bachelor material excess room myth torch option wasp nose police chalk glove"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.3/backend/.env.example
+   关键词: private_key
+   上下文:
+32:TRON_PRIVATE_KEY=your_tron_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.4/backend/.env
+   关键词: bachelor material excess
+   上下文:
+48:TATUM_MASTER_WALLET_MNEMONIC="bachelor material excess room myth torch option wasp nose police chalk glove"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.4/backend/.env.example
+   关键词: private_key
+   上下文:
+32:TRON_PRIVATE_KEY=your_tron_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/backend/.env
+   关键词: bachelor material excess
+   上下文:
+48:TATUM_MASTER_WALLET_MNEMONIC=bachelor material excess room myth torch option wasp nose police chalk glove
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/backend/.env.example
+   关键词: private_key
+   上下文:
+32:TRON_PRIVATE_KEY=your_tron_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.2/backend/.env.example
+   关键词: private_key
+   上下文:
+32:TRON_PRIVATE_KEY=your_tron_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.0/backend/.env.example
+   关键词: private_key
+   上下文:
+32:TRON_PRIVATE_KEY=your_tron_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.1/.env.example
+   关键词: private_key
+   上下文:
+32:TRON_PRIVATE_KEY=your_tron_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.2/backend/.env.example
+   关键词: private_key
+   上下文:
+32:TRON_PRIVATE_KEY=your_tron_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/.env
+   关键词: course match choose salon
+   上下文:
+50:MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+75:TATUM_MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/.env.example
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+51:MASTER_WALLET_MNEMONIC=your-master-wallet-mnemonic-here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/.env
+   关键词: course match choose salon
+   上下文:
+50:MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+75:TATUM_MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/.env.example
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+51:MASTER_WALLET_MNEMONIC=your-master-wallet-mnemonic-here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份/20251011_143651_remove_status_4/backend/.env
+   关键词: course match choose salon
+   上下文:
+50:MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+75:TATUM_MASTER_WALLET_MNEMONIC=course match choose salon fiscal enhance dilemma abstract you used weather humble
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份/20251011_143651_remove_status_4/backend/.env.example
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+51:MASTER_WALLET_MNEMONIC=your-master-wallet-mnemonic-here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.7/backend/.env
+   关键词: update kid shop wheel
+   上下文:
+48:TATUM_MASTER_WALLET_MNEMONIC="update kid shop wheel pelican series pitch green audit vicious jacket void"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.7/backend/.env.example
+   关键词: private_key
+   上下文:
+32:TRON_PRIVATE_KEY=your_tron_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.0/backend/.env.example
+   关键词: private_key
+   上下文:
+32:TRON_PRIVATE_KEY=your_tron_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.1/.env.example
+   关键词: private_key
+   上下文:
+32:TRON_PRIVATE_KEY=your_tron_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.6/backend/.env
+   关键词: update kid shop wheel
+   上下文:
+48:TATUM_MASTER_WALLET_MNEMONIC="update kid shop wheel pelican series pitch green audit vicious jacket void"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.6/backend/.env.example
+   关键词: private_key
+   上下文:
+32:TRON_PRIVATE_KEY=your_tron_private_key
+
+本节发现风险文件: 36
+=========================================
+
+📁 扫描 Markdown文档...
+路径: /Users/mason1236/0930
+文件模式: *.md
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/node_modules/@scure/bip32/README.md
+   关键词: mnemonic
+   上下文:
+14:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/node_modules/@scure/bip39/README.md
+   关键词: mnemonic
+   上下文:
+3:Audited & minimal JS implementation of [BIP39 mnemonic phrases](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki).
+41:// Reversible: Converts mnemonic string to raw entropy in form of byte array.
+42:const ent = bip39.mnemonicToEntropy(mn, wordlist)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/node_modules/@scure/base/README.md
+   关键词: mnemonic
+   上下文:
+151:For example, you can easily encode entropy to mnemonic (BIP-39):
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/node_modules/micro-ed25519-hdkey/README.md
+   关键词: mnemonic
+   上下文:
+7:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you also need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/node_modules/ethers/README.md
+   关键词: mnemonic
+   上下文:
+20:- Import and export BIP 39 **mnemonic phrases** (12 word backup phrases) and **HD Wallets** (English as well as Czech, French, Italian, Japanese, Korean, Simplified Chinese, Spanish, Traditional Chinese)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/node_modules/@tatumio/tron-wallet-provider/README.md
+   关键词: mnemonic
+   上下文:
+9:- Generating mnemonics for seed phrases.
+10:- Creating extended public keys (xpubs) from mnemonics.
+11:- Deriving private keys and addresses from mnemonics and xpubs.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/node_modules/ethereum-cryptography/README.md
+   关键词: mnemonic
+   上下文:
+14:* [BIP39 Mnemonic phrases](#bip39-mnemonic-seed-phrase)
+278:function mnemonicToEntropy(mnemonic: string, wordlist: string[]): Uint8Array;
+280:function validateMnemonic(mnemonic: string, wordlist: string[]): boolean;
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/node_modules/bip39/README.md
+   关键词: abandon abandon abandon
+   上下文:
+137:// => abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/docs/deployment-guide.md
+   关键词: mnemonic
+   上下文:
+147:MAIN_WALLET_MNEMONIC=your_main_wallet_mnemonic_phrase
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/docs/安全配置指南.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+199:      - MASTER_WALLET_MNEMONIC_FILE=/run/secrets/master_wallet_mnemonic
+217:            'MASTER_WALLET_MNEMONIC',
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/docs/Tatum钱包服务部署指南.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+46:MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/docs/fee-profit-implementation-summary.md
+   关键词: private_key
+   上下文:
+69:PROFIT_WALLET_PRIVATE_KEY=your_profit_wallet_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/examples/README.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+31:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/backend/scripts/tatum-integration-summary.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+20:  - `TATUM_MASTER_WALLET_MNEMONIC`: 已配置
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.3/主钱包配置教程.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+152:TATUM_MASTER_WALLET_MNEMONIC="生成的助记词"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/Tatum钱包管理教程.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+45:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+114:    this.masterWalletMnemonic = process.env.TATUM_MASTER_WALLET_MNEMONIC;
+399:TATUM_MASTER_WALLET_MNEMONIC="word1 word2 word3 ... word12"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/node_modules/@scure/bip32/README.md
+   关键词: mnemonic
+   上下文:
+14:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/node_modules/@scure/bip39/README.md
+   关键词: mnemonic
+   上下文:
+3:Audited & minimal JS implementation of [BIP39 mnemonic phrases](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki).
+41:// Reversible: Converts mnemonic string to raw entropy in form of byte array.
+42:const ent = bip39.mnemonicToEntropy(mn, wordlist)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/node_modules/@scure/base/README.md
+   关键词: mnemonic
+   上下文:
+151:For example, you can easily encode entropy to mnemonic (BIP-39):
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/node_modules/micro-ed25519-hdkey/README.md
+   关键词: mnemonic
+   上下文:
+7:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you also need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/node_modules/ethers/README.md
+   关键词: mnemonic
+   上下文:
+20:- Import and export BIP 39 **mnemonic phrases** (12 word backup phrases) and **HD Wallets** (English as well as Czech, French, Italian, Japanese, Korean, Simplified Chinese, Spanish, Traditional Chinese)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/node_modules/@tatumio/tron-wallet-provider/README.md
+   关键词: mnemonic
+   上下文:
+9:- Generating mnemonics for seed phrases.
+10:- Creating extended public keys (xpubs) from mnemonics.
+11:- Deriving private keys and addresses from mnemonics and xpubs.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/node_modules/ethereum-cryptography/README.md
+   关键词: mnemonic
+   上下文:
+14:* [BIP39 Mnemonic phrases](#bip39-mnemonic-seed-phrase)
+278:function mnemonicToEntropy(mnemonic: string, wordlist: string[]): Uint8Array;
+280:function validateMnemonic(mnemonic: string, wordlist: string[]): boolean;
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/node_modules/bip39/README.md
+   关键词: abandon abandon abandon
+   上下文:
+137:// => abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/docs/deployment-guide.md
+   关键词: mnemonic
+   上下文:
+147:MAIN_WALLET_MNEMONIC=your_main_wallet_mnemonic_phrase
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/docs/安全配置指南.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+199:      - MASTER_WALLET_MNEMONIC_FILE=/run/secrets/master_wallet_mnemonic
+217:            'MASTER_WALLET_MNEMONIC',
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/docs/Tatum钱包服务部署指南.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+46:MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/docs/fee-profit-implementation-summary.md
+   关键词: private_key
+   上下文:
+69:PROFIT_WALLET_PRIVATE_KEY=your_profit_wallet_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/examples/README.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+31:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/backend/scripts/tatum-integration-summary.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+20:  - `TATUM_MASTER_WALLET_MNEMONIC`: 已配置
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.4/主钱包配置教程.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+152:TATUM_MASTER_WALLET_MNEMONIC="生成的助记词"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/Tatum钱包管理教程.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+45:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+114:    this.masterWalletMnemonic = process.env.TATUM_MASTER_WALLET_MNEMONIC;
+399:TATUM_MASTER_WALLET_MNEMONIC="word1 word2 word3 ... word12"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/Tatum钱包管理教程.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+45:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+114:    this.masterWalletMnemonic = process.env.TATUM_MASTER_WALLET_MNEMONIC;
+399:TATUM_MASTER_WALLET_MNEMONIC="word1 word2 word3 ... word12"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/node_modules/@scure/bip32/README.md
+   关键词: mnemonic
+   上下文:
+14:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/node_modules/@scure/bip39/README.md
+   关键词: mnemonic
+   上下文:
+3:Audited & minimal JS implementation of [BIP39 mnemonic phrases](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki).
+41:// Reversible: Converts mnemonic string to raw entropy in form of byte array.
+42:const ent = bip39.mnemonicToEntropy(mn, wordlist)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/node_modules/@scure/base/README.md
+   关键词: mnemonic
+   上下文:
+151:For example, you can easily encode entropy to mnemonic (BIP-39):
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/node_modules/micro-ed25519-hdkey/README.md
+   关键词: mnemonic
+   上下文:
+7:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you also need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/node_modules/ethers/README.md
+   关键词: mnemonic
+   上下文:
+20:- Import and export BIP 39 **mnemonic phrases** (12 word backup phrases) and **HD Wallets** (English as well as Czech, French, Italian, Japanese, Korean, Simplified Chinese, Spanish, Traditional Chinese)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/node_modules/@tatumio/tron-wallet-provider/README.md
+   关键词: mnemonic
+   上下文:
+9:- Generating mnemonics for seed phrases.
+10:- Creating extended public keys (xpubs) from mnemonics.
+11:- Deriving private keys and addresses from mnemonics and xpubs.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/node_modules/ethereum-cryptography/README.md
+   关键词: mnemonic
+   上下文:
+14:* [BIP39 Mnemonic phrases](#bip39-mnemonic-seed-phrase)
+278:function mnemonicToEntropy(mnemonic: string, wordlist: string[]): Uint8Array;
+280:function validateMnemonic(mnemonic: string, wordlist: string[]): boolean;
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/node_modules/bip39/README.md
+   关键词: abandon abandon abandon
+   上下文:
+137:// => abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/docs/deployment-guide.md
+   关键词: mnemonic
+   上下文:
+147:MAIN_WALLET_MNEMONIC=your_main_wallet_mnemonic_phrase
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/docs/安全配置指南.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+199:      - MASTER_WALLET_MNEMONIC_FILE=/run/secrets/master_wallet_mnemonic
+217:            'MASTER_WALLET_MNEMONIC',
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/docs/Tatum钱包服务部署指南.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+46:MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/docs/fee-profit-implementation-summary.md
+   关键词: private_key
+   上下文:
+69:PROFIT_WALLET_PRIVATE_KEY=your_profit_wallet_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/examples/README.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+31:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/backend/scripts/tatum-integration-summary.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+20:  - `TATUM_MASTER_WALLET_MNEMONIC`: 已配置
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.5/主钱包配置教程.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+152:TATUM_MASTER_WALLET_MNEMONIC="生成的助记词"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/Tatum钱包管理教程.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+45:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+114:    this.masterWalletMnemonic = process.env.TATUM_MASTER_WALLET_MNEMONIC;
+399:TATUM_MASTER_WALLET_MNEMONIC="word1 word2 word3 ... word12"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/node_modules/@scure/bip32/README.md
+   关键词: mnemonic
+   上下文:
+14:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/node_modules/@scure/bip39/README.md
+   关键词: mnemonic
+   上下文:
+3:Audited & minimal JS implementation of [BIP39 mnemonic phrases](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki).
+41:// Reversible: Converts mnemonic string to raw entropy in form of byte array.
+42:const ent = bip39.mnemonicToEntropy(mn, wordlist)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/node_modules/@scure/base/README.md
+   关键词: mnemonic
+   上下文:
+151:For example, you can easily encode entropy to mnemonic (BIP-39):
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/node_modules/micro-ed25519-hdkey/README.md
+   关键词: mnemonic
+   上下文:
+7:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you also need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/node_modules/ethers/README.md
+   关键词: mnemonic
+   上下文:
+20:- Import and export BIP 39 **mnemonic phrases** (12 word backup phrases) and **HD Wallets** (English as well as Czech, French, Italian, Japanese, Korean, Simplified Chinese, Spanish, Traditional Chinese)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/node_modules/@tatumio/tron-wallet-provider/README.md
+   关键词: mnemonic
+   上下文:
+9:- Generating mnemonics for seed phrases.
+10:- Creating extended public keys (xpubs) from mnemonics.
+11:- Deriving private keys and addresses from mnemonics and xpubs.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/node_modules/ethereum-cryptography/README.md
+   关键词: mnemonic
+   上下文:
+14:* [BIP39 Mnemonic phrases](#bip39-mnemonic-seed-phrase)
+278:function mnemonicToEntropy(mnemonic: string, wordlist: string[]): Uint8Array;
+280:function validateMnemonic(mnemonic: string, wordlist: string[]): boolean;
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/node_modules/bip39/README.md
+   关键词: abandon abandon abandon
+   上下文:
+137:// => abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/docs/deployment-guide.md
+   关键词: mnemonic
+   上下文:
+147:MAIN_WALLET_MNEMONIC=your_main_wallet_mnemonic_phrase
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/docs/安全配置指南.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+199:      - MASTER_WALLET_MNEMONIC_FILE=/run/secrets/master_wallet_mnemonic
+217:            'MASTER_WALLET_MNEMONIC',
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/docs/Tatum钱包服务部署指南.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+46:MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/docs/fee-profit-implementation-summary.md
+   关键词: private_key
+   上下文:
+69:PROFIT_WALLET_PRIVATE_KEY=your_profit_wallet_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/examples/README.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+31:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/backend/scripts/tatum-integration-summary.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+20:  - `TATUM_MASTER_WALLET_MNEMONIC`: 已配置
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.2/主钱包配置教程.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+152:TATUM_MASTER_WALLET_MNEMONIC="生成的助记词"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/主钱包密钥信息.md
+   关键词: ripple scan offer arctic
+   上下文:
+18:[REDACTED_MNEMONIC] rubber leave tired slender rice olive grab excite noble impose obvious decade achieve outside detect act extend melody help alert
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.3/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.3/backend/node_modules/@scure/bip32/README.md
+   关键词: mnemonic
+   上下文:
+14:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.3/backend/node_modules/@scure/bip39/README.md
+   关键词: mnemonic
+   上下文:
+3:Audited & minimal JS implementation of [BIP39 mnemonic phrases](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki).
+41:// Reversible: Converts mnemonic string to raw entropy in form of byte array.
+42:const ent = bip39.mnemonicToEntropy(mn, wordlist)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.3/backend/node_modules/@scure/base/README.md
+   关键词: mnemonic
+   上下文:
+151:For example, you can easily encode entropy to mnemonic (BIP-39):
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.3/backend/node_modules/ethers/README.md
+   关键词: mnemonic
+   上下文:
+20:- Import and export BIP 39 **mnemonic phrases** (12 word backup phrases) and **HD Wallets** (English as well as Czech, French, Italian, Japanese, Korean, Simplified Chinese, Spanish, Traditional Chinese)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.3/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.3/backend/node_modules/ethereum-cryptography/README.md
+   关键词: mnemonic
+   上下文:
+14:* [BIP39 Mnemonic phrases](#bip39-mnemonic-seed-phrase)
+278:function mnemonicToEntropy(mnemonic: string, wordlist: string[]): Uint8Array;
+280:function validateMnemonic(mnemonic: string, wordlist: string[]): boolean;
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.3/backend/node_modules/bip39/README.md
+   关键词: abandon abandon abandon
+   上下文:
+137:// => abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.4/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.4/backend/node_modules/@scure/bip32/README.md
+   关键词: mnemonic
+   上下文:
+14:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.4/backend/node_modules/@scure/bip39/README.md
+   关键词: mnemonic
+   上下文:
+3:Audited & minimal JS implementation of [BIP39 mnemonic phrases](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki).
+41:// Reversible: Converts mnemonic string to raw entropy in form of byte array.
+42:const ent = bip39.mnemonicToEntropy(mn, wordlist)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.4/backend/node_modules/@scure/base/README.md
+   关键词: mnemonic
+   上下文:
+151:For example, you can easily encode entropy to mnemonic (BIP-39):
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.4/backend/node_modules/ethers/README.md
+   关键词: mnemonic
+   上下文:
+20:- Import and export BIP 39 **mnemonic phrases** (12 word backup phrases) and **HD Wallets** (English as well as Czech, French, Italian, Japanese, Korean, Simplified Chinese, Spanish, Traditional Chinese)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.4/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.4/backend/node_modules/ethereum-cryptography/README.md
+   关键词: mnemonic
+   上下文:
+14:* [BIP39 Mnemonic phrases](#bip39-mnemonic-seed-phrase)
+278:function mnemonicToEntropy(mnemonic: string, wordlist: string[]): Uint8Array;
+280:function validateMnemonic(mnemonic: string, wordlist: string[]): boolean;
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.4/backend/node_modules/bip39/README.md
+   关键词: abandon abandon abandon
+   上下文:
+137:// => abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/node_modules/@scure/bip32/README.md
+   关键词: mnemonic
+   上下文:
+14:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/node_modules/@scure/bip39/README.md
+   关键词: mnemonic
+   上下文:
+3:Audited & minimal JS implementation of [BIP39 mnemonic phrases](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki).
+41:// Reversible: Converts mnemonic string to raw entropy in form of byte array.
+42:const ent = bip39.mnemonicToEntropy(mn, wordlist)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/node_modules/@scure/base/README.md
+   关键词: mnemonic
+   上下文:
+151:For example, you can easily encode entropy to mnemonic (BIP-39):
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/node_modules/micro-ed25519-hdkey/README.md
+   关键词: mnemonic
+   上下文:
+7:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you also need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/node_modules/ethers/README.md
+   关键词: mnemonic
+   上下文:
+20:- Import and export BIP 39 **mnemonic phrases** (12 word backup phrases) and **HD Wallets** (English as well as Czech, French, Italian, Japanese, Korean, Simplified Chinese, Spanish, Traditional Chinese)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/node_modules/@tatumio/tron-wallet-provider/README.md
+   关键词: mnemonic
+   上下文:
+9:- Generating mnemonics for seed phrases.
+10:- Creating extended public keys (xpubs) from mnemonics.
+11:- Deriving private keys and addresses from mnemonics and xpubs.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/node_modules/ethereum-cryptography/README.md
+   关键词: mnemonic
+   上下文:
+14:* [BIP39 Mnemonic phrases](#bip39-mnemonic-seed-phrase)
+278:function mnemonicToEntropy(mnemonic: string, wordlist: string[]): Uint8Array;
+280:function validateMnemonic(mnemonic: string, wordlist: string[]): boolean;
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/node_modules/bip39/README.md
+   关键词: abandon abandon abandon
+   上下文:
+137:// => abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/docs/deployment-guide.md
+   关键词: mnemonic
+   上下文:
+147:MAIN_WALLET_MNEMONIC=your_main_wallet_mnemonic_phrase
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/docs/安全配置指南.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+199:      - MASTER_WALLET_MNEMONIC_FILE=/run/secrets/master_wallet_mnemonic
+217:            'MASTER_WALLET_MNEMONIC',
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/docs/Tatum钱包服务部署指南.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+46:MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/docs/fee-profit-implementation-summary.md
+   关键词: private_key
+   上下文:
+69:PROFIT_WALLET_PRIVATE_KEY=your_profit_wallet_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/docs/tatum-virtual-wallet-integration.md
+   关键词: abandon abandon abandon
+   上下文:
+218:MASTER_WALLET_MNEMONIC=abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/examples/README.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+31:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/backend/scripts/tatum-integration-summary.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+20:  - `TATUM_MASTER_WALLET_MNEMONIC`: 已配置
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/Tatum钱包管理教程.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+45:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+114:    this.masterWalletMnemonic = process.env.TATUM_MASTER_WALLET_MNEMONIC;
+399:TATUM_MASTER_WALLET_MNEMONIC="word1 word2 word3 ... word12"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.3/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.3/backend/node_modules/@scure/bip32/README.md
+   关键词: mnemonic
+   上下文:
+14:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.3/backend/node_modules/@scure/bip39/README.md
+   关键词: mnemonic
+   上下文:
+3:Audited & minimal JS implementation of [BIP39 mnemonic phrases](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki).
+41:// Reversible: Converts mnemonic string to raw entropy in form of byte array.
+42:const ent = bip39.mnemonicToEntropy(mn, wordlist)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.3/backend/node_modules/@scure/base/README.md
+   关键词: mnemonic
+   上下文:
+151:For example, you can easily encode entropy to mnemonic (BIP-39):
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.3/backend/node_modules/ethers/README.md
+   关键词: mnemonic
+   上下文:
+20:- Import and export BIP 39 **mnemonic phrases** (12 word backup phrases) and **HD Wallets** (English as well as Czech, French, Italian, Japanese, Korean, Simplified Chinese, Spanish, Traditional Chinese)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.3/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.3/backend/node_modules/ethereum-cryptography/README.md
+   关键词: mnemonic
+   上下文:
+14:* [BIP39 Mnemonic phrases](#bip39-mnemonic-seed-phrase)
+278:function mnemonicToEntropy(mnemonic: string, wordlist: string[]): Uint8Array;
+280:function validateMnemonic(mnemonic: string, wordlist: string[]): boolean;
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.3/backend/node_modules/bip39/README.md
+   关键词: abandon abandon abandon
+   上下文:
+137:// => abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.4/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.4/backend/node_modules/@scure/bip32/README.md
+   关键词: mnemonic
+   上下文:
+14:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.4/backend/node_modules/@scure/bip39/README.md
+   关键词: mnemonic
+   上下文:
+3:Audited & minimal JS implementation of [BIP39 mnemonic phrases](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki).
+41:// Reversible: Converts mnemonic string to raw entropy in form of byte array.
+42:const ent = bip39.mnemonicToEntropy(mn, wordlist)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.4/backend/node_modules/@scure/base/README.md
+   关键词: mnemonic
+   上下文:
+151:For example, you can easily encode entropy to mnemonic (BIP-39):
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.4/backend/node_modules/ethers/README.md
+   关键词: mnemonic
+   上下文:
+20:- Import and export BIP 39 **mnemonic phrases** (12 word backup phrases) and **HD Wallets** (English as well as Czech, French, Italian, Japanese, Korean, Simplified Chinese, Spanish, Traditional Chinese)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.4/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.4/backend/node_modules/ethereum-cryptography/README.md
+   关键词: mnemonic
+   上下文:
+14:* [BIP39 Mnemonic phrases](#bip39-mnemonic-seed-phrase)
+278:function mnemonicToEntropy(mnemonic: string, wordlist: string[]): Uint8Array;
+280:function validateMnemonic(mnemonic: string, wordlist: string[]): boolean;
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.4/backend/node_modules/bip39/README.md
+   关键词: abandon abandon abandon
+   上下文:
+137:// => abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/backend/node_modules/@scure/bip32/README.md
+   关键词: mnemonic
+   上下文:
+14:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/backend/node_modules/@scure/bip39/README.md
+   关键词: mnemonic
+   上下文:
+3:Audited & minimal JS implementation of [BIP39 mnemonic phrases](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki).
+41:// Reversible: Converts mnemonic string to raw entropy in form of byte array.
+42:const ent = bip39.mnemonicToEntropy(mn, wordlist)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/backend/node_modules/@scure/base/README.md
+   关键词: mnemonic
+   上下文:
+151:For example, you can easily encode entropy to mnemonic (BIP-39):
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/backend/node_modules/ethers/README.md
+   关键词: mnemonic
+   上下文:
+20:- Import and export BIP 39 **mnemonic phrases** (12 word backup phrases) and **HD Wallets** (English as well as Czech, French, Italian, Japanese, Korean, Simplified Chinese, Spanish, Traditional Chinese)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/backend/node_modules/@tatumio/tron-wallet-provider/README.md
+   关键词: mnemonic
+   上下文:
+9:- Generating mnemonics for seed phrases.
+10:- Creating extended public keys (xpubs) from mnemonics.
+11:- Deriving private keys and addresses from mnemonics and xpubs.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/backend/node_modules/ethereum-cryptography/README.md
+   关键词: mnemonic
+   上下文:
+14:* [BIP39 Mnemonic phrases](#bip39-mnemonic-seed-phrase)
+278:function mnemonicToEntropy(mnemonic: string, wordlist: string[]): Uint8Array;
+280:function validateMnemonic(mnemonic: string, wordlist: string[]): boolean;
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/backend/node_modules/bip39/README.md
+   关键词: abandon abandon abandon
+   上下文:
+137:// => abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/backend/examples/README.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+31:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.2/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.5/备份5.2/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.2/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份5.2/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/主钱包配置教程.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+152:TATUM_MASTER_WALLET_MNEMONIC="生成的助记词"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/Tatum钱包管理教程.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+45:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+114:    this.masterWalletMnemonic = process.env.TATUM_MASTER_WALLET_MNEMONIC;
+399:TATUM_MASTER_WALLET_MNEMONIC="word1 word2 word3 ... word12"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/node_modules/@scure/bip32/README.md
+   关键词: mnemonic
+   上下文:
+14:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/node_modules/@scure/bip39/README.md
+   关键词: mnemonic
+   上下文:
+3:Audited & minimal JS implementation of [BIP39 mnemonic phrases](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki).
+41:// Reversible: Converts mnemonic string to raw entropy in form of byte array.
+42:const ent = bip39.mnemonicToEntropy(mn, wordlist)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/node_modules/@scure/base/README.md
+   关键词: mnemonic
+   上下文:
+151:For example, you can easily encode entropy to mnemonic (BIP-39):
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/node_modules/micro-ed25519-hdkey/README.md
+   关键词: mnemonic
+   上下文:
+7:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you also need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/node_modules/ethers/README.md
+   关键词: mnemonic
+   上下文:
+20:- Import and export BIP 39 **mnemonic phrases** (12 word backup phrases) and **HD Wallets** (English as well as Czech, French, Italian, Japanese, Korean, Simplified Chinese, Spanish, Traditional Chinese)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/node_modules/@tatumio/tron-wallet-provider/README.md
+   关键词: mnemonic
+   上下文:
+9:- Generating mnemonics for seed phrases.
+10:- Creating extended public keys (xpubs) from mnemonics.
+11:- Deriving private keys and addresses from mnemonics and xpubs.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/node_modules/ethereum-cryptography/README.md
+   关键词: mnemonic
+   上下文:
+14:* [BIP39 Mnemonic phrases](#bip39-mnemonic-seed-phrase)
+278:function mnemonicToEntropy(mnemonic: string, wordlist: string[]): Uint8Array;
+280:function validateMnemonic(mnemonic: string, wordlist: string[]): boolean;
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/node_modules/bip39/README.md
+   关键词: abandon abandon abandon
+   上下文:
+137:// => abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/docs/deployment-guide.md
+   关键词: mnemonic
+   上下文:
+147:MAIN_WALLET_MNEMONIC=your_main_wallet_mnemonic_phrase
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/docs/安全配置指南.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+199:      - MASTER_WALLET_MNEMONIC_FILE=/run/secrets/master_wallet_mnemonic
+217:            'MASTER_WALLET_MNEMONIC',
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/docs/Tatum钱包服务部署指南.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+46:MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/docs/fee-profit-implementation-summary.md
+   关键词: private_key
+   上下文:
+69:PROFIT_WALLET_PRIVATE_KEY=your_profit_wallet_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/examples/README.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+31:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/backend/scripts/tatum-integration-summary.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+20:  - `TATUM_MASTER_WALLET_MNEMONIC`: 已配置
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.0/主钱包配置教程.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+152:TATUM_MASTER_WALLET_MNEMONIC="生成的助记词"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/Tatum钱包管理教程.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+45:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+114:    this.masterWalletMnemonic = process.env.TATUM_MASTER_WALLET_MNEMONIC;
+399:TATUM_MASTER_WALLET_MNEMONIC="word1 word2 word3 ... word12"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/node_modules/@scure/bip32/README.md
+   关键词: mnemonic
+   上下文:
+14:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/node_modules/@scure/bip39/README.md
+   关键词: mnemonic
+   上下文:
+3:Audited & minimal JS implementation of [BIP39 mnemonic phrases](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki).
+41:// Reversible: Converts mnemonic string to raw entropy in form of byte array.
+42:const ent = bip39.mnemonicToEntropy(mn, wordlist)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/node_modules/@scure/base/README.md
+   关键词: mnemonic
+   上下文:
+151:For example, you can easily encode entropy to mnemonic (BIP-39):
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/node_modules/micro-ed25519-hdkey/README.md
+   关键词: mnemonic
+   上下文:
+7:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you also need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/node_modules/ethers/README.md
+   关键词: mnemonic
+   上下文:
+20:- Import and export BIP 39 **mnemonic phrases** (12 word backup phrases) and **HD Wallets** (English as well as Czech, French, Italian, Japanese, Korean, Simplified Chinese, Spanish, Traditional Chinese)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/node_modules/@tatumio/tron-wallet-provider/README.md
+   关键词: mnemonic
+   上下文:
+9:- Generating mnemonics for seed phrases.
+10:- Creating extended public keys (xpubs) from mnemonics.
+11:- Deriving private keys and addresses from mnemonics and xpubs.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/node_modules/ethereum-cryptography/README.md
+   关键词: mnemonic
+   上下文:
+14:* [BIP39 Mnemonic phrases](#bip39-mnemonic-seed-phrase)
+278:function mnemonicToEntropy(mnemonic: string, wordlist: string[]): Uint8Array;
+280:function validateMnemonic(mnemonic: string, wordlist: string[]): boolean;
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/node_modules/bip39/README.md
+   关键词: abandon abandon abandon
+   上下文:
+137:// => abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/docs/deployment-guide.md
+   关键词: mnemonic
+   上下文:
+147:MAIN_WALLET_MNEMONIC=your_main_wallet_mnemonic_phrase
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/docs/安全配置指南.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+199:      - MASTER_WALLET_MNEMONIC_FILE=/run/secrets/master_wallet_mnemonic
+217:            'MASTER_WALLET_MNEMONIC',
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/docs/Tatum钱包服务部署指南.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+46:MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/docs/fee-profit-implementation-summary.md
+   关键词: private_key
+   上下文:
+69:PROFIT_WALLET_PRIVATE_KEY=your_profit_wallet_private_key
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/examples/README.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+31:TATUM_MASTER_WALLET_MNEMONIC=your_master_wallet_mnemonic_here
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/backend/scripts/tatum-integration-summary.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+20:  - `TATUM_MASTER_WALLET_MNEMONIC`: 已配置
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份6.1/主钱包配置教程.md
+   关键词: MASTER_WALLET_MNEMONIC
+   上下文:
+152:TATUM_MASTER_WALLET_MNEMONIC="生成的助记词"
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份/20251011_143651_remove_status_4/backend/node_modules/jws/readme.md
+   关键词: private_key
+   上下文:
+255:[encrypted-key-docs]: https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份/20251011_143651_remove_status_4/backend/node_modules/@scure/bip32/README.md
+   关键词: mnemonic
+   上下文:
+14:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份/20251011_143651_remove_status_4/backend/node_modules/@scure/bip39/README.md
+   关键词: mnemonic
+   上下文:
+3:Audited & minimal JS implementation of [BIP39 mnemonic phrases](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki).
+41:// Reversible: Converts mnemonic string to raw entropy in form of byte array.
+42:const ent = bip39.mnemonicToEntropy(mn, wordlist)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份/20251011_143651_remove_status_4/backend/node_modules/@scure/base/README.md
+   关键词: mnemonic
+   上下文:
+151:For example, you can easily encode entropy to mnemonic (BIP-39):
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份/20251011_143651_remove_status_4/backend/node_modules/micro-ed25519-hdkey/README.md
+   关键词: mnemonic
+   上下文:
+7:Check out [scure-bip39](https://github.com/paulmillr/scure-bip39) if you also need mnemonic phrases.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份/20251011_143651_remove_status_4/backend/node_modules/ethers/README.md
+   关键词: mnemonic
+   上下文:
+20:- Import and export BIP 39 **mnemonic phrases** (12 word backup phrases) and **HD Wallets** (English as well as Czech, French, Italian, Japanese, Korean, Simplified Chinese, Spanish, Traditional Chinese)
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份/20251011_143651_remove_status_4/backend/node_modules/@tatumio/tron-wallet-provider/README.md
+   关键词: mnemonic
+   上下文:
+9:- Generating mnemonics for seed phrases.
+10:- Creating extended public keys (xpubs) from mnemonics.
+11:- Deriving private keys and addresses from mnemonics and xpubs.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份/20251011_143651_remove_status_4/backend/node_modules/jsonwebtoken/README.md
+   关键词: private_key
+   上下文:
+37:encoded private key for RSA and ECDSA. In case of a private key with passphrase an object `{ key, passphrase }` can be used (based on [crypto documentation](https://nodejs.org/api/crypto.html#crypto_sign_sign_private_key_output_format)), in this case be sure you pass the `algorithm` option.
+
+⚠️  发现敏感信息: /Users/mason1236/0930/备份/20251011_143651_remove_status_4/backend/node_modules/ethereum-cryptography/README.md
+   关键词: mnemonic
+   上下文:
+14:* [BIP39 Mnemonic phrases](#bip39-mnemonic-seed-phrase)
+278:function mnemonicToEntropy(mnemonic: string, wordlist: string[]): Uint8Array;
+280:function validateMnemonic(mnemonic: string, wordlist: string[]): boolean;
+

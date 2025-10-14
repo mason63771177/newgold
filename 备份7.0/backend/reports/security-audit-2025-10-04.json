@@ -1,0 +1,107 @@
+{
+  "timestamp": "2025-10-04T04:02:19.335Z",
+  "summary": {
+    "totalIssues": 3,
+    "totalWarnings": 10,
+    "criticalIssues": 2,
+    "highIssues": 1,
+    "mediumIssues": 5,
+    "lowIssues": 0
+  },
+  "issues": [
+    {
+      "severity": "critical",
+      "category": "Dependency Security",
+      "description": "form-data 存在 critical 级别安全漏洞",
+      "recommendation": "运行 npm audit fix 或手动更新 form-data",
+      "timestamp": "2025-10-04T04:02:19.306Z"
+    },
+    {
+      "severity": "critical",
+      "category": "Dependency Security",
+      "description": "request 存在 critical 级别安全漏洞",
+      "recommendation": "运行 npm audit fix 或手动更新 request",
+      "timestamp": "2025-10-04T04:02:19.306Z"
+    },
+    {
+      "severity": "high",
+      "category": "Code Security",
+      "description": "scripts/init-database.js 可能存在 SQL 注入风险",
+      "recommendation": "使用参数化查询或 ORM",
+      "timestamp": "2025-10-04T04:02:19.326Z"
+    }
+  ],
+  "warnings": [
+    {
+      "severity": "moderate",
+      "category": "Dependency Security",
+      "description": "blessed-contrib 存在 moderate 级别安全漏洞",
+      "recommendation": "运行 npm audit fix 或手动更新 blessed-contrib",
+      "timestamp": "2025-10-04T04:02:19.306Z"
+    },
+    {
+      "severity": "moderate",
+      "category": "Dependency Security",
+      "description": "map-canvas 存在 moderate 级别安全漏洞",
+      "recommendation": "运行 npm audit fix 或手动更新 map-canvas",
+      "timestamp": "2025-10-04T04:02:19.306Z"
+    },
+    {
+      "severity": "moderate",
+      "category": "Dependency Security",
+      "description": "picture-tube 存在 moderate 级别安全漏洞",
+      "recommendation": "运行 npm audit fix 或手动更新 picture-tube",
+      "timestamp": "2025-10-04T04:02:19.306Z"
+    },
+    {
+      "severity": "moderate",
+      "category": "Dependency Security",
+      "description": "tough-cookie 存在 moderate 级别安全漏洞",
+      "recommendation": "运行 npm audit fix 或手动更新 tough-cookie",
+      "timestamp": "2025-10-04T04:02:19.306Z"
+    },
+    {
+      "severity": "moderate",
+      "category": "Dependency Security",
+      "description": "xml2js 存在 moderate 级别安全漏洞",
+      "recommendation": "运行 npm audit fix 或手动更新 xml2js",
+      "timestamp": "2025-10-04T04:02:19.306Z"
+    },
+    {
+      "severity": "medium",
+      "category": "Code Security",
+      "description": "admin-notification-center.js 可能存在 XSS 风险",
+      "recommendation": "使用 DOMPurify 清理用户输入",
+      "timestamp": "2025-10-04T04:02:19.310Z"
+    },
+    {
+      "severity": "medium",
+      "category": "Code Security",
+      "description": "admin-report-system.js 可能存在 XSS 风险",
+      "recommendation": "使用 DOMPurify 清理用户输入",
+      "timestamp": "2025-10-04T04:02:19.310Z"
+    },
+    {
+      "severity": "medium",
+      "category": "Code Security",
+      "description": "admin-wallet-management.js 可能存在 XSS 风险",
+      "recommendation": "使用 DOMPurify 清理用户输入",
+      "timestamp": "2025-10-04T04:02:19.310Z"
+    },
+    {
+      "severity": "medium",
+      "category": "Network Security",
+      "description": "未配置 csp 安全头",
+      "recommendation": "添加 csp 中间件提高安全性",
+      "timestamp": "2025-10-04T04:02:19.335Z"
+    },
+    {
+      "severity": "medium",
+      "category": "Database Security",
+      "description": "数据库连接未启用 SSL",
+      "recommendation": "在生产环境中启用数据库 SSL 连接",
+      "timestamp": "2025-10-04T04:02:19.335Z"
+    }
+  ],
+  "recommendations": []
+}

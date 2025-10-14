@@ -1,0 +1,136 @@
+{
+  "api": {
+    "baseUrl": "/api/admin",
+    "version": "v1",
+    "timeout": 10000,
+    "retryAttempts": 3,
+    "retryDelay": 1000
+  },
+  "endpoints": {
+    "auth": {
+      "login": "/auth/login",
+      "logout": "/auth/logout",
+      "refresh": "/auth/refresh",
+      "profile": "/auth/profile"
+    },
+    "users": {
+      "list": "/users",
+      "create": "/users",
+      "update": "/users/:id",
+      "delete": "/users/:id",
+      "stats": "/users/stats"
+    },
+    "wallet": {
+      "list": "/wallet",
+      "balance": "/wallet/balance",
+      "transactions": "/wallet/transactions",
+      "recharge": "/wallet/recharge",
+      "withdraw": "/wallet/withdraw"
+    },
+    "transactions": {
+      "list": "/transactions",
+      "detail": "/transactions/:id",
+      "stats": "/transactions/stats",
+      "export": "/transactions/export"
+    },
+    "tasks": {
+      "list": "/tasks",
+      "create": "/tasks",
+      "update": "/tasks/:id",
+      "delete": "/tasks/:id",
+      "stats": "/tasks/stats"
+    },
+    "redpackets": {
+      "list": "/redpackets",
+      "create": "/redpackets",
+      "update": "/redpackets/:id",
+      "delete": "/redpackets/:id",
+      "stats": "/redpackets/stats"
+    },
+    "teams": {
+      "list": "/teams",
+      "detail": "/teams/:id",
+      "members": "/teams/:id/members",
+      "stats": "/teams/stats"
+    },
+    "monitoring": {
+      "system": "/monitoring/system",
+      "performance": "/monitoring/performance",
+      "logs": "/monitoring/logs",
+      "alerts": "/monitoring/alerts"
+    },
+    "backup": {
+      "list": "/backup/list",
+      "create": "/backup/create",
+      "restore": "/backup/restore",
+      "delete": "/backup/delete",
+      "download": "/backup/download"
+    }
+  },
+  "responseFormat": {
+    "success": {
+      "code": 200,
+      "message": "success",
+      "data": {},
+      "timestamp": "ISO8601"
+    },
+    "error": {
+      "code": "number",
+      "message": "string",
+      "error": "string",
+      "timestamp": "ISO8601"
+    }
+  },
+  "errorCodes": {
+    "400": "请求参数错误",
+    "401": "未授权访问",
+    "403": "权限不足",
+    "404": "资源不存在",
+    "409": "资源冲突",
+    "422": "数据验证失败",
+    "429": "请求过于频繁",
+    "500": "服务器内部错误",
+    "502": "网关错误",
+    "503": "服务不可用",
+    "504": "网关超时"
+  },
+  "validation": {
+    "rules": {
+      "required": "此字段为必填项",
+      "email": "请输入有效的邮箱地址",
+      "phone": "请输入有效的手机号码",
+      "password": "密码长度至少8位，包含字母和数字",
+      "numeric": "请输入有效的数字",
+      "min": "最小值为 {min}",
+      "max": "最大值为 {max}",
+      "minLength": "最少输入 {min} 个字符",
+      "maxLength": "最多输入 {max} 个字符"
+    }
+  },
+  "security": {
+    "headers": {
+      "X-Requested-With": "XMLHttpRequest",
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "csrf": {
+      "enabled": true,
+      "headerName": "X-CSRF-Token",
+      "cookieName": "csrf-token"
+    },
+    "rateLimit": {
+      "enabled": true,
+      "maxRequests": 100,
+      "windowMs": 900000
+    }
+  },
+  "cache": {
+    "enabled": true,
+    "defaultTTL": 300000,
+    "strategies": {
+      "stats": 60000,
+      "lists": 30000,
+      "details": 120000
+    }
+  }
+}

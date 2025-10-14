@@ -1,0 +1,5076 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>裂金7日 H5 页面</title>
+  
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-K7WCTWLM');</script>
+  <!-- End Google Tag Manager -->
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ6GQ79K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-QQ6GQ79K7G');
+  </script>
+  
+  <link rel="stylesheet" href="themes.css">
+  <link rel="stylesheet" href="css/global-background.css">
+  <link rel="stylesheet" href="websocket.css">
+  
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 16px;
+      overflow: hidden;
+    }
+
+    /* 应用容器 100vh 三段式布局 */
+    .app {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+
+
+
+    /* 顶部区域 - 固定高度 */
+    .header {
+      flex: 0 0 65px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding-top: 0px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 100;
+    }
+    
+    .header-main {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin: 0;
+      padding: 0 20px;
+      position: relative;
+    }
+    
+    .status-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .logo {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: var(--btn-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: var(--logo-filter);
+    }
+
+    /* 新的 logo 图片样式 - 适中尺寸 */
+    .logo-img {
+      width: 65px;
+      height: 65px;
+      object-fit: contain;
+      filter: var(--logo-filter);
+    }
+    .state-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* 消息图标样式 */
+    .message-icon {
+      position: fixed;
+      left: 10px;
+      top: 10px;
+      width: 48px;
+      height: 48px;
+      cursor: pointer;
+      z-index: 101;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      touch-action: none;
+    }
+
+    /* 拖拽状态样式 */
+    .message-icon.dragging {
+      transition: none;
+      transform: scale(1.1);
+      opacity: 0.8;
+      cursor: grabbing;
+    }
+
+    .message-icon:hover:not(.dragging) {
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .message-icon img {
+      width: 36px;
+      height: 36px;
+      transition: all 0.3s ease;
+    }
+
+    .message-icon svg {
+      width: 36px;
+      height: 36px;
+      transition: all 0.3s ease;
+    }
+
+    .message-icon:hover:not(.dragging) img,
+    .message-icon:hover:not(.dragging) svg {
+      filter: brightness(1.1);
+    }
+
+    /* 未读消息提示点 */
+    .unread-dot {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      width: 14px;
+      height: 14px;
+      background: #ff4444;
+      border-radius: 50%;
+      border: 2px solid var(--bg-secondary);
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.3s ease;
+      box-shadow: 0 0 8px rgba(255, 68, 68, 0.6);
+    }
+
+    .unread-dot.show {
+      opacity: 1;
+      transform: scale(1);
+      /* 移除过度的脉冲动画，保持专业感 */
+    }
+
+    /* 移除抖动动画 - 保持专业感 */
+    .message-icon.shake {
+      /* 移除抖动效果，保持专业商务感 */
+    }
+
+    /* 移除持续轻微抖动效果 */
+    .message-icon.has-unread {
+      /* 移除持续抖动，保持专业感 */
+    }
+
+    .state-label {
+      text-shadow: 0 0 6px var(--accent-color);
+    }
+    .subtitle {
+      font-size: 11px;
+      color: var(--text-secondary);
+      opacity: 0.8;
+    }
+    /* 开发测试按钮，可隐藏于生产环境 */
+    .test-btn {
+      position: fixed;
+      top: 70px;
+      right: 10px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--accent-color);
+      font-size: 12px;
+      padding: 3px 6px;
+      z-index: 998;
+    }
+    
+    .reset-btn {
+      position: fixed;
+      top: 120px;
+      right: 10px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: #ff6464;
+      font-size: 12px;
+      padding: 3px 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 998;
+    }
+    
+    .reset-btn:hover {
+      background: linear-gradient(135deg, #ff6464, #ff4444);
+      color: var(--text-primary);
+      transform: translateY(-1px);
+    }
+    
+    .settings-btn {
+      background: rgba(255,255,255,0.2) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(255,255,255,0.4) !important;
+      border-radius: 8px !important;
+      padding: 6px 10px !important;
+      font-size: 14px !important;
+      cursor: pointer !important;
+      position: fixed !important;
+      top: 10px !important;
+      right: 10px !important;
+      z-index: 999 !important;
+      opacity: 0.9 !important;
+      transition: all 0.3s ease !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+    }
+    
+    .settings-btn:hover {
+      opacity: 1 !important;
+      background: rgba(255,255,255,0.3) !important;
+      border-color: rgba(255,255,255,0.6) !important;
+      transform: scale(1.05) !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+    }
+    
+    .theme-demo-btn {
+      position: absolute;
+      top: 8px;
+      left: 12px;
+      background: var(--btn-gradient);
+      border: none;
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-size: 12px;
+      padding: 3px 6px;
+      cursor: pointer;
+      box-shadow: var(--btn-shadow);
+      transition: all 0.3s ease;
+    }
+    
+    .theme-demo-btn:hover {
+       transform: translateY(-1px);
+       filter: brightness(1.1);
+     }
+     
+     .test-btn {
+       cursor: pointer;
+       transition: all 0.3s ease;
+    }
+    .test-btn:hover {
+      background: var(--btn-gradient);
+      color: var(--text-primary);
+    }
+
+    /* 中部内容卡片区域 - 可滚动 */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden; /* 禁止水平滚动 */
+      padding: 16px;
+      padding-bottom: 100px; /* 为底部固定按钮留出空间 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--bg-card);
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--btn-shadow);
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .section {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .section:last-child {
+      margin-bottom: 0;
+    }
+    /* 光效分割线 */
+    .section:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+      opacity: 0.4;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+    }
+    .section-content {
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--text-primary);
+      opacity: 0.9;
+    }
+    /* 任务列表样式 */
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+    }
+    .task-item:not(:last-child) {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .task-title {
+      flex: 1;
+      font-size: 14px;
+      color: #e0e5fb;
+    }
+    .task-status {
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 12px;
+      background: linear-gradient(45deg, #00eaff, #0088ff);
+      box-shadow: 0 0 6px rgba(0, 136, 255, 0.6);
+      color: #031e2e;
+    }
+    .task-status.done {
+      background: linear-gradient(45deg, #9be15d, #00e3ae);
+      box-shadow: 0 0 6px rgba(0, 227, 174, 0.6);
+    }
+    /* 再次激活突出样式 */
+    .reactivate-highlight {
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(255, 193, 7, 0.15));
+      border: 2px solid rgba(255, 107, 107, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .reactivate-highlight::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shimmer 2s infinite;
+    }
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+    .reactivate-highlight .section-title {
+      color: #ff6b6b;
+      font-size: 18px;
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+    }
+    .reactivate-btn {
+      background: linear-gradient(45deg, #ff6b6b, #ffc107);
+      border: none;
+      border-radius: 25px;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+      transition: all 0.3s ease;
+      width: 100%;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    .reactivate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+    }
+    .reactivate-btn:active {
+       transform: translateY(0);
+     }
+
+    /* 底部按钮区域 - 固定在屏幕底部 */
+    .bottom {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      /* 半透明背景与模糊，仿原生底部栏 */
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      margin: 0 12px 12px;
+      border-radius: 24px 24px 0 0;
+      z-index: 100;
+      /* 添加微妙的内阴影增强层次感 */
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                  0 -4px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* 基础按钮样式 - 现代商务设计 */
+    .bottom button {
+      flex: 1;
+      min-width: 0;
+      min-height: 36px;
+      border: none;
+      border-radius: 18px;
+      padding: 10px 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      position: relative;
+      background: var(--btn-gradient);
+      box-shadow: var(--btn-shadow);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    
+    /* 主要按钮 - 简化为专业商务风格 */
+    .bottom button.primary {
+      font-size: 15px;
+      font-weight: 800;
+      padding: 17px 14px;
+      min-height: 52px;
+      background: var(--btn-gradient);
+      box-shadow: var(--btn-shadow);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      /* 移除脉冲动画，保持专业感 */
+    }
+    
+    /* 金融相关按钮 - 专业稳重的设计 */
+    .bottom button.financial {
+      background: var(--btn-gradient);
+      box-shadow: var(--btn-shadow);
+      font-weight: 800;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    /* 金融按钮安全指示器 - 更精致 */
+    .bottom button.financial::before {
+      content: "🔒";
+      position: absolute;
+      top: 3px;
+      right: 6px;
+      font-size: 11px;
+      opacity: 0.9;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+    }
+    
+    /* 游戏化按钮 - 简化为商务风格 */
+    .bottom button.gaming {
+      background: var(--btn-gradient);
+      box-shadow: var(--btn-shadow);
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      /* 移除脉冲动画和能量流动效果，保持专业感 */
+    }
+    
+    /* 次要按钮 - 更柔和但保持质感 */
+    .bottom button.secondary {
+      background-image: linear-gradient(135deg, #78909C, #546E7A, #455A64);
+      box-shadow: 0 4px 20px rgba(120, 144, 156, 0.25), 
+                  inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                  0 2px 8px rgba(0, 0, 0, 0.1);
+      font-size: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* 当按钮超过6个时，调整布局 - 移动端优化 */
+    .bottom.many-buttons {
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 18px calc(26px + env(safe-area-inset-bottom, 0px));
+    }
+    .bottom.many-buttons button {
+      flex: 0 1 calc(33.333% - 7px);
+      margin: 2px;
+      padding: 14px 10px;
+      font-size: 12px;
+      border-radius: 16px;
+      min-height: 44px;
+    }
+    
+    /* 按钮颜色渐变 - 保持兼容性 */
+    .bottom button.red,
+    .bottom button.orange,
+    .bottom button.green,
+    .bottom button.purple,
+    .bottom button.blue {
+      background: var(--btn-gradient);
+      box-shadow: var(--btn-shadow), var(--btn-glow);
+    }
+    
+    .bottom button:disabled {
+      opacity: 0.4;
+      cursor: default;
+      filter: grayscale(0.8) brightness(0.7);
+      transform: none !important;
+      animation: none !important;
+    }
+    
+    /* 悬停效果 - 增强反馈和浮起感 */
+    .bottom button:not(:disabled):hover {
+      transform: translateY(-6px) scale(1.03);
+      filter: brightness(1.2) saturate(1.15);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* 主要按钮悬停效果 */
+    .bottom button.primary:not(:disabled):hover {
+      box-shadow: 0 14px 40px rgba(74, 144, 226, 0.6), 
+                  inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                  0 5px 20px rgba(0, 0, 0, 0.25),
+                  0 0 0 1px rgba(74, 144, 226, 0.4);
+      animation: none; /* 悬停时暂停脉冲 */
+    }
+    
+    /* 金融按钮悬停效果 */
+    .bottom button.financial:not(:disabled):hover {
+      box-shadow: 0 12px 36px rgba(212, 175, 55, 0.5), 
+                  inset 0 1px 0 rgba(255, 255, 255, 0.55),
+                  0 4px 18px rgba(0, 0, 0, 0.25),
+                  0 0 0 1px rgba(212, 175, 55, 0.4);
+    }
+    
+    /* 游戏化按钮悬停效果 */
+    .bottom button.gaming:not(:disabled):hover {
+      box-shadow: 0 14px 40px rgba(156, 39, 176, 0.6), 
+                  inset 0 1px 0 rgba(255, 255, 255, 0.45),
+                  0 5px 20px rgba(0, 0, 0, 0.25),
+                  0 0 0 1px rgba(156, 39, 176, 0.5);
+      animation: none; /* 悬停时暂停脉冲 */
+    }
+    
+    /* 次要按钮悬停效果 */
+    .bottom button.secondary:not(:disabled):hover {
+      box-shadow: 0 8px 28px rgba(120, 144, 156, 0.4), 
+                  inset 0 1px 0 rgba(255, 255, 255, 0.35),
+                  0 3px 14px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* 点击效果 - 更明显的反馈 */
+    .bottom button:not(:disabled):active {
+      transform: translateY(-2px) scale(0.97);
+      filter: brightness(0.85) saturate(1.1);
+      transition: all 0.08s ease;
+    }
+    
+    /* 移动端触摸优化 */
+    @media (hover: none) and (pointer: coarse) {
+      .bottom button:not(:disabled):active {
+        transform: scale(0.95);
+        filter: brightness(0.9);
+        transition: all 0.1s ease;
+      }
+    }
+    
+
+
+    /* 倒计时优化样式 */
+    @keyframes countdownPulse {
+      0%, 100% { 
+        box-shadow: 0 8px 32px rgba(47, 128, 237, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+      50% { 
+        box-shadow: 0 12px 40px rgba(47, 128, 237, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      }
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    
+    /* 紧急状态动画 */
+    @keyframes urgentPulse {
+      0%, 100% { 
+        box-shadow: 0 8px 32px rgba(255, 69, 58, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        border-color: #ff453a;
+      }
+      50% { 
+        box-shadow: 0 12px 40px rgba(255, 69, 58, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        border-color: #ff6961;
+      }
+    }
+    
+    @keyframes urgentBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.1; }
+    }
+    
+    /* 进度条高级科技流光动画 */
+        @keyframes slideRight {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(400%);
+          }
+        }
+    
+    /* 倒计时响应式设计 */
+    @media (max-width: 480px) {
+      .countdown-container {
+        padding: 16px !important;
+        margin: 0 -4px 16px -4px !important;
+      }
+      
+      .countdown-container .time-display {
+        font-size: 28px !important;
+        letter-spacing: 1px !important;
+      }
+      
+      .countdown-container .progress-ring {
+        width: 70px !important;
+        height: 70px !important;
+      }
+      
+      .countdown-container .progress-ring svg {
+        width: 70px !important;
+        height: 70px !important;
+      }
+      
+      .countdown-container .progress-ring circle {
+        r: 30 !important;
+        stroke-dasharray: 188 !important;
+      }
+      
+      /* 移动端时间显示区域调整 */
+      .countdown-container .time-area {
+        gap: 12px !important;
+      }
+      
+      /* 移动端状态提示调整 */
+      .countdown-container #countdownStatus {
+        font-size: 11px !important;
+        padding: 6px 10px !important;
+      }
+      
+      /* 移动端战绩卡调整 */
+      .grid-stats {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+        font-size: 11px !important;
+      }
+      
+      .stat-item {
+        padding: 8px !important;
+        font-size: 11px !important;
+      }
+      
+      .stat-value {
+        font-size: 13px !important;
+      }
+    }
+    
+    @media (max-width: 360px) {
+      .countdown-container {
+        padding: 12px !important;
+      }
+      
+      .countdown-container .time-display {
+        font-size: 24px !important;
+      }
+      
+      .countdown-container .progress-ring {
+        width: 60px !important;
+        height: 60px !important;
+      }
+      
+      .countdown-container .progress-ring svg {
+        width: 60px !important;
+        height: 60px !important;
+      }
+      
+      .countdown-container .progress-ring circle {
+        r: 25 !important;
+        stroke-dasharray: 157 !important;
+      }
+      
+      .countdown-container .time-labels {
+        gap: 8px !important;
+        font-size: 10px !important;
+      }
+    }
+    /* 邀请按钮突出显示，增加光晕 */
+    .bottom button[data-key="invite"],
+    .bottom button[data-key="inviteNew"] {
+      box-shadow: 0 12px 32px rgba(86, 204, 242, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    /* 主要突出按钮样式 - 激活账号专用 */
+    .bottom button.primary-highlight {
+      font-size: 18px !important;
+      font-weight: bold !important;
+      padding: 16px 24px !important;
+      background: linear-gradient(135deg, #00ff88, #00cc66, #009944) !important;
+      box-shadow: 0 8px 24px rgba(0, 255, 136, 0.4), 0 4px 12px rgba(0, 204, 102, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+      border: 2px solid rgba(0, 255, 136, 0.6) !important;
+      animation: pulse-glow 2s ease-in-out infinite !important;
+    }
+    .bottom button.primary-highlight:hover {
+      transform: translateY(-4px) !important;
+      box-shadow: 0 12px 32px rgba(0, 255, 136, 0.5), 0 6px 16px rgba(0, 204, 102, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 8px 24px rgba(0, 255, 136, 0.4), 0 4px 12px rgba(0, 204, 102, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4); }
+      50% { box-shadow: 0 12px 32px rgba(0, 255, 136, 0.6), 0 6px 16px rgba(0, 204, 102, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5); }
+    }
+    /* 高级弹窗样式 */
+    .dialog {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(8px);
+    }
+    .dialog.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .dialog .dialog-box {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 28px 32px;
+      max-width: 85%;
+      min-width: 280px;
+      color: var(--text-primary);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-color);
+      transform: scale(0.7) translateY(20px);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .dialog.show .dialog-box {
+      transform: scale(1) translateY(0);
+    }
+    .dialog .dialog-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.6s;
+    }
+    .dialog.show .dialog-box::before {
+      left: 100%;
+    }
+    .dialog .dialog-box h3 {
+      margin: 0 0 16px 0;
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* 模态框基础样式 */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+    }
+
+    /* 设置面板样式 */
+    .settings-panel {
+      padding: 0;
+    }
+    
+    /* 设置标题 */
+    .settings-header {
+      text-align: center;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    .settings-header h2 {
+      margin: 0;
+      font-size: 20px;
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+    
+    /* 个人资料卡片 */
+    .profile-card {
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 8px 24px rgba(47, 128, 237, 0.2);
+    }
+    .profile-avatar {
+      flex-shrink: 0;
+    }
+    .avatar-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      backdrop-filter: blur(10px);
+    }
+    .profile-info {
+      flex: 1;
+      color: white;
+    }
+    .profile-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .profile-code {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+    .profile-level {
+      flex-shrink: 0;
+    }
+    .level-badge {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+    }
+    
+    /* 设置区域 */
+    .settings-section {
+      margin-bottom: 24px;
+    }
+    .settings-section h3 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    
+    /* 设置卡片 */
+    .settings-card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+    
+    /* 设置项 */
+    .setting-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.2s ease;
+    }
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+    .setting-item.clickable {
+      cursor: pointer;
+    }
+    .setting-item.clickable:hover {
+      background: rgba(47, 128, 237, 0.05);
+    }
+    .setting-info {
+      flex: 1;
+    }
+    .setting-title {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+    .setting-desc {
+      display: block;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .arrow {
+      font-size: 18px;
+      color: var(--text-secondary);
+      font-weight: bold;
+    }
+    
+    /* 主题按钮 */
+    .theme-btn {
+      background: var(--brand);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .theme-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(47, 128, 237, 0.3);
+    }
+    .theme-preview {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+    }
+    
+    /* 现代化选择框 */
+    .modern-select {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      min-width: 140px;
+      transition: all 0.2s ease;
+    }
+    .modern-select:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.1);
+    }
+    
+    /* Toggle开关 */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 28px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.3s;
+      border-radius: 28px;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    input:checked + .toggle-slider {
+      background-color: var(--brand);
+    }
+    input:checked + .toggle-slider:before {
+      transform: translateX(22px);
+    }
+    
+    /* 操作按钮 */
+    .action-btn {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .action-btn:hover {
+      background: var(--brand);
+      color: white;
+      border-color: var(--brand);
+    }
+    
+    /* 危险操作区域 */
+    .danger-zone {
+      margin: 32px 0 24px 0;
+    }
+    .danger-zone h3 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      color: #ff6b6b;
+      font-weight: 600;
+    }
+    .danger-card {
+      background: rgba(255, 107, 107, 0.05);
+      border: 1px solid rgba(255, 107, 107, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .danger-warning {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding: 12px;
+      background: rgba(255, 107, 107, 0.1);
+      border-radius: 8px;
+    }
+    .warning-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .warning-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+    .danger-btn {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+    }
+    .danger-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
+    }
+    .danger-btn:active {
+      transform: translateY(0);
+    }
+    
+    /* 设置页脚 */
+    .settings-footer {
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 2px solid var(--border-color);
+      text-align: center;
+    }
+    .back-btn {
+      background: linear-gradient(135deg, #4a90e2, #357abd);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+      min-width: 200px;
+    }
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(74, 144, 226, 0.4);
+    }
+    .back-btn:active {
+      transform: translateY(0);
+    }
+    
+    /* 兼容旧样式 */
+    .settings-select:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 2px rgba(47, 128, 237, 0.2);
+    }
+    .dialog .dialog-box p {
+      margin: 0 0 24px 0;
+      line-height: 1.6;
+      text-align: center;
+      font-size: 16px;
+      white-space: pre-line;
+    }
+    .dialog .dialog-box button {
+      background: linear-gradient(135deg, var(--btn-primary), #0066cc);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      margin: 0 6px;
+      box-shadow: 0 4px 16px rgba(0, 102, 204, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .dialog .dialog-box button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 102, 204, 0.4);
+    }
+    .dialog .dialog-box button:active {
+      transform: translateY(0);
+      color: var(--text-primary);
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--btn-shadow);
+      margin: 0 5px;
+    }
+    
+    .dialog .dialog-box .secondary-btn {
+      background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+      color: white;
+    }
+    
+    .dialog .dialog-box .danger-btn {
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+      color: white;
+    }
+    
+    #dialogButtons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    
+    /* 任务完成弹窗特殊样式 */
+    .dialog.success .dialog-box {
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(0, 255, 136, 0.05) 100%);
+      border: 2px solid rgba(0, 255, 136, 0.3);
+      box-shadow: 0 20px 60px rgba(0, 255, 136, 0.2), 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+    .dialog.success .dialog-box h3 {
+      color: #00ff88;
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+    }
+    .dialog.success .dialog-box::after {
+      content: '🎉';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 24px;
+      animation: celebrate 0.6s ease-out;
+    }
+    @keyframes celebrate {
+      0% { transform: scale(0) rotate(0deg); opacity: 0; }
+      50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+      100% { transform: scale(1) rotate(360deg); opacity: 1; }
+    }
+    
+    /* 粒子效果 */
+     .dialog.success .dialog-box::before {
+       background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.2), transparent);
+     }
+     
+     /* 成功弹窗的脉冲动画 */
+     .dialog.success .dialog-box {
+       animation: successPulse 2s ease-in-out infinite;
+     }
+     @keyframes successPulse {
+       0%, 100% { 
+         box-shadow: 0 20px 60px rgba(0, 255, 136, 0.2), 0 8px 24px rgba(0, 0, 0, 0.2);
+       }
+       50% { 
+         box-shadow: 0 20px 60px rgba(0, 255, 136, 0.4), 0 8px 24px rgba(0, 255, 136, 0.1);
+       }
+     }
+     
+     /* 成功弹窗按钮特殊效果 */
+     .dialog.success button {
+       background: linear-gradient(135deg, #00ff88, #00cc66);
+       box-shadow: 0 4px 16px rgba(0, 255, 136, 0.4);
+     }
+     .dialog.success button:hover {
+       box-shadow: 0 8px 24px rgba(0, 255, 136, 0.6);
+       transform: translateY(-3px);
+     }
+    /* 邀请区高亮样式 */
+    .invite-highlight {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 12px;
+      margin-top: 12px;
+      box-shadow: var(--btn-glow);
+    }
+    .invite-highlight .section-title {
+      color: var(--accent-color);
+    }
+    
+    .invite-link-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .invite-link-container input {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .invite-link-container button:hover {
+      background: linear-gradient(135deg, #45a049, #3d8b40) !important;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    /* 移动端字体优化 */
+    @media (max-width: 768px) {
+      html, body {
+        font-size: 18px; /* 基础字体从16px增加到18px */
+      }
+      
+      /* 顶部区域字体优化 */
+      .state-label {
+        font-size: 15px !important; /* 从13px增加到15px */
+      }
+      
+      .subtitle {
+        font-size: 13px !important; /* 从11px增加到13px */
+      }
+      
+      /* 按钮字体优化 */
+      .bottom button {
+        font-size: 16px !important; /* 从14px增加到16px */
+      }
+      
+      .btn, button {
+        font-size: 16px !important; /* 从14px增加到16px */
+      }
+      
+      /* 设置相关字体优化 */
+      .setting-title {
+        font-size: 17px !important; /* 从15px增加到17px */
+      }
+      
+      .setting-desc {
+        font-size: 15px !important; /* 从13px增加到15px */
+      }
+      
+      .theme-btn {
+        font-size: 16px !important; /* 从14px增加到16px */
+      }
+      
+      .modern-select {
+        font-size: 16px !important; /* 从14px增加到16px */
+      }
+      
+      /* 测试按钮字体优化 */
+      .test-btn, .reset-btn, .settings-btn {
+        font-size: 14px !important; /* 从12px增加到14px */
+      }
+      
+      /* 测试按钮容器样式 */
+      .test-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      
+      /* 小尺寸测试按钮 */
+      .test-btn.small {
+        padding: 6px 12px;
+        font-size: 12px;
+        min-width: 60px;
+      }
+      
+      /* 内容区域字体优化 */
+      .section-title {
+        font-size: 18px !important; /* 从16px增加到18px */
+      }
+      
+      /* 小字体优化 */
+      .info, .detail-row, .txn-item {
+        font-size: 16px !important; /* 从14px增加到16px */
+      }
+      
+      /* 非常小的字体优化 */
+      .note, .caption {
+        font-size: 14px !important; /* 从12px增加到14px */
+      }
+      
+      /* 倒计时字体优化 */
+      #countdown, .countdown {
+        font-size: 26px !important; /* 从24px增加到26px */
+      }
+      
+      /* 金额显示字体优化 */
+      .balance, .amount, .price, .value {
+        font-size: 20px !important; /* 从18px增加到20px */
+      }
+      
+      /* 邀请码和链接字体优化 */
+      #myInviteCode {
+        font-size: 18px !important; /* 从16px增加到18px */
+      }
+      
+      #inviteLink {
+        font-size: 13px !important; /* 从11px增加到13px */
+      }
+      
+      /* 复制按钮字体优化 */
+      button[onclick*="copy"] {
+        font-size: 13px !important; /* 从11px增加到13px */
+      }
+      
+      /* 战绩卡字体优化 */
+      .stats-card {
+        font-size: 13px !important; /* 从11px增加到13px */
+      }
+      
+      /* 任务相关字体优化 */
+      .task-item {
+        font-size: 14px !important; /* 从12px增加到14px */
+      }
+      
+      /* 状态标签字体优化 */
+      .status-badge {
+        font-size: 12px !important; /* 从10px增加到12px */
+      }
+      
+      /* 状态2倒计时区域特殊字体优化 */
+      .countdown-container span[style*="font-size: 11px"] {
+        font-size: 14px !important; /* 挑战倒计时标签从11px增加到14px */
+      }
+      
+      .countdown-container div[style*="font-size: 9px"] {
+        font-size: 12px !important; /* 168小时挑战标签从9px增加到12px */
+      }
+      
+      .countdown-container span[style*="font-size: 10px"] {
+        font-size: 13px !important; /* 剩余天数从10px增加到13px */
+      }
+      
+      /* 战绩卡区域字体优化 */
+      .grid-stats .stat-item div[style*="color: var(--text-secondary)"] {
+        font-size: 14px !important; /* 战绩卡标签从12px增加到14px */
+      }
+      
+      .grid-stats .stat-value {
+        font-size: 16px !important; /* 战绩卡数值从14px增加到16px */
+      }
+      
+      /* 邀请链接区域字体优化 */
+      div[style*="font-size: 12px"][style*="💎 我的专属邀请码"] {
+        font-size: 15px !important; /* 邀请码标题从12px增加到15px */
+      }
+      
+      div[style*="font-size: 12px"][style*="🔗 邀请链接"] {
+        font-size: 15px !important; /* 邀请链接标题从12px增加到15px */
+      }
+      
+      /* 通用小字体优化 - 针对内联样式 */
+      [style*="font-size: 9px"] {
+        font-size: 12px !important;
+      }
+      
+      [style*="font-size: 10px"] {
+        font-size: 13px !important;
+      }
+      
+      [style*="font-size: 11px"] {
+        font-size: 14px !important;
+      }
+      
+      [style*="font-size: 12px"] {
+        font-size: 15px !important;
+      }
+    }
+    
+    /* 消息弹窗样式 */
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 20px 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .message-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    /* 标签页切换 */
+    .message-tabs {
+      display: flex;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      margin: 16px 20px;
+      padding: 4px;
+      gap: 4px;
+    }
+    
+    .tab-btn {
+      flex: 1;
+      padding: 12px 16px;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .tab-btn.active {
+      background: var(--brand);
+      color: white;
+      box-shadow: 0 2px 8px rgba(47, 128, 237, 0.3);
+    }
+    
+    .tab-btn:hover:not(.active) {
+      background: rgba(47, 128, 237, 0.1);
+      color: var(--brand);
+    }
+    
+    /* 功能按钮区域 */
+    .message-actions {
+      display: flex;
+      justify-content: center;
+      padding: 0 20px 16px 20px;
+    }
+    
+    .mark-all-read-btn {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+    }
+    
+    .mark-all-read-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+    }
+    
+    .mark-all-read-btn:active {
+      transform: translateY(0);
+    }
+    
+    /* 未读消息计数 */
+    .unread-count {
+      background: #ff4757;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 10px;
+      min-width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+    
+    /* 消息内容区域 */
+    .message-content {
+      height: 400px;
+      overflow-y: auto;
+      padding: 0 20px 20px 20px;
+    }
+    
+    .message-list {
+      display: none;
+    }
+    
+    .message-list.active {
+      display: block;
+    }
+    
+    /* 空消息状态 */
+    .empty-message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+      color: var(--text-secondary);
+    }
+    
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.6;
+    }
+    
+    .empty-text {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    
+    /* 消息项样式 */
+    .message-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    
+    .message-item:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .message-item.unread {
+      border-left: 4px solid var(--brand);
+      background: rgba(47, 128, 237, 0.05);
+    }
+    
+    .message-item.unread::before {
+      content: '';
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 8px;
+      height: 8px;
+      background: #ff4757;
+      border-radius: 50%;
+    }
+    
+    .message-header-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    
+    .message-title-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+      line-height: 1.3;
+    }
+    
+    .message-time {
+      font-size: 12px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      margin-left: 12px;
+    }
+    
+    .message-content-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin: 0;
+    }
+    
+    .message-category {
+      display: inline-block;
+      background: rgba(47, 128, 237, 0.1);
+      color: var(--brand);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-top: 8px;
+    }
+    
+    /* 消息按钮闪烁动画 */
+    @keyframes messageFlash {
+      0%, 100% {
+        background: var(--btn-gradient);
+        box-shadow: 0 2px 6px var(--accent-shadow);
+        transform: scale(1);
+      }
+      50% {
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        box-shadow: 0 4px 16px rgba(255, 107, 107, 0.4);
+        transform: scale(1.05);
+      }
+    }
+    
+    .message-flash {
+      animation: messageFlash 1.5s ease-in-out infinite;
+    }
+    
+    /* Bug报告表单样式 */
+    .bug-report-form {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .bug-report-form h4 {
+      margin: 0 0 16px 0;
+      color: var(--text-primary);
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      font-size: 14px;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 2px rgba(47, 128, 237, 0.2);
+    }
+    
+    .submit-bug-btn {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+      width: 100%;
+    }
+    
+    .submit-bug-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+    }
+    
+    .bug-list-section {
+      margin-top: 20px;
+    }
+    
+    .bug-list-section h4 {
+      margin: 0 0 12px 0;
+      color: var(--text-primary);
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .bug-item {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 8px;
+      border-left: 3px solid #ff6b6b;
+    }
+    
+    .bug-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    
+    .bug-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+    
+    .bug-time {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    
+    .bug-description {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      margin: 8px 0;
+    }
+    
+    .bug-type {
+      display: inline-block;
+      background: rgba(255, 107, 107, 0.2);
+      color: #ff6b6b;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+    
+    /* 消息按钮未读提示小红点 */
+    .bottom button[data-key="message"] {
+      position: relative;
+    }
+    
+    .bottom button[data-key="message"].has-unread::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 8px;
+      height: 8px;
+      background: #ff4757;
+      border-radius: 50%;
+      border: 2px solid var(--bg-primary);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K7WCTWLM"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  
+  <div id="app" class="app">
+    <div class="header">
+      <div class="header-main">
+        <!-- 消息图标 -->
+        <div id="messageIcon" class="message-icon" onclick="showMessages()">
+          <img src="图标文件/message_optimized.png" alt="消息" width="36" height="36" />
+          <div id="messageUnreadDot" class="unread-dot" style="display: none;"></div>
+        </div>
+        
+        <!-- 放大的logo -->
+        <img src="logo_gold7.png" alt="Logo" class="logo-img" />
+        <div class="status-info">
+          <div id="stateLabel" class="state-label">状态1</div>
+          <div id="subtitle" class="subtitle">欢迎加入裂金7日</div>
+        </div>
+      </div>
+      <button class="settings-btn" onclick="console.log('设置按钮被点击'); openSettings();">⚙️</button>
+    </div>
+    <div class="content">
+      <div id="card" class="card">
+        <!-- 动态内容将在这里注入 -->
+      </div>
+    </div>
+    <div id="bottomButtons" class="bottom">
+      <!-- 底部按钮动态生成 -->
+    </div>
+  </div>
+  <!-- 模态弹窗 -->
+  <div id="modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <button id="modalClose" class="modal-close">✕</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+  <div id="dialog" class="dialog" style="display:none;">
+    <div class="dialog-box">
+      <h3 id="dialogTitle">提示</h3>
+      <p id="dialogMsg">内容</p>
+      <div id="dialogButtons">
+        <button onclick="closeDialog()">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 设置面板 -->
+  <div id="settingsModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width: 420px; width: 95%; max-height: 90vh; overflow-y: auto;">
+      <button class="modal-close" onclick="closeSettings()">✕</button>
+      <div class="settings-panel">
+        <!-- 标题 -->
+        <div class="settings-header">
+          <h2>⚙️ 设置中心</h2>
+        </div>
+        
+        <!-- 个人资料卡片 -->
+        <div class="profile-card">
+          <div class="profile-avatar">
+            <div class="avatar-circle">👤</div>
+          </div>
+          <div class="profile-info">
+            <div class="profile-name" id="userEmailDisplay">未登录</div>
+            <div class="profile-code">邀请码：<span id="userInviteCodeDisplay">-</span></div>
+          </div>
+          <div class="profile-level">
+            <span class="level-badge">LV.1</span>
+          </div>
+        </div>
+
+        <!-- 外观设置 -->
+        <div class="settings-section">
+          <h3>🎨 外观设置</h3>
+          <div class="settings-card">
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-title">主题风格</span>
+                <span class="setting-desc">选择您喜欢的界面主题</span>
+              </div>
+              <button class="theme-btn" onclick="window.location.href='theme-demo.html'">
+                <span class="theme-preview"></span>
+                切换
+              </button>
+            </div>
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-title">🌐 语言</span>
+                <span class="setting-desc">选择界面显示语言</span>
+              </div>
+              <select id="languageSelect" class="modern-select">
+                <option value="zh-CN" selected>🇨🇳 简体中文</option>
+                <option value="zh-TW">🇨🇳 繁體中文</option>
+                <option value="en-US">🇺🇸 English</option>
+                <option value="ja-JP">🇯🇵 日本語</option>
+                <option value="ko-KR">🇰🇷 한국어</option>
+                <option value="th-TH">🇹🇭 ไทย</option>
+                <option value="hi-IN">🇮🇳 हिन्दी</option>
+                <option value="vi-VN">🇻🇳 Tiếng Việt</option>
+                <option value="km-KH">🇰🇭 ខ្មែរ</option>
+                <option value="ru-RU">🇷🇺 Русский</option>
+                <option value="mn-MN">🇲🇳 Монгол</option>
+                <option value="my-MM">🇲🇲 မြန်မာ</option>
+                <option value="lo-LA">🇱🇦 ລາວ</option>
+                <option value="ar-SA">🇸🇦 العربية</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 功能设置 -->
+        <div class="settings-section">
+          <h3>🔧 功能设置</h3>
+          <div class="settings-card">
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-title">🔔 消息通知</span>
+                <span class="setting-desc">接收重要消息提醒</span>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-title">🔊 音效</span>
+                <span class="setting-desc">开启操作音效反馈</span>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="soundToggle" checked onchange="toggleSound()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-title">📊 数据管理</span>
+                <span class="setting-desc">重置本地测试数据</span>
+              </div>
+              <button class="action-btn" onclick="resetTestData()">重置数据</button>
+            </div>
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-title">🔄 状态切换</span>
+                <span class="setting-desc">切换用户状态进行测试</span>
+              </div>
+              <select id="stateSelect" class="modern-select" onchange="switchToState(this.value)">
+                <option value="">选择状态</option>
+                <option value="1">状态1 - 新手未入金</option>
+                <option value="2">状态2 - 新手已入金</option>
+                <option value="3">状态3 - 本期挑战结束</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-title">🎨 主题演示</span>
+                <span class="setting-desc">查看主题切换效果</span>
+              </div>
+              <button class="action-btn" onclick="demoTheme()">主题演示</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 帮助与支持 -->
+        <!-- 测试功能区域 -->
+        <div class="settings-section">
+          <h3>🧪 测试功能</h3>
+          <div class="settings-card">
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-title">🎯 新手任务模拟</span>
+                <span class="setting-desc">模拟完成新手任务1/2/3</span>
+              </div>
+              <div class="test-buttons">
+                <button class="test-btn small" onclick="simulateTask('newbie', 1)">任务1</button>
+                <button class="test-btn small" onclick="simulateTask('newbie', 2)">任务2</button>
+                <button class="test-btn small" onclick="simulateTask('newbie', 3)">任务3</button>
+              </div>
+            </div>
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-title">📝 答题模拟</span>
+                <span class="setting-desc">模拟完成全部答题任务</span>
+              </div>
+              <button class="test-btn" onclick="simulateAllQuiz()">完成全部答题</button>
+            </div>
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-title">🏆 大神任务模拟</span>
+                <span class="setting-desc">模拟完成大神任务1-6</span>
+              </div>
+              <div class="test-buttons">
+                <button class="test-btn small" onclick="simulateTask('master', 1)">任务1</button>
+                <button class="test-btn small" onclick="simulateTask('master', 2)">任务2</button>
+                <button class="test-btn small" onclick="simulateTask('master', 3)">任务3</button>
+                <button class="test-btn small" onclick="simulateTask('master', 4)">任务4</button>
+                <button class="test-btn small" onclick="simulateTask('master', 5)">任务5</button>
+                <button class="test-btn small" onclick="simulateTask('master', 6)">任务6</button>
+              </div>
+            </div>
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-title">📢 消息测试</span>
+                <span class="setting-desc">发送随机官方公告测试消息功能</span>
+              </div>
+              <button class="test-btn" onclick="sendRandomAnnouncement()">发送随机公告</button>
+            </div>
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-title">⏰ 时间调试</span>
+                <span class="setting-desc">手动设置挑战剩余时间（仅测试用）</span>
+              </div>
+              <div class="time-debug-controls">
+                <input type="number" id="debugHours" placeholder="小时" min="0" max="999" style="width: 60px; margin-right: 5px;">
+                <input type="number" id="debugMinutes" placeholder="分钟" min="0" max="59" style="width: 60px; margin-right: 5px;">
+                <input type="number" id="debugSeconds" placeholder="秒" min="0" max="59" style="width: 60px; margin-right: 10px;">
+                <button class="test-btn small" onclick="setDebugTime()">设置时间</button>
+                <button class="test-btn small" onclick="resetDebugTime()">重置</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3>❓ 帮助与支持</h3>
+          <div class="settings-card">
+            <div class="setting-item clickable" onclick="showHelp()">
+              <div class="setting-info">
+                <span class="setting-title">📖 使用帮助</span>
+                <span class="setting-desc">查看功能说明和操作指南</span>
+              </div>
+              <span class="arrow">›</span>
+            </div>
+            <div class="setting-item clickable" onclick="showFeedback()">
+              <div class="setting-info">
+                <span class="setting-title">💬 意见反馈</span>
+                <span class="setting-desc">提交建议和问题反馈</span>
+              </div>
+              <span class="arrow">›</span>
+            </div>
+            <div class="setting-item clickable" onclick="showAbout()">
+              <div class="setting-info">
+                <span class="setting-title">ℹ️ 关于我们</span>
+                <span class="setting-desc">版本信息和开发团队</span>
+              </div>
+              <span class="arrow">›</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 危险操作区域 -->
+        <div class="danger-zone">
+          <h3>⚠️ 危险操作</h3>
+          <div class="danger-card">
+            <div class="danger-warning">
+              <span class="warning-icon">🚨</span>
+              <div class="warning-text">
+                <strong>注意：</strong>退出登录将清除所有本地数据，请确保重要信息已备份
+              </div>
+            </div>
+            <button class="danger-btn" onclick="confirmLogout()">
+              🚪 退出登录
+            </button>
+          </div>
+        </div>
+
+        <!-- 返回按钮 -->
+        <div class="settings-footer">
+          <button class="back-btn" onclick="closeSettings()">
+            ← 返回主页
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 消息弹窗 -->
+  <div id="messageModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width: 420px; width: 95%; max-height: 80vh; overflow: hidden;">
+      <div class="message-header">
+        <h3 class="message-title">💬 消息中心</h3>
+        <button class="modal-close" onclick="closeMessages()">✕</button>
+      </div>
+      
+      <!-- 标签页切换 -->
+      <div class="message-tabs">
+        <button class="tab-btn active" onclick="switchMessageTab('official')" id="officialTab">
+          📢 官方公告
+          <span class="unread-count" id="officialUnreadCount" style="display:none;">0</span>
+        </button>
+        <button class="tab-btn" onclick="switchMessageTab('team')" id="teamTab">
+          👥 团队消息
+          <span class="unread-count" id="teamUnreadCount" style="display:none;">0</span>
+        </button>
+        <button class="tab-btn" onclick="switchMessageTab('bug')" id="bugTab">
+          🐛 Bug报告
+        </button>
+      </div>
+      
+      <!-- 功能按钮区域 -->
+      <div class="message-actions">
+        <button class="mark-all-read-btn" onclick="markAllAsRead()">
+          ✅ 一键已读
+        </button>
+      </div>
+      
+      <!-- 消息列表容器 -->
+      <div class="message-content">
+        <!-- 官方公告列表 -->
+        <div id="officialMessages" class="message-list active">
+          <div class="empty-message">
+            <div class="empty-icon">📭</div>
+            <div class="empty-text">暂无官方公告</div>
+          </div>
+        </div>
+        
+        <!-- 团队消息列表 -->
+        <div id="teamMessages" class="message-list">
+          <div class="empty-message">
+            <div class="empty-icon">👥</div>
+            <div class="empty-text">暂无团队消息</div>
+          </div>
+        </div>
+        
+        <!-- Bug报告列表 -->
+        <div id="bugMessages" class="message-list">
+          <div class="bug-report-form">
+            <h4>🐛 提交Bug报告</h4>
+            <form onsubmit="submitBugReport(event)">
+              <div class="form-group">
+                <label for="bugTitle">Bug标题：</label>
+                <input type="text" id="bugTitle" placeholder="请简要描述遇到的问题" required>
+              </div>
+              <div class="form-group">
+                <label for="bugDescription">详细描述：</label>
+                <textarea id="bugDescription" rows="4" placeholder="请详细描述问题的具体情况、复现步骤等" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="bugType">问题类型：</label>
+                <select id="bugType" required>
+                  <option value="">请选择问题类型</option>
+                  <option value="功能异常">功能异常</option>
+                  <option value="界面显示">界面显示</option>
+                  <option value="性能问题">性能问题</option>
+                  <option value="其他">其他</option>
+                </select>
+              </div>
+              <button type="submit" class="submit-bug-btn">📝 提交报告</button>
+            </form>
+          </div>
+          
+          <div class="bug-list-section">
+            <h4>📋 已提交的Bug报告</h4>
+            <div id="bugReportList">
+              <div class="empty-message">
+                <div class="empty-icon">🐛</div>
+                <div class="empty-text">暂无Bug报告</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 设置面板功能 - 提前定义确保onclick可以找到
+    function openSettings() {
+      console.log('openSettings函数被调用');
+      const settingsModal = document.getElementById('settingsModal');
+      console.log('settingsModal元素:', settingsModal);
+      
+      if (!settingsModal) {
+        console.error('找不到settingsModal元素');
+        alert('设置面板元素未找到，请刷新页面重试');
+        return;
+      }
+      
+      settingsModal.style.display = 'flex';
+      console.log('设置面板已显示');
+      
+      // 更新个人信息显示
+      updateProfileDisplay();
+      
+      // 加载保存的设置
+      loadSettingsFromStorage();
+    }
+
+    function closeSettings() {
+      const settingsModal = document.getElementById('settingsModal');
+      settingsModal.style.display = 'none';
+    }
+
+    function updateSettingsInfo() {
+      const userEmail = localStorage.getItem('userEmail') || '未登录';
+      const userInviteCode = localStorage.getItem('userInviteCode') || '-';
+      const currentLanguage = localStorage.getItem('language') || 'zh-CN';
+      
+      document.getElementById('userEmailDisplay').textContent = userEmail;
+      document.getElementById('userInviteCodeDisplay').textContent = userInviteCode;
+      document.getElementById('languageSelect').value = currentLanguage;
+    }
+
+    /* 状态数据与逻辑定义 */
+    const STATES = {
+      1: {
+        name: '状态1',
+        subtitle: '新手未入金',
+        card: function() {
+          return `
+            <div class="section reactivate-highlight">
+              <div class="section-title">激活账号</div>
+              <div class="section-content" style="margin-bottom: 16px;">立即入金100 USDT，开启168小时挑战期，解锁任务系统和收益机会。</div>
+              <button class="reactivate-btn" onclick="activateAccount()">立即激活 100 USDT</button>
+            </div>
+            <div class="section">
+              <div class="section-title">收益预览</div>
+              <div class="section-content">查看前10名收益排行榜，了解潜在收益机会。</div>
+              <button onclick="showRanking()" style="margin-top: 12px; padding: 8px 16px; background: var(--btn-gradient); color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; width: 100%; font-weight: 500; box-shadow: 0 2px 6px var(--accent-shadow); transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 12px var(--accent-shadow-hover)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px var(--accent-shadow)'">查看排行榜</button>
+            </div>
+          `;
+        },
+        buttons: []
+      },
+      2: {
+        name: '状态2',
+        subtitle: '168小时倒计时中',
+        card: function() {
+          // 当前新手任务：只显示尚未完成的第一个任务
+          const currentTask = newTasks.find(t => !t.done);
+          let taskSection;
+          if (currentTask) {
+            taskSection = `
+            <div class="section">
+              <div class="section-title">当前任务</div>
+              <div class="section-content">${currentTask.title}</div>
+            </div>
+            `;
+          } else {
+            taskSection = `
+            <div class="section">
+              <div class="section-title">当前任务</div>
+              <div class="section-content">所有新手任务已完成</div>
+            </div>
+            `;
+          }
+          const completedTasks = newTasks.filter(t => t.done).length;
+          
+          // 可接的任务区域：显示所有未完成的新手任务
+          const availableTasks = newTasks.filter(t => !t.done);
+          let availableTasksSection = '';
+          if (availableTasks.length > 0) {
+            availableTasksSection = `
+            <div class="section" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 8px; margin-bottom: 8px; cursor: pointer;" onclick="window.location.href='tasks.html'">
+              <div class="section-title" style="font-size: 14px; font-weight: bold; color: var(--accent-color); margin-bottom: 6px;">📋 可接的任务</div>
+              <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">点击查看详细任务列表</div>
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                ${availableTasks.map(task => `
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <span style="font-size: 12px; color: var(--text);">${task.title}</span>
+                    <span style="font-size: 10px; padding: 2px 6px; background: linear-gradient(45deg, #00eaff, #0088ff); color: #031e2e; border-radius: 8px;">待完成</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            `;
+          }
+          
+          // 答题任务区域：完成至少一个新手任务后出现，且未完成全部20题
+          const firstDone = newTasks[0] && newTasks[0].done;
+          const quizCorrect = parseInt(localStorage.getItem('quizCorrect')) || 0;
+          let quizSection = '';
+          if (firstDone && quizCorrect < 20) {
+            quizSection = `
+            <div class="section" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 8px; margin-bottom: 8px; box-shadow: var(--btn-glow); cursor: pointer;" onclick="window.location.href='quiz.html'">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <div style="font-size: 14px; font-weight: bold; color: var(--accent-color); margin-bottom: 2px;">📝 答题任务</div>
+                  <div style="font-size: 12px; color: var(--text-secondary);">降低提现手续费</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 12px; color: var(--text-secondary);">进度</div>
+                  <div style="font-weight: bold; color: var(--accent-color);">${quizCorrect}/20</div>
+                </div>
+              </div>
+            </div>
+            `;
+          }
+          
+          // 大神任务区域：完成所有新手任务且完成答题任务后显示
+          const allNewTasksCompleted = newTasks.every(task => task.done);
+          const quizCompleted = quizCorrect >= 20;
+          let masterTasksSection = '';
+          if (allNewTasksCompleted && quizCompleted) {
+            // 获取大神任务完成状态
+            const godTasksCompleted = parseInt(localStorage.getItem('godTasksCompleted')) || 0;
+            const currentMasterTask = godTasks.find(task => !task.done);
+            
+            masterTasksSection = `
+            <div class="section" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 8px; margin-bottom: 8px; box-shadow: var(--btn-glow); cursor: pointer;" onclick="window.location.href='tasks.html?tab=master'">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <div style="font-size: 14px; font-weight: bold; color: var(--accent-color); margin-bottom: 2px;">🏆 大神任务</div>
+                  <div style="font-size: 12px; color: var(--text-secondary);">${currentMasterTask ? currentMasterTask.title : '所有大神任务已完成'}</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 12px; color: var(--text-secondary);">进度</div>
+                  <div style="font-weight: bold; color: var(--accent-color);">${godTasksCompleted}/6</div>
+                </div>
+              </div>
+            </div>
+            `;
+          }
+          
+          return `
+            <!-- 优化后的倒计时区域 -->
+            <div class="section" style="margin-bottom: 16px;">
+              <div class="countdown-container" style="
+                background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(47, 128, 237, 0.1) 100%);
+                border: 2px solid var(--accent-color);
+                border-radius: 10px;
+                padding: 6px 10px;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 8px 32px rgba(47, 128, 237, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+                animation: countdownPulse 3s ease-in-out infinite;
+              ">
+                
+                <!-- 倒计时主体 -->
+                <div style="position: relative; z-index: 2;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                      <div style="
+                        width: 5px;
+                        height: 5px;
+                        background: var(--accent-color);
+                        border-radius: 50%;
+                        animation: blink 1.5s ease-in-out infinite;
+                      "></div>
+                      <span style="font-size: 11px; color: var(--accent-color); font-weight: 600;">⚡ 挑战倒计时</span>
+                    </div>
+                    <div style="
+                      background: rgba(47, 128, 237, 0.2);
+                      padding: 1px 4px;
+                      border-radius: 6px;
+                      font-size: 9px;
+                      color: var(--accent-color);
+                      font-weight: 500;
+                    ">168小时挑战</div>
+                  </div>
+                  
+                  <!-- 时间显示区域 -->
+                  <div class="time-area" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; margin-bottom: 2px;">
+                    <!-- 时间数字 -->
+                    <div style="text-align: center;">
+                      <div class="time-display" style="
+                        font-size: 28px;
+                        font-weight: 700;
+                        color: var(--accent-color);
+                        text-shadow: 0 0 20px rgba(47, 128, 237, 0.5);
+                        font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+                        letter-spacing: 1px;
+                        margin-bottom: 2px;
+                      ">
+                        <span id="countdown">--:--:--</span>
+                      </div>
+                    </div>
+                    
+                    <!-- 直线进度条 -->
+                    <div style="width: 100%; margin-top: 4px;">
+                      <div style="
+                        width: 100%;
+                        height: 4px;
+                        background: rgba(47, 128, 237, 0.2);
+                        border-radius: 2px;
+                        overflow: hidden;
+                        position: relative;
+                      ">
+                        <div 
+                          id="countdownProgress" 
+                          style="
+                            height: 100%;
+                            width: 100%;
+                            background: var(--accent-color);
+                            border-radius: 2px;
+                            transition: width 1s ease-in-out;
+                            box-shadow: 0 0 12px rgba(109, 213, 237, 0.6), 0 0 24px rgba(109, 213, 237, 0.3);
+                            margin-left: auto;
+                            position: relative;
+                            overflow: hidden;
+                          "
+                        >
+                          <div style="
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 30%;
+                            height: 100%;
+                            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+                            animation: slideRight 3s linear infinite;
+                          "></div>
+                        </div>
+                      </div>
+                      <div style="
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin-top: 2px;
+                        font-size: 10px;
+                        color: var(--text-secondary);
+                      ">
+                        <span id="remainingDays" style="color: var(--accent-color); font-weight: 600;">剩余 -- 天</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- 状态提示 -->
+                  <div id="countdownStatus" style="
+                    text-align: center;
+                    font-size: 12px;
+                    color: var(--text-secondary);
+                    background: rgba(47, 128, 237, 0.1);
+                    padding: 8px 12px;
+                    border-radius: 12px;
+                    border: 1px solid rgba(47, 128, 237, 0.2);
+                    display: none;
+                  ">
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 邀请链接区域 -->
+            <div class="section invite-highlight" style="margin-bottom: 16px;">
+              <div class="section-title">邀请链接</div>
+              <div class="section-content">
+                <!-- 专属邀请码区域 -->
+                <div style="margin-bottom: 12px; padding: 12px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 2px 8px var(--accent-shadow);">
+                  <div style="font-size: 12px; color: var(--accent-color); margin-bottom: 8px; text-align: center; font-weight: 500;">💎 我的专属邀请码</div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="flex: 1; font-weight: bold; color: var(--accent-color); font-size: 16px; text-align: center; padding: 10px; background: var(--input-bg); border-radius: 8px; border: 1px solid var(--border-color); box-shadow: inset 0 1px 3px var(--accent-shadow);" id="myInviteCode">--</div>
+                    <button onclick="copyInviteCode()" style="padding: 10px 16px; background: var(--btn-gradient); color: white; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; white-space: nowrap; font-weight: 600; box-shadow: 0 2px 6px var(--accent-shadow); transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 12px var(--accent-shadow-hover)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px var(--accent-shadow)'">复制码</button>
+                  </div>
+                </div>
+                
+                <!-- 邀请链接区域 -->
+                <div style="padding: 12px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 2px 8px var(--accent-shadow);">
+                  <div style="font-size: 12px; color: var(--accent-color); margin-bottom: 8px; text-align: center; font-weight: 500;">🔗 邀请链接</div>
+                  <div class="invite-link-container" style="display: flex; gap: 8px;">
+                    <input type="text" id="inviteLink" value="https://gold7.com/invite?code=--" readonly style="flex: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--input-bg); font-size: 11px; color: var(--accent-color); box-shadow: inset 0 1px 3px var(--accent-shadow);">
+                    <button onclick="copyInviteLink()" style="padding: 10px 16px; background: var(--btn-gradient); color: white; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; white-space: nowrap; font-weight: 600; box-shadow: 0 2px 6px var(--accent-shadow); transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 12px var(--accent-shadow-hover)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px var(--accent-shadow)'">复制链接</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            ${availableTasksSection}
+            ${quizSection}
+            ${masterTasksSection}
+            
+            <!-- 战绩卡区域 - 移动到最下方 -->
+            <div class="section" style="margin-bottom: 16px;">
+              <div style="
+                background: var(--bg-secondary); 
+                border-radius: 16px; 
+                padding: 16px;
+                border: 1px solid rgba(47, 128, 237, 0.1);
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+              ">
+                <div style="
+                  font-size: 14px; 
+                  color: var(--accent-color); 
+                  margin-bottom: 12px; 
+                  text-align: center;
+                  font-weight: 600;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 8px;
+                ">
+                  <span>🏆</span>
+                  <span>我的战绩</span>
+                </div>
+                <div class="grid-stats" style="
+                   display: grid;
+                   grid-template-columns: 1fr 1fr;
+                   gap: 12px;
+                   font-size: 12px;
+                   line-height: 1.4;
+                 ">
+                   <!-- 新手任务卡片 - 增强版 -->
+                   <div class="stat-item" style="
+                     background: rgba(47, 128, 237, 0.05);
+                     padding: 12px;
+                     border-radius: 12px;
+                     border: 1px solid rgba(47, 128, 237, 0.1);
+                     position: relative;
+                     transition: all 0.2s ease;
+                   " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(47, 128, 237, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                       <div style="color: var(--text-secondary); font-size: 11px;">📚 新手任务</div>
+                       <div style="font-size: 10px; color: var(--accent-color); font-weight: 500;">
+                         ${completedTasks === 3 ? '✅ 已完成' : '进行中'}
+                       </div>
+                     </div>
+                     <div class="stat-value" style="color: var(--accent-color); font-weight: bold; font-size: 16px; margin-bottom: 4px;">
+                       <span id="taskProgress">${completedTasks}</span>/3
+                       <span style="font-size: 12px; color: var(--text-secondary); margin-left: 4px;">
+                         (${Math.round(completedTasks/3*100)}%)
+                       </span>
+                     </div>
+                     <div style="
+                       width: 100%;
+                       height: 4px;
+                       background: rgba(47, 128, 237, 0.1);
+                       border-radius: 2px;
+                       overflow: hidden;
+                       margin-bottom: 4px;
+                     ">
+                       <div style="
+                         width: ${completedTasks/3*100}%;
+                         height: 100%;
+                         background: var(--accent-color);
+                         border-radius: 2px;
+                         transition: width 0.3s ease;
+                       "></div>
+                     </div>
+                     <div style="font-size: 10px; color: var(--text-secondary);">
+                       ${completedTasks < 3 ? `还需完成 ${3-completedTasks} 个任务` : '🎉 全部完成！'}
+                     </div>
+                   </div>
+                   
+                   <!-- 答题进度卡片 - 增强版 -->
+                   <div class="stat-item" style="
+                     background: rgba(47, 128, 237, 0.05);
+                     padding: 12px;
+                     border-radius: 12px;
+                     border: 1px solid rgba(47, 128, 237, 0.1);
+                     position: relative;
+                     transition: all 0.2s ease;
+                   " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(47, 128, 237, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                       <div style="color: var(--text-secondary); font-size: 11px;">🧠 答题进度</div>
+                       <div style="font-size: 10px; color: var(--accent-color); font-weight: 500;">
+                         ${quizCorrect >= 16 ? '✅ 通过' : (completedTasks >= 1 ? '可答题' : '🔒 未解锁')}
+                       </div>
+                     </div>
+                     <div class="stat-value" style="color: var(--accent-color); font-weight: bold; font-size: 16px; margin-bottom: 4px;">
+                       ${quizCorrect}/20
+                       <span style="font-size: 12px; color: var(--text-secondary); margin-left: 4px;">
+                         (${Math.round(quizCorrect/20*100)}%)
+                       </span>
+                     </div>
+                     <div style="
+                       width: 100%;
+                       height: 4px;
+                       background: rgba(47, 128, 237, 0.1);
+                       border-radius: 2px;
+                       overflow: hidden;
+                       margin-bottom: 4px;
+                     ">
+                       <div style="
+                         width: ${quizCorrect/20*100}%;
+                         height: 100%;
+                         background: var(--accent-color);
+                         border-radius: 2px;
+                         transition: width 0.3s ease;
+                       "></div>
+                     </div>
+                     <div style="font-size: 10px; color: var(--text-secondary);">
+                       ${completedTasks < 1 ? '需完成新手任务1解锁' : (quizCorrect < 16 ? `需答对 ${16-quizCorrect} 题通过` : '🎁 非固定已手续费永久已降低至1%')}
+                     </div>
+                   </div>
+                   
+                   <!-- 团队人数卡片 - 增强版 -->
+                   <div class="stat-item" style="
+                     background: rgba(47, 128, 237, 0.05);
+                     padding: 12px;
+                     border-radius: 12px;
+                     border: 1px solid rgba(47, 128, 237, 0.1);
+                     position: relative;
+                     transition: all 0.2s ease;
+                   " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(47, 128, 237, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                       <div style="color: var(--text-secondary); font-size: 11px;">👥 团队规模</div>
+                       <div style="font-size: 10px; color: var(--success-color); font-weight: 500;">
+                         ${teamMembers > 0 ? '↗️ 增长中' : '待发展'}
+                       </div>
+                     </div>
+                     <div class="stat-value" style="color: var(--accent-color); font-weight: bold; font-size: 16px; margin-bottom: 4px;">
+                       <span id="teamCount">${teamMembers}</span>人
+                     </div>
+                     <div style="font-size: 10px; color: var(--text-secondary); margin-bottom: 4px;">
+                       ${teamMembers < 2 ? '距离大神任务一还需' + (2-teamMembers) + '人' : '已达成大神任务一条件 🎯'}
+                     </div>
+                     <div style="font-size: 10px; color: var(--text-secondary);">
+                       💡 邀请更多好友加入团队
+                     </div>
+                   </div>
+                   
+                   <!-- 总收益卡片 - 增强版 -->
+                   <div class="stat-item" style="
+                     background: rgba(40, 167, 69, 0.1);
+                     padding: 12px;
+                     border-radius: 12px;
+                     border: 1px solid rgba(40, 167, 69, 0.2);
+                     position: relative;
+                     transition: all 0.2s ease;
+                   " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(40, 167, 69, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                       <div style="color: var(--text-secondary); font-size: 11px;">💰 总收益</div>
+                       <div style="font-size: 10px; color: var(--success-color); font-weight: 500;">
+                         ${totalEarnings > 0 ? '📈 盈利中' : '待激活'}
+                       </div>
+                     </div>
+                     <div class="stat-value" style="color: var(--success-color); font-weight: bold; font-size: 16px; margin-bottom: 4px;">
+                       <span id="totalEarnings">${totalEarnings.toFixed(2)}</span> USDT
+                     </div>
+                     <div style="font-size: 10px; color: var(--text-secondary); margin-bottom: 2px;">
+                       收益率: ${totalEarnings > 0 ? (totalEarnings/100*100).toFixed(1) + '%' : '0%'}
+                       ${totalEarnings > 0 ? ' | 日均: ' + (totalEarnings/7).toFixed(2) + ' USDT' : ''}
+                     </div>
+                     <div style="font-size: 10px; color: var(--text-secondary);">
+                       ${totalEarnings === 0 ? '💡 完成任务开始赚取收益' : '🚀 继续完成任务提升收益'}
+                     </div>
+                   </div>
+                 </div>
+              </div>
+            </div>
+          `;
+        },
+        buttons: [
+          { text: '红包', color: 'red', key: 'red', action: () => grabRedPacket() },
+          { text: '团队', color: 'orange', key: 'team', action: () => showTeam() },
+          { text: '钱包', color: 'purple', key: 'wallet', action: () => showWallet() },
+          { text: '排行', color: 'green', key: 'rank', action: () => showRanking() }
+        ]
+      },
+      3: {
+        name: '状态3',
+        subtitle: '倒计时结束未复购',
+        card: function() {
+          const completedTasks = newTasks.filter(t => t.done).length;
+          return `
+            <div class="section reactivate-highlight">
+              <div class="section-title">🔥 再次激活</div>
+              <div class="section-content">
+                <p style="margin-bottom: 12px;">重新开启168小时挑战，继续赚取收益！</p>
+                <button class="reactivate-btn" onclick="repurchase()">立即激活 100 USDT</button>
+              </div>
+            </div>
+            <div class="section">
+              <div class="section-title">战绩卡</div>
+              <div class="section-content">本期收益：<strong>${totalEarnings.toFixed(2)} USDT</strong><br/>新手任务：${completedTasks}/3 完成<br/>团队人数：${teamMembers}人</div>
+            </div>
+            <div class="section">
+              <div class="section-title">我的团队</div>
+              <div class="section-content">查看七层团队结构和人数。</div>
+            </div>
+          `;
+        },
+        buttons: [
+          { text: '团队', color: 'orange', action: () => showTeam() },
+          { text: '钱包', color: 'purple', action: () => showWallet() },
+          { text: '排行', color: 'green', action: () => showRanking() }
+        ]
+      }
+    };
+
+    /* 按钮分类系统 */
+    function getButtonCategory(buttonKey) {
+      // 主要功能按钮
+      const primaryButtons = ['activate', 'reactivate', 'invite', 'wallet', 'team'];
+      // 金融相关按钮
+      const financialButtons = ['wallet', 'grab-red-packet'];
+      // 游戏化按钮
+      const gamificationButtons = ['tasks', 'god-tasks', 'leaderboard'];
+      
+      if (primaryButtons.includes(buttonKey)) {
+        return 'btn-primary';
+      } else if (financialButtons.includes(buttonKey)) {
+        return 'btn-financial';
+      } else if (gamificationButtons.includes(buttonKey)) {
+        return 'btn-gamification';
+      }
+      return 'btn-default';
+    }
+    
+    /* 任务数据 */
+    const newTasks = [
+      { id: 1, title: '直接推荐1人', desc: '邀请1位好友注册并激活账号', done: false, reward: 10 },
+      { id: 2, title: '帮助下级推荐1人', desc: '指导你的下级成功邀请1位新用户', done: false, reward: 10 },
+      { id: 3, title: '教下级如何教他的下级推荐1人', desc: '培训下级的推广技巧，帮助三级推广', done: false, reward: 10 }
+    ];
+    
+    // 答题任务数据
+    const quizTasks = [
+      { id: 'quiz1', title: '基础知识答题', desc: '完成20道基础题目，正确率达到80%', done: false, reward: 20, feeReduction: 0.02 }
+    ];
+    
+    const godTasks = [
+      { id: 1, title: '大神任务一：直推2人 × 2层 = 6人', desc: '建立2层团队结构，每层2人', done: false, reward: 50 },
+      { id: 2, title: '大神任务二：直推3人 × 3层 = 39人', desc: '建立3层团队结构，每层3人', done: false, reward: 250 },
+      { id: 3, title: '大神任务三：直推4人 × 4层 = 340人', desc: '建立4层团队结构，每层4人', done: false, reward: 1250 },
+      { id: 4, title: '大神任务四：直推5人 × 5层 = 3905人', desc: '建立5层团队结构，每层5人', done: false, reward: 6250 },
+      { id: 5, title: '大神任务五：直推6人 × 6层 = 55986人', desc: '建立6层团队结构，每层6人', done: false, reward: 31250 },
+      { id: 6, title: '大神任务六：直推7人 × 7层 = 960799人', desc: '建立7层团队结构，每层7人', done: false, reward: 156250 }
+    ];
+
+    // ===== API 调用工具函数 =====
+    const API_BASE_URL = 'http://localhost:3000';
+    
+    // 获取认证token
+    function getAuthToken() {
+      return localStorage.getItem('token');
+    }
+    
+    // API请求封装
+    async function apiRequest(endpoint, options = {}) {
+      const token = getAuthToken();
+      const url = `${API_BASE_URL}/api${endpoint}`;
+      
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        ...options
+      };
+      
+      try {
+        const response = await fetch(url, config);
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.message || `HTTP error! status: ${response.status}`);
+        }
+        
+        return data;
+      } catch (error) {
+        console.error('API请求失败:', error);
+        throw error;
+      }
+    }
+    
+    // 状态管理API调用
+    const StateAPI = {
+      // 获取用户状态
+      async getStatus() {
+        return await apiRequest('/state/status');
+      },
+      
+      // 激活账号
+      async activate() {
+        return await apiRequest('/state/activate', {
+          method: 'POST'
+        });
+      },
+      
+      // 复购
+      async repurchase() {
+        return await apiRequest('/state/repurchase', {
+          method: 'POST'
+        });
+      },
+      
+      // 同步状态
+      async syncState(localState) {
+        return await apiRequest('/state/sync', {
+          method: 'PUT',
+          body: JSON.stringify(localState)
+        });
+      },
+      
+      // 切换状态（开发用）
+      async switchState(newState) {
+        return await apiRequest('/state/switch', {
+          method: 'POST',
+          body: JSON.stringify({ state: newState })
+        });
+      }
+    };
+
+    /* 全局状态变量 */
+    let currentState = 1;
+    let countdownStart = null; // 开启倒计时的时间戳
+    let inviteStart = null;    // 邀请链接生效时间戳
+    let countdownTimer = null;
+
+    // 模拟用户钱包余额，用于红包和提现功能
+    let walletBalance = 0;
+
+    // 交易记录列表
+    let transactions = [];
+
+    // 提现手续费比例，默认为 5%（0.05），可通过答题任务降低，最低 1%（0.01）
+    let withdrawFeeRate = 0.05;
+
+    // 新增状态管理变量
+    let userLevel = 0; // 用户等级 0:未激活 1:已激活
+    let completedNewbieTasks = 0; // 已完成新手任务数量
+    let quizCompleted = false; // 答题任务是否完成
+    let godTasksUnlocked = false; // 大神任务是否解锁
+    let teamMembers = 0; // 团队成员数量
+    let totalEarnings = 0; // 总收益
+
+    /**
+     * 从 localStorage 初始化状态，包括余额、任务完成状态和交易记录。
+     */
+    function loadState() {
+      const savedState = localStorage.getItem('appState');
+      if (savedState) {
+        try {
+          const state = JSON.parse(savedState);
+          currentState = state.currentState || 1;
+          countdownStart = state.countdownStart;
+          inviteStart = state.inviteStart;
+          walletBalance = state.walletBalance || 0;
+          transactions = state.transactions || [];
+          userLevel = state.userLevel || 0;
+          completedNewbieTasks = state.completedNewbieTasks || 0;
+          quizCompleted = state.quizCompleted || false;
+          godTasksUnlocked = state.godTasksUnlocked || false;
+          teamMembers = state.teamMembers || 0;
+          totalEarnings = state.totalEarnings || 0;
+          withdrawFeeRate = state.withdrawFeeRate || 0.05;
+          
+          // 同步团队收益：总收益 = 团队人数 * 10
+          const teamData = JSON.parse(localStorage.getItem('teamData') || '{}');
+          if (teamData.totalMembers) {
+            totalEarnings = teamData.totalMembers * 10;
+            teamMembers = teamData.totalMembers;
+          }
+          
+          // 恢复任务状态
+          if (state.newTasks) {
+            state.newTasks.forEach((task, index) => {
+              if (newTasks[index]) newTasks[index].done = task.done;
+            });
+            // 同步completedNewbieTasks变量，确保与newTasks数组状态一致
+            completedNewbieTasks = newTasks.filter(t => t.done).length;
+          }
+          if (state.quizTasks) {
+            state.quizTasks.forEach((task, index) => {
+              if (quizTasks[index]) quizTasks[index].done = task.done;
+            });
+          }
+          if (state.godTasks) {
+            state.godTasks.forEach((task, index) => {
+              if (godTasks[index]) godTasks[index].done = task.done;
+            });
+          }
+        } catch (e) {
+          console.warn('无法解析 appState', e);
+        }
+      }
+    }
+
+    /**
+     * 将当前状态保存到 localStorage。
+     */
+    function saveState() {
+      // 同步团队收益：总收益 = 团队人数 * 10
+      const teamData = JSON.parse(localStorage.getItem('teamData') || '{}');
+      if (teamData.totalMembers) {
+        totalEarnings = teamData.totalMembers * 10;
+      }
+      
+      const state = {
+        currentState,
+        countdownStart,
+        inviteStart,
+        walletBalance,
+        transactions,
+        userLevel,
+        completedNewbieTasks,
+        quizCompleted,
+        godTasksUnlocked,
+        teamMembers,
+        totalEarnings,
+        withdrawFeeRate,
+        newTasks: newTasks.map(t => ({ ...t })),
+        quizTasks: quizTasks.map(t => ({ ...t })),
+        godTasks: godTasks.map(t => ({ ...t }))
+      };
+      localStorage.setItem('appState', JSON.stringify(state));
+    }
+
+    // 与后端同步状态
+    async function syncWithBackend() {
+      try {
+        console.log('正在与后端同步状态...');
+        const response = await StateAPI.getStatus();
+        
+        if (response.success && response.data) {
+          const backendState = response.data;
+          
+          // 更新前端状态
+          currentState = backendState.status;
+          
+          // 如果后端有倒计时信息，同步倒计时
+          if (backendState.countdown_end_time) {
+            const endTime = new Date(backendState.countdown_end_time);
+            const now = new Date();
+            if (endTime > now) {
+              countdownStart = now.getTime();
+              // 计算倒计时开始时间（168小时前）
+              const startTime = new Date(endTime.getTime() - 168 * 60 * 60 * 1000);
+              countdownStart = startTime.getTime();
+            }
+          }
+          
+          // 同步其他数据
+          if (backendState.balance !== undefined) {
+            walletBalance = backendState.balance;
+          }
+          if (backendState.total_earnings !== undefined) {
+            totalEarnings = backendState.total_earnings;
+          }
+          if (backendState.team_count !== undefined) {
+            teamMembers = backendState.team_count;
+          }
+          
+          console.log('后端状态同步成功:', backendState);
+          
+          // 保存同步后的状态
+          saveState();
+          
+          // 重新渲染页面
+          renderState();
+        }
+      } catch (error) {
+        console.warn('后端状态同步失败，使用本地状态:', error.message);
+        // 继续使用本地状态，不影响用户体验
+      }
+    }
+
+    // 生成用户专属邀请码
+    function generateUserInviteCode() {
+      const userEmail = localStorage.getItem('userEmail');
+      if (userEmail) {
+        // 使用邮箱前缀 + 随机6位字符生成邀请码
+        const emailPrefix = userEmail.split('@')[0].substring(0, 6).toUpperCase();
+        const randomSuffix = Math.random().toString(36).substring(2, 8).toUpperCase();
+        return emailPrefix + randomSuffix;
+      }
+      // 如果没有邮箱，生成随机邀请码
+      return 'USER' + Math.random().toString(36).substring(2, 8).toUpperCase();
+    }
+
+    // WebSocket连接和实时通知功能
+    let websocket = null;
+    
+    function initWebSocket() {
+      // 获取JWT token
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.log('未找到token，跳过WebSocket连接');
+        return;
+      }
+      
+      // 连接WebSocket服务器（使用正确的路径和token）
+      websocket = new WebSocket(`ws://localhost:3000/ws?token=${encodeURIComponent(token)}`);
+      
+      websocket.onopen = function(event) {
+        console.log('WebSocket连接已建立');
+      };
+      
+      websocket.onmessage = function(event) {
+        try {
+          const data = JSON.parse(event.data);
+          handleWebSocketMessage(data);
+        } catch (error) {
+          console.error('解析WebSocket消息失败:', error);
+        }
+      };
+      
+      websocket.onclose = function(event) {
+        console.log('WebSocket连接已关闭');
+        // 5秒后尝试重连
+        setTimeout(initWebSocket, 5000);
+      };
+      
+      websocket.onerror = function(error) {
+        console.error('WebSocket错误:', error);
+      };
+    }
+    
+    function handleWebSocketMessage(data) {
+      switch (data.type) {
+        case 'redpacket_notification':
+          // 红包通知
+          showDialog(
+            '红包提醒',
+            `新的红包活动开始了！快去抢红包吧！`,
+            [{ text: '立即抢红包', action: 'grabRedPacket' }, { text: '稍后再说', action: 'close' }],
+            'redpacket'
+          );
+          break;
+          
+        case 'balance_update':
+          // 余额更新通知
+          updateWalletBalance(data.newBalance, data.reason);
+          break;
+          
+        case 'task_reminder':
+          // 任务提醒
+          showDialog(
+            '任务提醒',
+            data.message,
+            [{ text: '查看任务', action: 'showTasks' }, { text: '稍后再说', action: 'close' }],
+            'success'
+          );
+          break;
+          
+        case 'system_notification':
+          // 系统通知
+          showDialog(
+            '系统通知',
+            data.message,
+            [{ text: '确定', action: 'close' }],
+            'success'
+          );
+          break;
+          
+        default:
+          console.log('未知的WebSocket消息类型:', data.type);
+      }
+    }
+    
+    // 更新钱包余额函数
+    function updateWalletBalance(newBalance, reason = '') {
+      const oldBalance = walletBalance;
+      walletBalance = newBalance;
+      
+      // 保存到localStorage
+      localStorage.setItem('walletBalance', walletBalance.toString());
+      
+      // 重新渲染页面以更新显示
+      renderState();
+      
+      // 显示余额变化通知
+      if (reason) {
+        const changeAmount = newBalance - oldBalance;
+        const changeText = changeAmount > 0 ? `+${changeAmount}` : changeAmount.toString();
+        showDialog(
+          '余额变化',
+          `${reason}\n余额变化: ${changeText}元\n当前余额: ${newBalance}元`,
+          [{ text: '确定', action: 'close' }],
+          'success'
+        );
+      }
+    }
+    
+    // 显示任务页面函数
+    function showTasks() {
+      // 根据当前状态显示相应的任务信息
+      let taskMessage = '';
+      if (currentState === 1) {
+        taskMessage = '请先激活账号后查看任务';
+      } else if (currentState === 2 || currentState === 4) {
+        const incompleteTasks = newTasks.filter(task => !task.done);
+        if (incompleteTasks.length > 0) {
+          taskMessage = `您还有 ${incompleteTasks.length} 个新手任务未完成：\n`;
+          incompleteTasks.forEach((task, index) => {
+            taskMessage += `${index + 1}. ${task.name}\n`;
+          });
+        } else if (!quizCompleted) {
+          taskMessage = '新手任务已完成，请完成答题任务';
+        } else if (!godTasksCompleted) {
+          taskMessage = '请完成大神任务以获得更多奖励';
+        } else {
+          taskMessage = '所有任务已完成！继续邀请好友获得更多奖励';
+        }
+      } else {
+        taskMessage = '当前状态下暂无可用任务';
+      }
+      
+      showDialog(
+        '任务提醒',
+        taskMessage,
+        [{ text: '知道了', action: 'close' }],
+        'success'
+      );
+    }
+
+    function init() {
+      // 检查用户是否已登录
+      const userEmail = localStorage.getItem('userEmail');
+      if (!userEmail) {
+        // 未登录，跳转到登录页面
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      // 从 localStorage 加载历史状态
+      loadState();
+      
+      // 尝试从后端同步状态
+      syncWithBackend();
+      
+      // 生成或获取用户邀请码
+      let userInviteCode = localStorage.getItem('userInviteCode');
+      if (!userInviteCode) {
+        userInviteCode = generateUserInviteCode();
+        localStorage.setItem('userInviteCode', userInviteCode);
+      }
+      
+      // 初始化音效系统
+      initAudioSystem();
+      
+      // 初始化消息系统
+      initMessages();
+      
+      // 初始化Bug报告系统
+      initBugReports();
+      
+      // 初始化消息图标拖拽功能
+      initMessageIconDrag();
+      
+      // 初始化WebSocket连接
+      initWebSocket();
+      
+      renderState();
+      
+      // 初始化设置面板事件监听器
+      initSettingsEvents();
+    }
+
+    function renderState() {
+      const state = STATES[currentState];
+      document.getElementById('stateLabel').innerText = state.name;
+      document.getElementById('subtitle').innerText = state.subtitle;
+      // 渲染卡片内容
+      document.getElementById('card').innerHTML = state.card();
+      
+      // 更新战绩卡数据
+      updateStatsDisplay();
+      
+      // 渲染底部按钮
+      const bottom = document.getElementById('bottomButtons');
+      bottom.innerHTML = '';
+      
+      // 严格按状态控制按钮显示
+      const buttonsToShow = getButtonsForState(currentState);
+      
+      // 如果按钮超过6个，添加many-buttons类
+      if (buttonsToShow.length > 6) {
+        bottom.classList.add('many-buttons');
+      } else {
+        bottom.classList.remove('many-buttons');
+      }
+      
+      buttonsToShow.forEach(btnConfig => {
+        const b = document.createElement('button');
+        b.innerText = btnConfig.text;
+        
+        // 应用新的按钮分类系统
+        const buttonCategory = getButtonCategory(btnConfig.key || btnConfig.text);
+        b.classList.add(buttonCategory);
+        
+        // 保持原有颜色类（向后兼容）
+        if (btnConfig.color) {
+          b.classList.add(btnConfig.color);
+        }
+        
+        b.onclick = btnConfig.action;
+        
+        // 设置 data-key 以便样式定制
+        if (btnConfig.key) {
+          b.dataset.key = btnConfig.key;
+        }
+        
+        bottom.appendChild(b);
+      });
+      
+      // 控制倒计时
+      if (currentState === 2) {
+        if (!countdownStart) {
+          countdownStart = Date.now();
+          inviteStart = countdownStart;
+        }
+        updateCountdown();
+        countdownTimer = setInterval(updateCountdown, 1000);
+      } else {
+        if (countdownTimer) clearInterval(countdownTimer);
+      }
+      
+      // 更新消息按钮状态
+      updateMessageButton();
+    }
+    
+    // 根据状态严格控制按钮显示
+    function getButtonsForState(state) {
+      const baseButtons = STATES[state].buttons;
+      const result = [...baseButtons];
+      
+
+      
+      return result;
+    }
+    
+    // 更新战绩卡显示
+    function updateStatsDisplay() {
+      const taskProgressEl = document.getElementById('taskProgress');
+      const teamCountEl = document.getElementById('teamCount');
+      const totalEarningsEl = document.getElementById('totalEarnings');
+      
+      // 使用newTasks数组的实际完成状态，确保与内容栏显示一致
+      const actualCompletedTasks = newTasks.filter(t => t.done).length;
+      if (taskProgressEl) taskProgressEl.innerText = actualCompletedTasks;
+      if (teamCountEl) teamCountEl.innerText = teamMembers;
+      if (totalEarningsEl) totalEarningsEl.innerText = totalEarnings.toFixed(2);
+    }
+
+    function updateCountdown(wsData = null) {
+      const total = 168 * 3600 * 1000; // 总时长：168小时
+      let remaining;
+      
+      if (wsData && wsData.remaining !== undefined) {
+        // 使用WebSocket推送的倒计时数据
+        remaining = wsData.remaining;
+      } else {
+        // 使用本地计算的倒计时
+        const now = Date.now();
+        const elapsed = now - countdownStart;
+        remaining = total - elapsed;
+        if (remaining < 0) remaining = 0;
+      }
+      
+      // 计算总小时数、分钟数、秒数
+      const totalHours = Math.floor(remaining / (3600 * 1000));
+      const mins = Math.floor((remaining % 3600000) / 60000);
+      const secs = Math.floor((remaining % 60000) / 1000);
+      
+      // 格式化为 XX:XX:XX 格式（小时不补前导0）
+      const timeStr = `${totalHours}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      
+      // 更新倒计时显示
+      const countdownEl = document.getElementById('countdown');
+      if (countdownEl) countdownEl.innerText = timeStr;
+      
+      // 更新进度条（倒计时进度：从满逐渐变空）
+      const progressEl = document.getElementById('countdownProgress');
+      const remainingDaysEl = document.getElementById('remainingDays');
+      if (progressEl && remainingDaysEl) {
+        // 倒计时进度条：显示剩余时间进度（从100%递减到0%，从满逐渐变空）
+        const remainingProgress = (remaining / total);
+        const remainingPercent = remainingProgress * 100;
+        progressEl.style.width = `${remainingPercent}%`;
+        
+        // 计算剩余天数、小时数和分钟数
+        const remainingDays = Math.floor(remaining / (24 * 3600 * 1000));
+        const remainingHours = Math.floor((remaining % (24 * 3600 * 1000)) / (3600 * 1000));
+        const remainingMinutes = Math.floor((remaining % (3600 * 1000)) / (60 * 1000));
+        
+        // 根据剩余时间显示不同格式
+        if (remainingDays > 0) {
+          remainingDaysEl.textContent = `剩余${remainingDays}天${remainingHours}小时${remainingMinutes}分`;
+        } else {
+          remainingDaysEl.textContent = `仅剩余${remainingHours}小时${remainingMinutes}分`;
+        }
+      }
+      
+      // 更新状态提示和动画效果
+      const statusEl = document.getElementById('countdownStatus');
+      const containerEl = document.querySelector('.countdown-container');
+      
+      if (statusEl && containerEl) {
+        const hoursLeft = remaining / (3600 * 1000);
+        
+        if (hoursLeft <= 24) {
+          // 最后24小时 - 紧急状态
+          statusEl.innerHTML = '🚨 最后24小时！立即完成任务获得奖励';
+          statusEl.style.background = 'rgba(255, 69, 58, 0.2)';
+          statusEl.style.borderColor = 'rgba(255, 69, 58, 0.4)';
+          statusEl.style.color = '#ff453a';
+          containerEl.style.animation = 'urgentPulse 1.5s ease-in-out infinite';
+          
+          // 进度环变红色
+          if (progressEl) {
+            progressEl.style.stroke = '#ff453a';
+            progressEl.style.filter = 'drop-shadow(0 0 8px #ff453a)';
+          }
+        } else if (hoursLeft <= 72) {
+          // 最后72小时 - 警告状态
+          statusEl.innerHTML = '⚠️ 时间紧迫，抓紧完成任务获得收益';
+          statusEl.style.background = 'rgba(255, 193, 7, 0.2)';
+          statusEl.style.borderColor = 'rgba(255, 193, 7, 0.4)';
+          statusEl.style.color = '#ffc107';
+          containerEl.style.animation = 'countdownPulse 2s ease-in-out infinite';
+          
+          // 进度环变橙色
+          if (progressEl) {
+            progressEl.style.stroke = '#ffc107';
+            progressEl.style.filter = 'drop-shadow(0 0 8px #ffc107)';
+          }
+        } else {
+          // 正常状态 - 不显示任何提示
+          if (statusEl) {
+            statusEl.style.display = 'none';
+          }
+          containerEl.style.animation = 'countdownPulse 3s ease-in-out infinite';
+          
+          // 进度环保持蓝色
+          if (progressEl) {
+            progressEl.style.stroke = 'var(--accent-color)';
+            progressEl.style.filter = 'drop-shadow(0 0 8px var(--accent-color))';
+          }
+        }
+      }
+      
+      // 更新邀请链接显示
+      updateInviteDisplay();
+      
+      // 当倒计时结束，自动进入状态3
+      if (remaining === 0 && currentState === 2) {
+        currentState = 3;
+        countdownStart = null;
+        renderState();
+      }
+    }
+    
+    // 更新邀请链接显示
+    function updateInviteDisplay() {
+      // 更新邀请码和邀请链接内容
+      const userInviteCode = localStorage.getItem('userInviteCode') || '';
+      
+      // 更新专属邀请码显示
+      const inviteCodeEl = document.getElementById('myInviteCode');
+      if (inviteCodeEl) {
+        inviteCodeEl.textContent = userInviteCode;
+      }
+      
+      // 更新邀请链接
+      const inviteLinkEl = document.getElementById('inviteLink');
+      if (inviteLinkEl) {
+        inviteLinkEl.value = `https://gold7.com/login.html?invite=${userInviteCode}`;
+      }
+    }
+
+    // 开发测试循环状态
+    function cycleState() {
+      currentState++;
+      if (currentState > 3) currentState = 1;
+      countdownStart = null;
+      renderState();
+    }
+
+    // 切换到指定状态
+    function switchToState(state) {
+      if (state === '') return; // 如果选择了空选项，不执行任何操作
+      
+      currentState = parseInt(state);
+      countdownStart = null;
+      renderState();
+      
+      // 重置下拉菜单
+      document.getElementById('stateSelect').value = '';
+      
+      // 自动关闭设置面板
+      closeSettings();
+    }
+
+    // 激活账号/首次入金
+    async function activateAccount() {
+      showDialog('激活账号', '请向系统提供的USDT地址支付100 USDT以激活账号。激活后将开启168小时挑战期。');
+      
+      try {
+        // 尝试调用后端API
+        const response = await StateAPI.activate();
+        
+        if (response.success) {
+          // 使用后端返回的数据更新状态
+          currentState = response.data.status;
+          countdownStart = new Date(response.data.countdown_end_time).getTime() - (168 * 60 * 60 * 1000);
+          inviteStart = countdownStart;
+          userLevel = 1;
+          
+          // 记录交易
+          transactions.push({ 
+            type: '激活缴费', 
+            amount: -100, 
+            fee: 0, 
+            net: -100, 
+            time: new Date().toISOString(),
+            desc: '首次激活账号缴费' 
+          });
+          
+          // 设置激活时间供quiz.html使用
+          localStorage.setItem('activationTime', new Date().toISOString());
+          
+          saveState();
+          renderState();
+          
+          showDialog('激活成功', '账号激活成功！168小时挑战期已开始，请完成任务获得收益。');
+        }
+      } catch (error) {
+        console.warn('后端API调用失败，使用本地模式:', error);
+        
+        // 回退到本地模式
+        setTimeout(() => {
+          // 首次激活记录交易（入金不影响余额，余额来源于佣金）
+          transactions.push({ 
+            type: '激活缴费', 
+            amount: -100, 
+            fee: 0, 
+            net: -100, 
+            time: new Date().toISOString(),
+            desc: '首次激活账号缴费' 
+          });
+          
+          // 更新状态
+          userLevel = 1;
+          currentState = 2;
+          countdownStart = Date.now();
+          inviteStart = countdownStart;
+          
+          // 设置激活时间供quiz.html使用
+          localStorage.setItem('activationTime', new Date().toISOString());
+          
+          saveState();
+          renderState();
+          
+          showDialog('激活成功', '账号激活成功！168小时挑战期已开始，请完成任务获得收益。');
+        }, 1000);
+      }
+    }
+
+    // 再次入金（复购）
+    async function repurchase() {
+      showDialog('再次激活', '请向系统提供的新USDT地址支付100 USDT以重新激活。重新激活后将开启新的168小时挑战期。');
+      
+      try {
+        // 尝试调用后端API
+        const response = await StateAPI.repurchase();
+        
+        if (response.success) {
+          // 使用后端返回的数据更新状态
+          currentState = response.data.status;
+          countdownStart = new Date(response.data.countdown_end_time).getTime() - (168 * 60 * 60 * 1000);
+          inviteStart = countdownStart;
+          
+          // 记录交易
+          transactions.push({ 
+            type: '复购缴费', 
+            amount: -100, 
+            fee: 0, 
+            net: -100, 
+            time: new Date().toISOString(),
+            desc: '复购激活缴费' 
+          });
+          
+          // 设置激活时间供quiz.html使用
+          localStorage.setItem('activationTime', new Date().toISOString());
+          
+          saveState();
+          renderState();
+          
+          showDialog('复购成功', '复购激活成功！新的168小时挑战期已开始。');
+        }
+      } catch (error) {
+        console.warn('后端API调用失败，使用本地模式:', error);
+        
+        // 回退到本地模式
+        setTimeout(() => {
+          // 复购记录交易
+          transactions.push({ 
+            type: '复购缴费', 
+            amount: -100, 
+            fee: 0, 
+            net: -100, 
+            time: new Date().toISOString(),
+            desc: '复购激活缴费' 
+          });
+          
+          // 更新状态
+          currentState = 2;
+          countdownStart = Date.now();
+          inviteStart = countdownStart;
+          
+          // 设置激活时间供quiz.html使用
+          localStorage.setItem('activationTime', new Date().toISOString());
+          
+          saveState();
+          renderState();
+          
+          showDialog('复购成功', '复购激活成功！新的168小时挑战期已开始。');
+        }, 1000);
+      }
+    }
+
+    // 任务按钮 - 实现按序触发逻辑
+    function openTasks() {
+      // 找到下一个未完成的任务（按ID顺序）
+      const nextTask = newTasks.find(t => !t.done && t.id === completedNewbieTasks + 1);
+      
+      if (nextTask) {
+        // 显示任务详情
+        showDialog('当前任务', `任务${nextTask.id}：${nextTask.title}\n\n${nextTask.desc}\n\n完成奖励：${nextTask.reward} USDT\n\n点击确定标记完成`);
+        
+        // 模拟任务完成
+        setTimeout(() => {
+          nextTask.done = true;
+          // 同步completedNewbieTasks变量，确保与newTasks数组状态一致
+          completedNewbieTasks = newTasks.filter(t => t.done).length;
+          
+          // 任务奖励
+          walletBalance += nextTask.reward;
+          totalEarnings += nextTask.reward;
+          
+          // 记录交易
+          transactions.push({ 
+            type: '任务奖励', 
+            amount: nextTask.reward, 
+            fee: 0, 
+            net: nextTask.reward, 
+            time: new Date().toISOString(),
+            desc: `完成${nextTask.title}` 
+          });
+          
+          saveState();
+          renderState();
+          
+          // 显示任务完成弹窗
+          showDialog('任务完成', `恭喜完成任务：${nextTask.title}！\n奖励：${nextTask.reward} USDT\n当前余额：${walletBalance.toFixed(2)} USDT`);
+          
+          // 检查是否解锁答题任务，直接加入弹窗队列
+          if (completedNewbieTasks >= 1 && !quizCompleted) {
+            showDialog('解锁答题任务', '恭喜！解锁答题任务，完成可降低提现手续费！\n\n当前手续费：' + ((withdrawFeeRate * 100).toFixed(1)) + '%');
+          }
+        }, 1500);
+      } else if (completedNewbieTasks >= 3) {
+        // 检查答题任务状态
+        const quizCorrect = parseInt(localStorage.getItem('quizCorrect')) || 0;
+        if (quizCorrect < 20) {
+          showDialog('答题任务', '所有新手任务已完成！\n\n答题任务可用，完成20题可降低提现手续费。\n\n当前手续费：' + ((withdrawFeeRate * 100).toFixed(1)) + '%');
+        } else {
+          showDialog('新手任务', '所有新手任务已完成！\n\n答题任务也已完成，手续费已降至最低。');
+        }
+      } else {
+        showDialog('任务系统', '请按顺序完成任务。');
+      }
+    }
+    
+
+    
+    // 复制邀请链接
+    function copyInvite() {
+      const userInviteCode = localStorage.getItem('userInviteCode') || '';
+      const link = `https://gold7.com/invite?code=${userInviteCode}`;
+      navigator.clipboard.writeText(link).then(() => {
+        showDialog('邀请链接已复制', `有效期剩余 ${document.getElementById('inviteLeft').innerText}。`);
+      });
+    }
+    
+    // 新的复制邀请链接函数
+    function copyInviteLink() {
+      const linkInput = document.getElementById('inviteLink');
+      const link = linkInput.value;
+      
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(link).then(() => {
+          const detailedTime = getDetailedCountdown();
+          showDialog('邀请链接已复制', `有效期剩余 ${detailedTime}`);
+        }).catch(() => {
+          fallbackCopy(link);
+        });
+      } else {
+        fallbackCopy(link);
+      }
+    }
+    
+    // 复制专属邀请码函数
+    function copyInviteCode() {
+      const codeEl = document.getElementById('myInviteCode');
+      const code = codeEl.textContent;
+      
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(code).then(() => {
+          const detailedTime = getDetailedCountdown();
+          showDialog('邀请码已复制', `专属邀请码: ${code}\n有效期剩余 ${detailedTime}`);
+        }).catch(() => {
+          fallbackCopyCode(code);
+        });
+      } else {
+        fallbackCopyCode(code);
+      }
+    }
+    
+    // 获取详细倒计时时间
+    function getDetailedCountdown() {
+      const total = 168 * 3600 * 1000;
+      const now = Date.now();
+      const inviteRemainingMs = Math.max(0, (inviteStart + total) - now);
+      const days = Math.floor(inviteRemainingMs / (24 * 3600000));
+      const hrs = Math.floor((inviteRemainingMs % (24 * 3600000)) / 3600000);
+      const mins = Math.floor((inviteRemainingMs % 3600000) / 60000);
+      
+      let result = '';
+      if (days > 0) result += `${days}天`;
+      if (hrs > 0) result += `${hrs}小时`;
+      if (mins > 0) result += `${mins}分钟`;
+      if (result === '') result = '不足1分钟';
+      
+      return result;
+    }
+    
+    // 降级复制方案
+    function fallbackCopy(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        const detailedTime = getDetailedCountdown();
+        showDialog('邀请链接已复制', `有效期剩余 ${detailedTime}`);
+      } catch (err) {
+        showDialog('复制失败', '请手动复制链接');
+      }
+      document.body.removeChild(textArea);
+    }
+    
+    // 降级复制邀请码方案
+    function fallbackCopyCode(code) {
+      const textArea = document.createElement('textarea');
+      textArea.value = code;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        const detailedTime = getDetailedCountdown();
+        showDialog('邀请码已复制', `专属邀请码: ${code}\n有效期剩余 ${detailedTime}`);
+      } catch (err) {
+        showDialog('复制失败', '请手动复制邀请码');
+      }
+      document.body.removeChild(textArea);
+    }
+    // 抢红包 - 跳转到红包页面
+    function grabRedPacket() {
+      // 检查资格：仅状态2和状态4有红包按钮
+      if (currentState !== 2 && currentState !== 4) {
+        showDialog('无抢红包资格', '只有在激活状态（初次挑战或复购状态）才可以抢红包。');
+        return;
+      }
+      
+      // 跳转到红包页面
+      window.location.href = 'redpacket.html';
+    }
+    // 我的团队
+    function showTeam() {
+      // 跳转到团队页面
+      window.location.href = 'team.html';
+    }
+    // 我的钱包
+    function showWallet() {
+      // 跳转到钱包页面
+      window.location.href = 'wallet.html';
+    }
+    // 排行榜
+    function showRanking() {
+      // 跳转到排行榜页面
+      window.location.href = 'ranking.html';
+    }
+    function showRedRanking() {
+      showDialog('红包排行榜', '按红包收入USDT总额排行。');
+    }
+    function showGodRanking() {
+      showDialog('大神排行榜', '按大神等级排行。');
+    }
+    function openGodTasks() {
+      showDialog('大神任务', '请在卡片中查看大神任务目标。');
+    }
+    /* 高级对话框 */
+    // 弹窗队列管理
+    let dialogQueue = [];
+    let isDialogShowing = false;
+    
+    function showDialog(title, msg, buttons = null, type = 'normal', callback = null) {
+      // 如果当前有弹窗正在显示，将新弹窗加入队列
+      if (isDialogShowing) {
+        dialogQueue.push({ title, msg, buttons, type, callback });
+        return;
+      }
+      
+      isDialogShowing = true;
+      const dialog = document.getElementById('dialog');
+      const dialogTitle = document.getElementById('dialogTitle');
+      const dialogMsg = document.getElementById('dialogMsg');
+      const dialogButtons = document.getElementById('dialogButtons');
+      
+      dialogTitle.innerText = title;
+      dialogMsg.innerText = msg;
+      
+      // 根据类型添加特殊样式
+       dialog.className = 'dialog';
+       if (title.includes('任务完成') || title.includes('恭喜') || title.includes('成功') || title.includes('抢红包成功') || title.includes('激活成功') || type === 'success') {
+         dialog.classList.add('success');
+       }
+       if (type === 'redpacket') {
+         dialog.classList.add('redpacket');
+       }
+       if (type === 'countdown') {
+         dialog.classList.add('countdown');
+       }
+      
+      if (buttons && Array.isArray(buttons)) {
+        // 自定义按钮
+        dialogButtons.innerHTML = '';
+        buttons.forEach(button => {
+          const btn = document.createElement('button');
+          btn.textContent = button.text;
+          btn.className = button.style === 'danger' ? 'danger-btn' : (button.style === 'secondary' ? 'secondary-btn' : '');
+          btn.onclick = () => {
+            closeDialog(() => {
+              // 处理WebSocket消息中的特殊动作
+              if (button.action === 'grabRedPacket') {
+                grabRedPacket();
+              } else if (button.action === 'showTasks') {
+                // 显示任务页面或任务弹窗
+                showTasks();
+              } else if (button.action === 'close') {
+                // 仅关闭弹窗，无其他动作
+              } else if (button.action) {
+                button.action();
+              }
+              if (callback) {
+                callback();
+              }
+            });
+          };
+          dialogButtons.appendChild(btn);
+        });
+      } else {
+        // 默认确定按钮
+        dialogButtons.innerHTML = '';
+        const defaultBtn = document.createElement('button');
+        defaultBtn.textContent = '确定';
+        defaultBtn.onclick = () => {
+          closeDialog(callback);
+        };
+        dialogButtons.appendChild(defaultBtn);
+      }
+      
+      // 显示弹窗并添加动画
+      dialog.style.display = 'flex';
+      setTimeout(() => {
+        dialog.classList.add('show');
+      }, 10);
+    }
+    
+    function closeDialog(callback = null) {
+      const dialog = document.getElementById('dialog');
+      dialog.classList.remove('show');
+      setTimeout(() => {
+        dialog.style.display = 'none';
+        dialog.className = 'dialog'; // 重置类名
+        isDialogShowing = false;
+        
+        if (callback) {
+          callback();
+        }
+        
+        // 处理队列中的下一个弹窗，添加500ms延迟避免视觉冲突
+        if (dialogQueue.length > 0) {
+          setTimeout(() => {
+            const nextDialog = dialogQueue.shift();
+            showDialog(nextDialog.title, nextDialog.msg, nextDialog.buttons, nextDialog.type, nextDialog.callback);
+          }, 500);
+        }
+      }, 300);
+    }
+
+    /**
+     * 重置测试数据
+     */
+    function resetTestData() {
+      if(confirm('确定要重置所有测试数据吗？此操作不可撤销。')) {
+        // 重置所有任务状态
+        newTasks.forEach(task => task.done = false);
+        quizCompleted = false;
+        godTasksCompleted = false;
+        
+        // 生成随机团队人数 (1-50人)
+        const randomTeamSize = Math.floor(Math.random() * 50) + 1;
+        
+        // 设置余额为团队人数*10 USDT
+        const newBalance = randomTeamSize * 10;
+        
+        // 清空localStorage中的相关数据
+        localStorage.removeItem('userTasks');
+        localStorage.removeItem('quizCompleted');
+        localStorage.removeItem('godTasksCompleted');
+        localStorage.removeItem('userBalance');
+        localStorage.removeItem('teamSize');
+        
+        // 重置答题相关数据
+        localStorage.removeItem('quizIndex');
+        localStorage.removeItem('quizCorrect');
+        localStorage.setItem('withdrawFeeRate', '0.05'); // 重置手续费为5%
+        
+        // 清除交易记录和应用状态数据
+        localStorage.removeItem('transactions');
+        localStorage.removeItem('appState');
+        localStorage.removeItem('teamData');
+        localStorage.removeItem('recentRed');
+        
+        // 重置全局变量到初始状态
+        transactions = [];
+        userLevel = 0;
+        completedNewbieTasks = 0;
+        godTasksUnlocked = false;
+        teamMembers = randomTeamSize;
+        totalEarnings = randomTeamSize * 10;
+        withdrawFeeRate = 0.05;
+        walletBalance = randomTeamSize * 10;
+        countdownStart = null;
+        inviteStart = null;
+        
+        // 设置新的数据到localStorage
+        localStorage.setItem('teamSize', randomTeamSize.toString());
+        localStorage.setItem('userBalance', newBalance.toString());
+        
+        // 重置到状态1
+        currentState = 1;
+        
+        // 重新渲染页面
+        renderState();
+        
+        // 强制显示风格选择弹窗
+        showForceThemeSelection(randomTeamSize, newBalance);
+      }
+    }
+
+    /**
+     * 强制风格选择弹窗
+     */
+    function showForceThemeSelection(teamSize, balance) {
+      const themes = {
+        'cyberpunk': { name: '赛博朋克', icon: '🌆', description: '未来科技感' },
+
+        'business': { name: '商务蓝', icon: '💼', description: '专业稳重' },
+        'dark-tech': { name: '暗黑科技', icon: '⚡', description: '神秘酷炫' },
+        'fresh': { name: '清新绿', icon: '🌿', description: '自然清新' }
+      };
+      
+      const themeOptionsHTML = Object.entries(themes).map(([key, theme]) => `
+        <div class="force-theme-option" data-theme="${key}">
+          <span class="force-theme-icon">${theme.icon}</span>
+          <div class="force-theme-info">
+            <div class="force-theme-name">${theme.name}</div>
+            <div class="force-theme-desc">${theme.description}</div>
+          </div>
+        </div>
+      `).join('');
+      
+      const modalHTML = `
+        <div id="forceThemeModal" class="force-theme-modal">
+          <div class="force-theme-content">
+            <div class="force-theme-header">
+              <h2>🎨 选择您的专属风格</h2>
+              <p>数据重置成功！请选择一个风格主题继续使用</p>
+            </div>
+            <div class="force-theme-options">
+              ${themeOptionsHTML}
+            </div>
+            <div class="force-theme-footer">
+              <p class="force-theme-info-text">团队人数：${teamSize}人 | 余额：${balance} USDT | 所有任务已重置</p>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // 添加样式
+      const styleHTML = `
+        <style>
+        .force-theme-modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.8);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 10000;
+          backdrop-filter: blur(10px);
+        }
+        .force-theme-content {
+          background: var(--bg-card);
+          border-radius: 20px;
+          padding: 24px;
+          max-width: 400px;
+          width: 90%;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+          border: 1px solid var(--border-color);
+        }
+        .force-theme-header {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+        .force-theme-header h2 {
+          color: var(--text-primary);
+          margin: 0 0 8px 0;
+          font-size: 20px;
+        }
+        .force-theme-header p {
+          color: var(--text-secondary);
+          margin: 0;
+          font-size: 14px;
+        }
+        .force-theme-options {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          margin-bottom: 20px;
+        }
+        .force-theme-option {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px;
+          border: 2px solid var(--border-color);
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          background: var(--bg-secondary);
+        }
+        .force-theme-option:hover {
+          border-color: var(--accent-color);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .force-theme-option.selected {
+          border-color: var(--accent-color);
+          background: var(--btn-gradient);
+          color: var(--text-primary);
+        }
+        .force-theme-icon {
+          font-size: 24px;
+          width: 32px;
+          text-align: center;
+        }
+        .force-theme-info {
+          flex: 1;
+        }
+        .force-theme-name {
+          font-weight: 600;
+          font-size: 16px;
+          margin-bottom: 2px;
+        }
+        .force-theme-desc {
+          font-size: 12px;
+          opacity: 0.8;
+        }
+        .force-theme-footer {
+          text-align: center;
+        }
+        .force-theme-info-text {
+          font-size: 12px;
+          color: var(--text-secondary);
+          margin: 0;
+        }
+        </style>
+      `;
+      
+      // 插入样式和模态框
+      document.head.insertAdjacentHTML('beforeend', styleHTML);
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+      
+      // 绑定事件
+      const modal = document.getElementById('forceThemeModal');
+      const options = document.querySelectorAll('.force-theme-option');
+      
+      options.forEach(option => {
+        option.addEventListener('click', () => {
+          const selectedTheme = option.getAttribute('data-theme');
+          
+          // 应用选中的主题
+          if (window.themeSwitcher) {
+            window.themeSwitcher.switchTheme(selectedTheme);
+          } else {
+            document.documentElement.setAttribute('data-theme', selectedTheme === 'cyberpunk' ? '' : selectedTheme);
+            localStorage.setItem('selectedTheme', selectedTheme);
+          }
+          
+          // 关闭模态框
+          modal.remove();
+          
+          // 显示成功信息
+          const themeName = themes[selectedTheme].name;
+          showDialog('风格设置成功', `已切换至${themeName}风格\n团队人数：${teamSize}人\n余额：${balance} USDT\n所有任务已重置`);
+        });
+      });
+    }
+
+    /**
+     * 模态弹窗管理
+     */
+    const modal = document.getElementById('modal');
+    const modalClose = document.getElementById('modalClose');
+    const modalBody = document.getElementById('modalBody');
+    modalClose.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+    function openModal(type) {
+      let html = '';
+      if(type === 'task') {
+        const currentTask = newTasks.find(t => !t.done);
+        if(currentTask) {
+          html += `<h3 style="margin-top:0;color:var(--brand)">${currentTask.title}</h3>`;
+          html += `<p style="font-size:14px;color:var(--muted)">${currentTask.desc ? currentTask.desc : '完成此任务可推进进度。'}</p>`;
+          html += `<button class="btn" id="modalTaskDone" style="margin-top:16px;width:100%">标记完成</button>`;
+        } else {
+          html += `<h3 style="margin-top:0;color:var(--brand)">所有新手任务已完成</h3>`;
+          html += `<p style="font-size:14px;color:var(--muted)">无需再执行新手任务。</p>`;
+        }
+      } else if(type === 'wallet') {
+        html += `<h3 style="margin-top:0;color:var(--brand)">我的钱包</h3>`;
+        html += `<p style="font-size:14px;color:var(--muted)">当前余额：-- USDT</p>`;
+        html += `<button class="btn" style="margin-top:16px;width:100%">提现</button>`;
+      } else if(type === 'team') {
+        html += `<h3 style="margin-top:0;color:var(--brand)">我的团队</h3>`;
+        html += `<div style="font-size:14px;color:var(--muted)">
+          <p>团队总人数：<span id="teamTotalCount">--</span></p>
+          <p>直推人数：<span id="directCount">--</span></p>
+          <p>团队业绩：<span id="teamPerformance">-- USDT</span></p>
+        </div>`;
+      } else if(type === 'ranking') {
+        html += `<h3 style="margin-top:0;color:var(--brand)">排行榜</h3>`;
+        html += `<div style="font-size:14px;color:var(--muted)">
+          <div style="margin-bottom:16px">
+            <h4 style="margin:0 0 8px 0;color:var(--brand)">团队排行</h4>
+            <p>暂无数据</p>
+          </div>
+          <div style="margin-bottom:16px">
+            <h4 style="margin:0 0 8px 0;color:var(--brand)">红包排行</h4>
+            <p>暂无数据</p>
+          </div>
+          <div>
+            <h4 style="margin:0 0 8px 0;color:var(--brand)">大神排行</h4>
+            <p>暂无数据</p>
+          </div>
+        </div>`;
+      }
+      modalBody.innerHTML = html;
+      modal.style.display = 'flex';
+      // 绑定任务完成按钮
+      const completeBtn = document.getElementById('modalTaskDone');
+      if(completeBtn) {
+        completeBtn.addEventListener('click', () => {
+          const task = newTasks.find(t => !t.done);
+          if(task) task.done = true;
+          modal.style.display = 'none';
+          renderState();
+        });
+      }
+    }
+
+    // 退出登录功能
+    // 确认退出登录
+    function confirmLogout() {
+      // 先关闭设置界面
+      closeSettings();
+      
+      // 然后显示确认退出对话框
+      showDialog('确认退出', '退出登录将清除所有本地数据，确定要继续吗？', [
+        {
+          text: '取消',
+          style: 'secondary',
+          action: () => {}
+        },
+        {
+          text: '确认退出',
+          style: 'danger',
+          action: logout
+        }
+      ]);
+    }
+    
+    function logout() {
+      // 清除所有用户相关的本地存储数据
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userPassword');
+      localStorage.removeItem('appState');
+      localStorage.removeItem('userInviteCode');
+      localStorage.removeItem('teamData');
+      localStorage.removeItem('language');
+      localStorage.removeItem('userStatus');
+      localStorage.removeItem('inviteCode');
+      
+      // 直接跳转到登录页面
+      window.location.href = 'login.html';
+    }
+    
+    // 显示帮助信息
+    function showHelp() {
+      closeSettings();
+      showDialog('使用帮助', '这里是功能说明和操作指南\n\n• 激活账号：完成邮箱验证\n• 邀请好友：分享专属邀请码\n• 完成任务：获得奖励积分\n• 抢红包：在指定时间参与\n• 查看排行：了解当前排名');
+    }
+    
+    // 显示意见反馈
+    function showFeedback() {
+      closeSettings();
+      showDialog('意见反馈', '感谢您的宝贵意见！\n\n请通过以下方式联系我们：\n• 邮箱：feedback@example.com');
+    }
+    
+    // 显示关于信息
+    function showAbout() {
+      closeSettings();
+      showDialog('关于我们', '裂金7日 H5应用\n\n版本：v1.0.0\n更新时间：2024年1月\n\n开发团队致力于为用户提供\n最佳的互动体验');
+    }
+
+    // 设置面板功能已移至script开头
+
+    // 主题切换功能
+    function selectTheme(theme) {
+      // 移除所有主题按钮的active状态
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // 激活选中的主题按钮
+      event.target.classList.add('active');
+      
+      // 保存主题设置
+      localStorage.setItem('theme', theme);
+      
+      // 应用主题（这里可以添加实际的主题切换逻辑）
+      showDialog('主题设置', `已切换到${theme}主题`);
+    }
+    
+    // Toggle开关功能
+    function toggleSwitch(switchId) {
+      const toggle = document.getElementById(switchId);
+      const isChecked = toggle.checked;
+      
+      // 保存设置
+      localStorage.setItem(switchId, isChecked);
+      
+      // 根据不同的开关执行不同的逻辑
+      switch(switchId) {
+        case 'soundToggle':
+          showDialog('声音设置', isChecked ? '已开启声音效果' : '已关闭声音效果');
+          break;
+        case 'vibrationToggle':
+          showDialog('震动设置', isChecked ? '已开启震动反馈' : '已关闭震动反馈');
+          break;
+        case 'notificationToggle':
+          showDialog('通知设置', isChecked ? '已开启推送通知' : '已关闭推送通知');
+          break;
+      }
+    }
+    
+    // 语言切换功能
+    function changeLanguage() {
+      const select = document.getElementById('languageSelect');
+      const selectedLanguage = select.value;
+      const selectedText = select.options[select.selectedIndex].text;
+      
+      localStorage.setItem('language', selectedLanguage);
+      showDialog('语言设置', `已切换到：${selectedText}`);
+    }
+
+    // 初始化设置面板事件监听器
+    function initSettingsEvents() {
+      // 加载保存的设置
+      loadSettingsFromStorage();
+      
+      // 语言选择器事件监听
+      const languageSelect = document.getElementById('languageSelect');
+      if (languageSelect) {
+        languageSelect.addEventListener('change', changeLanguage);
+      }
+      
+      // 初始化音效开关状态
+      const soundToggle = document.getElementById('soundToggle');
+      if (soundToggle) {
+        const savedSoundEnabled = localStorage.getItem('soundEnabled');
+        if (savedSoundEnabled !== null) {
+          soundEnabled = savedSoundEnabled === 'true';
+          soundToggle.checked = soundEnabled;
+        }
+      }
+      
+      // 点击模态框背景关闭设置面板
+      document.addEventListener('click', function(e) {
+        const settingsModal = document.getElementById('settingsModal');
+        if (e.target === settingsModal) {
+          closeSettings();
+        }
+      });
+    }
+    
+    // 从本地存储加载设置
+    function loadSettingsFromStorage() {
+      // 加载主题设置
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      const themeBtn = document.querySelector(`[onclick="selectTheme('${savedTheme}')"]`);
+      if (themeBtn) {
+        themeBtn.classList.add('active');
+      }
+      
+      // 加载语言设置
+      const savedLanguage = localStorage.getItem('language') || 'zh-CN';
+      const languageSelect = document.getElementById('languageSelect');
+      if (languageSelect) {
+        languageSelect.value = savedLanguage;
+      }
+      
+      // 加载开关设置
+      const switches = ['soundToggle', 'vibrationToggle', 'notificationToggle'];
+      switches.forEach(switchId => {
+        const toggle = document.getElementById(switchId);
+        if (toggle) {
+          const savedState = localStorage.getItem(switchId);
+          toggle.checked = savedState === 'true';
+        }
+      });
+    }
+    
+    // 更新个人资料显示
+    function updateProfileDisplay() {
+      const userEmail = localStorage.getItem('userEmail') || 'user@example.com';
+      const profileEmail = document.getElementById('profileEmail');
+      if (profileEmail) {
+        profileEmail.textContent = userEmail;
+      }
+      
+      // 可以添加更多个人信息的更新逻辑
+    }
+
+    // 测试功能：模拟完成新手任务
+    function simulateTask(type, taskId) {
+      if (type === 'newbie') {
+        // 模拟完成新手任务
+        const task = newTasks.find(t => t.id === taskId);
+        if (task && !task.done) {
+          task.done = true;
+          completedNewbieTasks = newTasks.filter(t => t.done).length;
+          
+          // 更新钱包余额
+          walletBalance += task.reward;
+          
+          // 添加交易记录
+          transactions.unshift({
+            type: 'income',
+            amount: task.reward,
+            description: `完成${task.title}`,
+            timestamp: new Date().toISOString()
+          });
+          
+          // 检查是否解锁答题任务
+          if (completedNewbieTasks >= 1 && !quizCompleted) {
+            // 解锁答题任务
+          }
+          
+          // 检查是否解锁大神任务
+          if (completedNewbieTasks >= 3 && quizCompleted && !godTasksUnlocked) {
+            godTasksUnlocked = true;
+          }
+          
+          saveState();
+          renderState();
+          alert(`成功完成${task.title}，获得${task.reward}元奖励！`);
+        } else {
+          alert('该任务已完成或不存在！');
+        }
+      } else if (type === 'master') {
+        // 模拟完成大神任务
+        const task = godTasks.find(t => t.id === taskId);
+        if (task && !task.done) {
+          task.done = true;
+          
+          // 更新钱包余额
+          walletBalance += task.reward;
+          
+          // 添加交易记录
+          transactions.unshift({
+            type: 'income',
+            amount: task.reward,
+            description: `完成${task.title}`,
+            timestamp: new Date().toISOString()
+          });
+          
+          saveState();
+          renderState();
+          alert(`成功完成${task.title}，获得${task.reward}元奖励！`);
+        } else {
+          alert('该任务已完成或不存在！');
+        }
+      }
+    }
+    
+    // 测试功能：模拟完成全部答题
+    function simulateAllQuiz() {
+      if (!quizCompleted) {
+        quizCompleted = true;
+        const quizTask = quizTasks[0];
+        if (quizTask) {
+          quizTask.done = true;
+          
+          // 更新钱包余额
+          walletBalance += quizTask.reward;
+          
+          // 添加交易记录
+          transactions.unshift({
+            type: 'income',
+            amount: quizTask.reward,
+            description: `完成${quizTask.title}`,
+            timestamp: new Date().toISOString()
+          });
+          
+          // 降低提现手续费
+          withdrawFeeRate = Math.max(0.01, withdrawFeeRate - quizTask.feeReduction);
+        }
+        
+        // 检查是否解锁大神任务
+        if (completedNewbieTasks >= 3 && !godTasksUnlocked) {
+          godTasksUnlocked = true;
+        }
+        
+        saveState();
+        renderState();
+        alert('成功完成全部答题任务，获得20元奖励并降低提现手续费！');
+      } else {
+        alert('答题任务已完成！');
+      }
+    }
+
+    // ==================== 消息系统 ====================
+    
+    // 音效管理
+    let audioContext = null;
+    let soundEnabled = true;
+    
+    // 初始化音效系统
+    function initAudioSystem() {
+      try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // 从本地存储读取音效设置
+        const savedSoundSetting = localStorage.getItem('soundEnabled');
+        if (savedSoundSetting !== null) {
+          soundEnabled = JSON.parse(savedSoundSetting);
+        }
+      } catch (error) {
+        console.warn('音效系统初始化失败:', error);
+        soundEnabled = false;
+      }
+    }
+    
+    // 播放消息提示音
+    function playMessageSound() {
+      if (!soundEnabled) return;
+      
+      try {
+        // 创建音频元素播放金币声效
+        const audio = new Audio('金币声效.mp3');
+        audio.volume = 0.5; // 设置音量为50%
+        
+        // 播放音效
+        const playPromise = audio.play();
+        
+        // 处理播放Promise（现代浏览器要求）
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.log('音效播放失败:', error);
+          });
+        }
+        
+      } catch (error) {
+        console.warn('播放消息音效失败:', error);
+      }
+    }
+    
+    // 切换音效开关
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      localStorage.setItem('soundEnabled', JSON.stringify(soundEnabled));
+      
+      // 更新设置面板中的开关状态
+      const soundToggle = document.querySelector('#soundToggle');
+      if (soundToggle) {
+        soundToggle.checked = soundEnabled;
+      }
+      
+      // 播放测试音效（如果开启）
+      if (soundEnabled) {
+        playMessageSound();
+      }
+    }
+    
+    // 消息数据管理
+    let messages = {
+      official: [],
+      team: []
+    };
+    
+    let messageReadStatus = {};
+    
+    // Bug报告数据管理
+    let bugReports = [];
+    
+    // 初始化Bug报告数据
+    function initBugReports() {
+      const savedBugReports = localStorage.getItem('bugReports');
+      if (savedBugReports) {
+        bugReports = JSON.parse(savedBugReports);
+      }
+    }
+    
+    // 保存Bug报告数据
+    function saveBugReports() {
+      localStorage.setItem('bugReports', JSON.stringify(bugReports));
+    }
+    
+    // 初始化消息数据
+    function initMessages() {
+      const savedMessages = localStorage.getItem('messages');
+      const savedReadStatus = localStorage.getItem('messageReadStatus');
+      
+      if (savedMessages) {
+        messages = JSON.parse(savedMessages);
+      } else {
+        // 初始化默认消息
+        messages = {
+          official: [
+            {
+              id: 'official_1',
+              title: '欢迎加入平台',
+              content: '欢迎您加入我们的平台！完成新手任务可获得丰厚奖励，快来体验吧！',
+              time: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+              category: '系统通知'
+            },
+            {
+              id: 'official_2', 
+              title: '抢红包活动开启',
+              content: '每日三场红包雨活动已开启！时间：9:00、12:00、20:00，每场持续77秒，不要错过哦！',
+              time: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+              category: '活动公告'
+            },
+            {
+              id: 'official_3',
+              title: '平台升级公告',
+              content: '为了给您提供更好的服务体验，平台将在今晚23:00-24:00进行系统维护升级，期间可能影响部分功能使用，敬请谅解！',
+              time: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+              category: '系统公告'
+            }
+          ],
+          team: [
+            {
+              id: 'team_1',
+              title: '团队收益提醒',
+              content: '您的团队今日收益已更新，当前团队总收益：156.8元，继续努力！',
+              time: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
+              category: '收益通知'
+            }
+          ]
+        };
+        saveMessages();
+      }
+      
+      if (savedReadStatus) {
+        messageReadStatus = JSON.parse(savedReadStatus);
+      }
+    }
+    
+    // 保存消息数据
+    function saveMessages() {
+      localStorage.setItem('messages', JSON.stringify(messages));
+      localStorage.setItem('messageReadStatus', JSON.stringify(messageReadStatus));
+    }
+    
+    // 添加新消息
+    function addMessage(type, messageData) {
+      const message = {
+        id: `${type}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        title: messageData.title,
+        content: messageData.content,
+        time: new Date().toISOString(),
+        category: messageData.category || '系统消息'
+      };
+      
+      messages[type].unshift(message);
+      saveMessages();
+      updateMessageButton();
+      
+      // 播放新消息音效
+      playMessageSound();
+      
+      // 触发消息图标抖动效果
+      const messageIcon = document.querySelector('.message-icon');
+      if (messageIcon) {
+        messageIcon.classList.add('shake');
+        setTimeout(() => {
+          messageIcon.classList.remove('shake');
+        }, 600);
+      }
+    }
+    
+    // 生成团队消息
+    function generateTeamMessage(action, data) {
+      let title, content, category;
+      
+      switch (action) {
+        case 'member_join':
+          title = '新成员加入';
+          content = `恭喜！您的团队新增了一名成员，当前团队人数：${data.teamSize}人`;
+          category = '团队动态';
+          break;
+        case 'balance_change':
+          title = '收益更新';
+          content = `您的账户余额发生变化，当前余额：${data.balance}元`;
+          category = '收益通知';
+          break;
+        case 'task_complete':
+          title = '任务完成';
+          content = `恭喜完成任务"${data.taskName}"，获得奖励${data.reward}元`;
+          category = '任务奖励';
+          break;
+        default:
+          return;
+      }
+      
+      addMessage('team', { title, content, category });
+    }
+    
+    // 显示消息弹窗
+    function showMessages() {
+      const modal = document.getElementById('messageModal');
+      modal.style.display = 'flex';
+      
+      // 默认显示官方公告
+      switchMessageTab('official');
+    }
+    
+    // 隐藏消息弹窗
+    function hideMessages() {
+      const modal = document.getElementById('messageModal');
+      modal.style.display = 'none';
+    }
+    
+    // 关闭消息弹窗（与hideMessages功能相同，用于按钮点击）
+    function closeMessages() {
+      hideMessages();
+    }
+    
+    // 切换消息标签页
+    function switchMessageTab(type) {
+      // 更新标签按钮状态
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelector(`[onclick="switchMessageTab('${type}')"]`).classList.add('active');
+      
+      // 更新消息列表显示
+      document.querySelectorAll('.message-list').forEach(list => {
+        list.classList.remove('active');
+      });
+      document.getElementById(`${type}Messages`).classList.add('active');
+      
+      // 渲染对应内容
+      if (type === 'bug') {
+        renderBugReportList();
+      } else {
+        renderMessageList(type);
+      }
+    }
+    
+    // 渲染消息列表
+    function renderMessageList(type) {
+      const container = document.getElementById(`${type}Messages`);
+      const messageList = messages[type];
+      
+      if (messageList.length === 0) {
+        container.innerHTML = `
+          <div class="empty-message">
+            <div class="empty-icon">📭</div>
+            <div class="empty-text">暂无${type === 'official' ? '官方公告' : '团队消息'}</div>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = messageList.map(message => {
+        const isUnread = !messageReadStatus[message.id];
+        const timeStr = formatMessageTime(message.time);
+        
+        return `
+          <div class="message-item ${isUnread ? 'unread' : ''}" onclick="markMessageAsRead('${message.id}')">
+            <div class="message-header-info">
+              <h4 class="message-title-text">${message.title}</h4>
+              <span class="message-time">${timeStr}</span>
+            </div>
+            <p class="message-content-text">${message.content}</p>
+            <span class="message-category">${message.category}</span>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // 格式化消息时间
+    function formatMessageTime(timeStr) {
+      const time = new Date(timeStr);
+      const now = new Date();
+      const diff = now - time;
+      
+      if (diff < 60 * 1000) {
+        return '刚刚';
+      } else if (diff < 60 * 60 * 1000) {
+        return `${Math.floor(diff / (60 * 1000))}分钟前`;
+      } else if (diff < 24 * 60 * 60 * 1000) {
+        return `${Math.floor(diff / (60 * 60 * 1000))}小时前`;
+      } else {
+        return time.toLocaleDateString();
+      }
+    }
+    
+    // 标记消息为已读
+    function markMessageAsRead(messageId) {
+      messageReadStatus[messageId] = true;
+      saveMessages();
+      updateMessageButton();
+      
+      // 重新渲染当前标签页
+      const activeTab = document.querySelector('.tab-btn.active');
+      if (activeTab) {
+        const type = activeTab.onclick.toString().includes('official') ? 'official' : 'team';
+        renderMessageList(type);
+      }
+    }
+    
+    // 一键已读功能
+    function markAllAsRead() {
+      // 获取当前活跃的标签页类型
+      const activeTab = document.querySelector('.tab-btn.active');
+      if (!activeTab) return;
+      
+      let type = 'official';
+      if (activeTab.onclick.toString().includes('team')) {
+        type = 'team';
+      } else if (activeTab.onclick.toString().includes('bug')) {
+        // Bug报告页面不需要已读功能
+        alert('Bug报告无需标记已读');
+        return;
+      }
+      
+      // 标记当前标签页所有消息为已读
+      messages[type].forEach(message => {
+        messageReadStatus[message.id] = true;
+      });
+      
+      // 保存数据并更新界面
+      saveMessages();
+      updateMessageButton();
+      updateTabUnreadCount();
+      renderMessageList(type);
+      
+      // 显示成功提示
+      alert(`已将所有${type === 'official' ? '官方公告' : '团队消息'}标记为已读`);
+    }
+    
+    // 更新消息按钮状态（现在更新消息图标状态）
+    function updateMessageButton() {
+      const messageIcon = document.querySelector('.message-icon');
+      const unreadDot = document.querySelector('#messageUnreadDot');
+      
+      if (!messageIcon || !unreadDot) return;
+      
+      // 检查是否有未读消息
+      const hasUnread = [...messages.official, ...messages.team].some(msg => !messageReadStatus[msg.id]);
+      
+      if (hasUnread) {
+        messageIcon.classList.add('has-unread');
+        unreadDot.style.display = 'block';
+      } else {
+        messageIcon.classList.remove('has-unread');
+        unreadDot.style.display = 'none';
+      }
+    }
+    
+    // 更新标签页未读计数
+    function updateTabUnreadCount() {
+      const officialCount = messages.official.filter(msg => !messageReadStatus[msg.id]).length;
+      const teamCount = messages.team.filter(msg => !messageReadStatus[msg.id]).length;
+      
+      // 更新官方公告标签
+      const officialTab = document.querySelector('[onclick="switchMessageTab(\'official\')"]');
+      if (officialTab) {
+        const countEl = officialTab.querySelector('.unread-count');
+        if (officialCount > 0) {
+          if (!countEl) {
+            officialTab.innerHTML += `<span class="unread-count">${officialCount}</span>`;
+          } else {
+            countEl.textContent = officialCount;
+          }
+        } else if (countEl) {
+          countEl.remove();
+        }
+      }
+      
+      // 更新团队消息标签
+      const teamTab = document.querySelector('[onclick="switchMessageTab(\'team\')"]');
+      if (teamTab) {
+        const countEl = teamTab.querySelector('.unread-count');
+        if (teamCount > 0) {
+          if (!countEl) {
+            teamTab.innerHTML += `<span class="unread-count">${teamCount}</span>`;
+          } else {
+            countEl.textContent = teamCount;
+          }
+        } else if (countEl) {
+          countEl.remove();
+        }
+      }
+    }
+
+    // 发送随机官方公告
+    function sendRandomAnnouncement() {
+      const announcements = [
+        {
+          title: '🎉 系统升级完成',
+          content: '亲爱的用户，系统升级已完成，新增多项功能优化，感谢您的耐心等待！',
+          category: '系统公告'
+        },
+        {
+          title: '💰 奖励活动开启',
+          content: '限时活动：完成指定任务可获得额外奖励，活动时间有限，快来参与吧！',
+          category: '活动公告'
+        },
+        {
+          title: '🔧 功能更新通知',
+          content: '新版本已发布，优化了用户体验，修复了已知问题，建议及时更新。',
+          category: '更新公告'
+        },
+        {
+          title: '⚠️ 重要提醒',
+          content: '为保障账户安全，请勿向他人透露您的登录信息，如有异常请及时联系客服。',
+          category: '安全提醒'
+        },
+        {
+          title: '🎊 节日祝福',
+          content: '祝您节日快乐！特别推出节日专属活动，丰厚奖励等您来拿！',
+          category: '节日公告'
+        },
+        {
+          title: '📈 数据统计',
+          content: '本月平台活跃度创新高，感谢所有用户的支持与参与！',
+          category: '数据公告'
+        },
+        {
+          title: '🛠️ 维护通知',
+          content: '系统将于今晚23:00-01:00进行例行维护，期间可能影响部分功能使用。',
+          category: '维护公告'
+        },
+        {
+          title: '🏆 排行榜更新',
+          content: '本周排行榜已更新，恭喜上榜用户！继续努力，争取更好成绩！',
+          category: '排行公告'
+        }
+      ];
+      
+      const randomAnnouncement = announcements[Math.floor(Math.random() * announcements.length)];
+      addMessage('official', randomAnnouncement);
+      
+      // 显示成功提示
+      showToast('📢 随机公告已发送！', 'success');
+    }
+    
+    // Bug报告相关函数
+    
+    // 提交Bug报告
+    function submitBugReport(event) {
+      event.preventDefault();
+      
+      const title = document.getElementById('bugTitle').value.trim();
+      const description = document.getElementById('bugDescription').value.trim();
+      const type = document.getElementById('bugType').value;
+      
+      if (!title || !description || !type) {
+        alert('请填写完整的Bug报告信息');
+        return;
+      }
+      
+      const bugReport = {
+        id: `bug_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        title: title,
+        description: description,
+        type: type,
+        time: new Date().toISOString(),
+        status: '已提交'
+      };
+      
+      bugReports.unshift(bugReport);
+      saveBugReports();
+      
+      // 清空表单
+      document.getElementById('bugTitle').value = '';
+      document.getElementById('bugDescription').value = '';
+      document.getElementById('bugType').value = '';
+      
+      // 重新渲染Bug报告列表
+      renderBugReportList();
+      
+      // 显示成功提示
+      alert('Bug报告提交成功！感谢您的反馈。');
+    }
+    
+    // 渲染Bug报告列表
+    function renderBugReportList() {
+      const container = document.getElementById('bugReportList');
+      
+      if (bugReports.length === 0) {
+        container.innerHTML = `
+          <div class="empty-message">
+            <div class="empty-icon">🐛</div>
+            <div class="empty-text">暂无Bug报告</div>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = bugReports.map(bug => {
+        const timeStr = formatMessageTime(bug.time);
+        
+        return `
+          <div class="bug-item">
+            <div class="bug-item-header">
+              <h5 class="bug-title">${bug.title}</h5>
+              <span class="bug-time">${timeStr}</span>
+            </div>
+            <p class="bug-description">${bug.description}</p>
+            <span class="bug-type">${bug.type}</span>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // 格式化时间（复用消息系统的函数）
+    function formatBugTime(timeStr) {
+      return formatMessageTime(timeStr);
+    }
+
+    // 消息图标拖拽功能
+    function initMessageIconDrag() {
+      const messageIcon = document.getElementById('messageIcon');
+      if (!messageIcon) return;
+
+      let isDragging = false;
+      let startY = 0;
+      let startTop = 0;
+      let currentY = 0;
+
+      // 从localStorage加载保存的位置
+      const savedTop = localStorage.getItem('messageIconTop');
+      if (savedTop) {
+        messageIcon.style.top = savedTop + 'px';
+      }
+
+      // 鼠标事件
+      messageIcon.addEventListener('mousedown', startDrag);
+      document.addEventListener('mousemove', drag);
+      document.addEventListener('mouseup', endDrag);
+
+      // 触摸事件
+      messageIcon.addEventListener('touchstart', startDragTouch, { passive: false });
+      document.addEventListener('touchmove', dragTouch, { passive: false });
+      document.addEventListener('touchend', endDragTouch);
+
+      function startDrag(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        isDragging = true;
+        startY = e.clientY;
+        startTop = parseInt(window.getComputedStyle(messageIcon).top, 10);
+        messageIcon.classList.add('dragging');
+      }
+
+      function startDragTouch(e) {
+        isDragging = true;
+        startY = e.touches[0].clientY;
+        startTop = parseInt(window.getComputedStyle(messageIcon).top, 10);
+        currentY = 0; // 重置移动距离
+      }
+
+      function drag(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        e.stopPropagation();
+        
+        currentY = e.clientY - startY;
+        const newTop = startTop + currentY;
+        
+        // 边界检查
+        const maxTop = window.innerHeight - messageIcon.offsetHeight;
+        const constrainedTop = Math.max(0, Math.min(newTop, maxTop));
+        
+        // 使用requestAnimationFrame优化性能
+        requestAnimationFrame(() => {
+          messageIcon.style.top = constrainedTop + 'px';
+        });
+      }
+
+      function dragTouch(e) {
+        if (!isDragging) return;
+        
+        currentY = e.touches[0].clientY - startY;
+        
+        // 只有在移动距离超过阈值时才开始真正的拖动
+        if (Math.abs(currentY) > 5) {
+          e.preventDefault();
+          e.stopPropagation();
+          messageIcon.classList.add('dragging');
+          
+          const newTop = startTop + currentY;
+          
+          // 边界检查
+          const maxTop = window.innerHeight - messageIcon.offsetHeight;
+          const constrainedTop = Math.max(0, Math.min(newTop, maxTop));
+          
+          // 使用requestAnimationFrame优化性能
+          requestAnimationFrame(() => {
+            messageIcon.style.top = constrainedTop + 'px';
+          });
+        }
+      }
+
+      function endDrag(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        messageIcon.classList.remove('dragging');
+        
+        // 保存位置到localStorage
+        const finalTop = parseInt(messageIcon.style.top, 10);
+        localStorage.setItem('messageIconTop', finalTop);
+        
+        // 移除自动触发点击事件的逻辑，拖动后不自动打开消息中心
+      }
+
+      function endDragTouch(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        messageIcon.classList.remove('dragging');
+        
+        // 如果移动距离很小，说明是点击而不是拖动
+        if (Math.abs(currentY) <= 5) {
+          // 手动触发点击事件
+          showMessages();
+        } else {
+          // 保存位置到localStorage
+          const finalTop = parseInt(messageIcon.style.top, 10);
+          localStorage.setItem('messageIconTop', finalTop);
+        }
+      }
+    }
+
+    // 时间调试功能
+    let debugTimeOffset = 0; // 调试时间偏移量（毫秒）
+    
+    function setDebugTime() {
+      const hours = parseInt(document.getElementById('debugHours').value) || 0;
+      const minutes = parseInt(document.getElementById('debugMinutes').value) || 0;
+      const seconds = parseInt(document.getElementById('debugSeconds').value) || 0;
+      
+      // 计算总的调试时间（毫秒）
+      const debugTotalMs = (hours * 3600 + minutes * 60 + seconds) * 1000;
+      
+      // 计算需要的偏移量
+      const total = 168 * 3600 * 1000; // 总时间168小时
+      debugTimeOffset = total - debugTotalMs;
+      
+      // 重新设置倒计时开始时间
+      countdownStart = Date.now() - debugTimeOffset;
+      
+      // 立即更新显示
+      updateCountdown();
+      
+      // 显示设置成功提示
+      showToast(`⏰ 时间已设置为 ${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
+      
+      console.log(`调试时间设置: ${hours}小时${minutes}分${seconds}秒, 偏移量: ${debugTimeOffset}ms`);
+    }
+    
+    function resetDebugTime() {
+      debugTimeOffset = 0;
+      countdownStart = Date.now();
+      
+      // 清空输入框
+      document.getElementById('debugHours').value = '';
+      document.getElementById('debugMinutes').value = '';
+      document.getElementById('debugSeconds').value = '';
+      
+      // 立即更新显示
+      updateCountdown();
+      
+      showToast('⏰ 倒计时已重置为168小时');
+      
+      console.log('调试时间已重置');
+    }
+
+    window.onload = init;
+  </script>
+  <script src="websocket.js"></script>
+  <script src="js/global-background.js"></script>
+</body>
+</html>

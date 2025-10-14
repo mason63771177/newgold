@@ -1,0 +1,8 @@
+{
+  "version": "1.0.0",
+  "created_at": "2025-10-12T00:41:29.706Z",
+  "encryption_algorithm": "aes-256-gcm",
+  "key_rotation_interval": 90,
+  "access_log_retention": 365,
+  "keys": {}
+}

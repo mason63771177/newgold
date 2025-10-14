@@ -1,0 +1,10 @@
+
+# Tatum 主钱包配置 (请安全保存)
+TATUM_MASTER_WALLET_MNEMONIC="control consider shine key mule quality casual jewel hidden enough asthma awake"
+TATUM_MASTER_WALLET_XPUB=xpub6CYTUgbJCBLzjxUMJPoTeetrL439cZh1eV9Rj5jTY5bRy2tUQHn6BzA5vUnLEbMWGEhAcUUJQxyLT6yB2pXMTwSPrrXLDBpU4z8ids3MXJr
+TATUM_NETWORK=testnet
+TATUM_API_KEY=your_tatum_api_key_here
+
+# 验证信息
+# 第一个地址: T2a9dbc9ac608aa07f5255057aad2785087
+# 第一个私钥: b8dd59b5c2b41436e4af27d9820a138bb8be4b5df81e68ea2e5dd2956750469f

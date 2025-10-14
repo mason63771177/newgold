@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-10-04T04:00:42.023Z",
+  "summary": {
+    "totalFixed": 9,
+    "totalFailed": 3
+  },
+  "fixedIssues": [
+    "修复 public/admin-system-monitoring.js 中的 XSS 风险",
+    "修复 public/admin-task-management.js 中的 XSS 风险",
+    "修复 public/admin-transaction-analytics.js 中的 XSS 风险",
+    "修复 public/admin-user-management.js 中的 XSS 风险",
+    "添加数据库 SSL 配置注释",
+    "设置 .env 文件权限为 600",
+    "设置 config/database.js 文件权限为 600",
+    "设置 middleware/auth.js 文件权限为 600",
+    "创建安全配置文件"
+  ],
+  "failedFixes": [
+    "修复 public/admin-notification-center.js 失败: ENOENT: no such file or directory, open '/Users/mason1236/0930/backend/public/admin-notification-center.js'",
+    "修复 public/admin-report-system.js 失败: ENOENT: no such file or directory, open '/Users/mason1236/0930/backend/public/admin-report-system.js'",
+    "修复 public/admin-wallet-management.js 失败: ENOENT: no such file or directory, open '/Users/mason1236/0930/backend/public/admin-wallet-management.js'"
+  ]
+}

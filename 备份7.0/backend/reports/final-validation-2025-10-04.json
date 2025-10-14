@@ -1,0 +1,131 @@
+{
+  "systemHealth": {
+    "status": "ok",
+    "checks": {},
+    "alerts": []
+  },
+  "apiEndpoints": {
+    "total": 8,
+    "success": 8,
+    "successRate": "100.00%"
+  },
+  "walletFunctions": {
+    "filesExist": "5/5",
+    "envVarsSet": "0/2",
+    "tests": [
+      {
+        "name": "地址生成",
+        "passed": false
+      },
+      {
+        "name": "余额查询",
+        "passed": false
+      },
+      {
+        "name": "充值监听",
+        "passed": false
+      },
+      {
+        "name": "提现处理",
+        "passed": false
+      },
+      {
+        "name": "资金归集",
+        "passed": false
+      }
+    ]
+  },
+  "security": {
+    "checks": [
+      {
+        "name": "生产环境模式",
+        "passed": false
+      },
+      {
+        "name": "config/security.js 存在",
+        "passed": true
+      },
+      {
+        "name": "middleware/auth.js 存在",
+        "passed": true
+      },
+      {
+        "name": "middleware/rateLimit.js 存在",
+        "passed": true
+      },
+      {
+        "name": ".env 权限",
+        "passed": true
+      },
+      {
+        "name": "config/database.js 权限",
+        "passed": true
+      }
+    ],
+    "passedCount": 5,
+    "totalCount": 6
+  },
+  "performance": {},
+  "documentation": {
+    "total": 4,
+    "existing": 4,
+    "completeness": "100.00%",
+    "status": [
+      {
+        "name": "README.md",
+        "exists": true
+      },
+      {
+        "name": "docs/deployment-guide.md",
+        "exists": true
+      },
+      {
+        "name": "docs/operations-manual.md",
+        "exists": true
+      },
+      {
+        "name": "docs/api-documentation.md",
+        "exists": true
+      }
+    ]
+  },
+  "deployment": {
+    "checks": [
+      {
+        "name": "start脚本",
+        "passed": true
+      },
+      {
+        "name": ".env.example",
+        "passed": true
+      },
+      {
+        "name": "数据库初始化脚本",
+        "passed": true
+      }
+    ],
+    "readiness": "100.00%"
+  },
+  "summary": {
+    "overallScore": 70,
+    "totalIssues": 1,
+    "totalWarnings": 4,
+    "status": "good",
+    "timestamp": "2025-10-04T10:41:30.409Z"
+  },
+  "issues": [
+    "系统健康检查失败"
+  ],
+  "warnings": [
+    "环境变量未设置: TATUM_API_KEY",
+    "环境变量未设置: TATUM_TESTNET",
+    "未设置为生产环境模式",
+    "无法获取性能指标"
+  ],
+  "recommendations": [
+    "立即修复所有严重问题",
+    "处理所有警告项目",
+    "建议在生产部署前进行全面优化"
+  ],
+  "generatedAt": "2025-10-04T10:41:30.414Z"
+}

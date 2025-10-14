@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>裂金7日 · 邀请链接</title>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ6GQ79K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-QQ6GQ79K7G');
+  </script>
+  
+  <link rel="stylesheet" href="css/global-background.css">
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --card: #0e141d;
+      --brand: #56ccf2;
+      --brand-2: #2f80ed;
+      --text: #e6efff;
+      --muted: #9fb3cd;
+      --accent-border: rgba(111,158,255,0.18);
+      --safe: env(safe-area-inset-bottom, 0px);
+    }
+    html, body { margin: 0; padding: 0; height: 100vh; background: var(--bg); color: var(--text); font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif; overflow:hidden; }
+    .container { height: 100vh; display:flex; flex-direction:column; }
+    .header { position:relative; flex:0 0 20%; display:flex; align-items:center; justify-content:center; padding-top:20px; }
+    .header h1 { font-size:24px; font-weight:700; background:linear-gradient(45deg,#2193b0,#6dd5ed); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter: drop-shadow(0 0 12px rgba(109,213,237,0.5)) drop-shadow(0 0 24px rgba(109,213,237,0.3)); margin:0; }
+    /* 小logo样式 */
+    .logo-small {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      margin-right: 8px;
+      filter: drop-shadow(0 0 8px rgba(109, 213, 237, 0.4)) drop-shadow(0 0 16px rgba(109, 213, 237, 0.2));
+    }
+
+    .content { flex:1; padding:0 16px; display:flex; align-items:center; justify-content:center; overflow-x: hidden; }
+    .card { width:100%; max-width:480px; background:linear-gradient(180deg,rgba(15,21,32,0.85),rgba(15,21,32,0.9)); border-radius:24px; padding:24px; border:1px solid var(--accent-border); box-shadow:0 6px 20px rgba(0,0,0,0.35) inset,0 12px 28px rgba(0,0,0,0.35); backdrop-filter:blur(16px); display:flex; flex-direction:column; gap:16px; }
+    .info { font-size:14px; line-height:1.4; color:#cdd6f7; }
+    .link-box { font-family: ui-monospace,SFMono-Regular,Menlo,monospace; font-size:14px; background:rgba(255,255,255,0.05); padding:10px; border-radius:12px; word-break:break-all; }
+    .btn { appearance:none; border:none; border-radius:16px; padding:12px 0; font-size:14px; font-weight:700; cursor:pointer; background-image:linear-gradient(180deg,var(--brand),var(--brand-2)); box-shadow:0 8px 24px rgba(47,128,237,0.45), inset 0 1px 0 rgba(255,255,255,0.25); color:#031e2e; transition:transform 0.08s ease, filter 0.2s ease; }
+    .btn:active { transform:translateY(0); filter:brightness(0.95); }
+    .bottom { flex:0 0 auto; padding:14px 16px calc(24px + var(--safe)); display:flex; background:rgba(255,255,255,0.04); backdrop-filter:blur(10px); border-top:1px solid rgba(255,255,255,0.06); margin:0 12px 12px; border-radius:20px; }
+    .bottom button { flex:1; margin:0 6px; border:none; border-radius:16px; padding:14px 0; font-size:14px; font-weight:800; color:var(--text); cursor:pointer; background-image:linear-gradient(180deg,var(--brand),var(--brand-2)); box-shadow:0 8px 24px rgba(47,128,237,0.45), inset 0 1px 0 rgba(255,255,255,0.25); transition:transform 0.08s ease, filter 0.2s ease; white-space:nowrap; }
+    .bottom button:hover { transform:translateY(-3px); filter:brightness(1.2); }
+    .bottom button:active { transform:translateY(0); filter:brightness(0.95); }
+  </style>
+</head>
+<body>
+  <script src="js/smart-back.js"></script>
+  <div class="container">
+    <div class="header">
+      <img src="logo_gold7.png" alt="Logo" class="logo-small" />
+      <h1>邀请链接</h1>
+    </div>
+    <div class="content">
+      <div class="card">
+        <div class="info">分享你的专属邀请链接给好友，TA 通过该链接注册并在 168 小时内激活后即可成为你的团队成员。</div>
+        <div id="linkBox" class="link-box">尚未生成邀请链接</div>
+        <button class="btn" id="copyBtn" onclick="copyLink()">复制链接</button>
+        <button class="btn" id="newBtn" onclick="generate()">生成/刷新链接</button>
+        <div id="timeInfo" class="info"></div>
+      </div>
+    </div>
+    <div class="bottom">
+      <button onclick="smartBack()">返回</button>
+    </div>
+  </div>
+  <script>
+    function loadInvite() {
+      // 从appState加载邀请数据
+      const appState = JSON.parse(localStorage.getItem('appState') || '{}');
+      const inviteData = appState.inviteData || {};
+      const link = inviteData.link;
+      const expires = inviteData.expires || 0;
+      const now = Date.now();
+      const linkBox = document.getElementById('linkBox');
+      const timeInfo = document.getElementById('timeInfo');
+      const copyBtn = document.getElementById('copyBtn');
+      
+      if (link && expires > now) {
+        linkBox.textContent = link;
+        const left = expires - now;
+        const hours = Math.floor(left / 3600000);
+        const minutes = Math.floor((left % 3600000) / 60000);
+        timeInfo.textContent = `剩余有效时间：${hours}小时${minutes}分钟`;
+        copyBtn.disabled = false;
+        
+        // 启动倒计时更新
+        if (window.inviteTimer) clearInterval(window.inviteTimer);
+        window.inviteTimer = setInterval(() => {
+          const nowTime = Date.now();
+          if (expires <= nowTime) {
+            clearInterval(window.inviteTimer);
+            loadInvite(); // 重新加载显示失效状态
+          } else {
+            const leftTime = expires - nowTime;
+            const h = Math.floor(leftTime / 3600000);
+            const m = Math.floor((leftTime % 3600000) / 60000);
+            timeInfo.textContent = `剩余有效时间：${h}小时${m}分钟`;
+          }
+        }, 60000); // 每分钟更新一次
+      } else if (link && expires <= now) {
+        linkBox.textContent = '邀请链接已失效，请重新生成';
+        timeInfo.textContent = '链接已过期，请生成新链接';
+        copyBtn.disabled = true;
+        if (window.inviteTimer) clearInterval(window.inviteTimer);
+      } else {
+        linkBox.textContent = '尚未生成邀请链接';
+        timeInfo.textContent = '点击下方按钮生成专属邀请链接';
+        copyBtn.disabled = true;
+        if (window.inviteTimer) clearInterval(window.inviteTimer);
+      }
+    }
+    function generate() {
+      // 生成新链接，有效期168小时
+      const token = Math.random().toString(36).substr(2, 8) + Date.now().toString(36).substr(-4);
+      const link = `${location.origin}/?invite=${token}`;
+      const expiresAt = Date.now() + 168 * 3600 * 1000;
+      
+      // 保存到appState
+      const appState = JSON.parse(localStorage.getItem('appState') || '{}');
+      appState.inviteData = {
+        link: link,
+        expires: expiresAt,
+        token: token,
+        generatedAt: Date.now()
+      };
+      localStorage.setItem('appState', JSON.stringify(appState));
+      
+      // 清理旧的localStorage数据
+      localStorage.removeItem('inviteLink');
+      localStorage.removeItem('inviteExpires');
+      
+      loadInvite();
+      alert('已生成新的邀请链接，有效期168小时');
+    }
+    function copyLink() {
+      const appState = JSON.parse(localStorage.getItem('appState') || '{}');
+      const inviteData = appState.inviteData || {};
+      const link = inviteData.link;
+      const expires = inviteData.expires || 0;
+      
+      if (!link || expires <= Date.now()) {
+        alert('当前没有有效的邀请链接，请先生成');
+        return;
+      }
+      
+      navigator.clipboard.writeText(link).then(() => {
+        alert('已复制邀请链接到剪贴板');
+      }).catch(() => {
+        // 降级方案：创建临时文本框复制
+        const textArea = document.createElement('textarea');
+        textArea.value = link;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          alert('已复制邀请链接');
+        } catch (err) {
+          alert('复制失败，请手动复制链接');
+        }
+        document.body.removeChild(textArea);
+      });
+    }
+    // 页面卸载时清理定时器
+    window.addEventListener('beforeunload', () => {
+      if (window.inviteTimer) clearInterval(window.inviteTimer);
+    });
+    
+    window.addEventListener('DOMContentLoaded', loadInvite);
+  </script>
+  <script src="js/global-background.js"></script>
+</body>
+</html>

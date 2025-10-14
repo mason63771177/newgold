@@ -1,0 +1,66 @@
+
+🔍 快速助记词安全扫描报告
+扫描时间: 2025年10月12日 星期日 07时30分31秒 +07
+=========================================
+1. 环境配置文件:
+   ⚠️  /Users/mason1236/0930/备份6.3/backend/.env
+   ⚠️  /Users/mason1236/0930/备份6.3/backend/.env.example
+   ⚠️  /Users/mason1236/0930/备份6.4/backend/.env
+   ⚠️  /Users/mason1236/0930/备份6.4/backend/.env.example
+   ⚠️  /Users/mason1236/0930/备份6.5/backend/.env
+   ⚠️  /Users/mason1236/0930/备份6.5/backend/.env.example
+   ⚠️  /Users/mason1236/0930/备份6.2/backend/.env
+   ⚠️  /Users/mason1236/0930/备份6.2/backend/.env.example
+   ⚠️  /Users/mason1236/0930/备份5.3/backend/.env
+   ⚠️  /Users/mason1236/0930/备份5.4/backend/.env
+   ⚠️  /Users/mason1236/0930/backend/.env
+   ⚠️  /Users/mason1236/0930/backend/.env.example
+   ⚠️  /Users/mason1236/0930/备份5.5/备份5.3/backend/.env
+   ⚠️  /Users/mason1236/0930/备份5.5/备份5.4/backend/.env
+   ⚠️  /Users/mason1236/0930/备份5.5/backend/.env
+   ⚠️  /Users/mason1236/0930/备份6.0/backend/.env
+   ⚠️  /Users/mason1236/0930/备份6.0/backend/.env.example
+   ⚠️  /Users/mason1236/0930/备份6.1/backend/.env
+   ⚠️  /Users/mason1236/0930/备份6.1/backend/.env.example
+   ⚠️  /Users/mason1236/0930/备份/20251011_143651_remove_status_4/backend/.env
+   ⚠️  /Users/mason1236/0930/备份/20251011_143651_remove_status_4/backend/.env.example
+   ⚠️  /Users/mason1236/0930/备份5.7/backend/.env
+   ⚠️  /Users/mason1236/0930/备份5.6/backend/.env
+2. 文档文件:
+   ⚠️  /Users/mason1236/0930/主钱包密钥信息.md
+   ⚠️  /Users/mason1236/0930/助记词和私钥知情人员分析报告.md
+3. 备份目录风险文件:
+4. JavaScript配置文件:
+   ⚠️  /Users/mason1236/0930/backend/config/security.js
+   ⚠️  /Users/mason1236/0930/backend/examples/wallet-management-demo.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/test-sdk-compatibility.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/test-tatum-connection.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/find-private-key-for-address.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/test-fund-consolidation.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/check-wallet-security.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/test-with-mock.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/verify-wallet-control.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/generate-master-wallet.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/test-wallet-functions.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/security-audit.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/check-wallet-service-address.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/verify-correct-mnemonic.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/generate-tron-address.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/fix-security-issues.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/generate-real-test-wallet.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/find-correct-mnemonic.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/test-updated-config.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/generate-test-wallet.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/get-tatum-api-key.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/verify-user-mnemonic.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/create-test-wallet.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/verify-mnemonic.js
+   ⚠️  /Users/mason1236/0930/backend/scripts/configure-tatum-rpc.js
+   ⚠️  /Users/mason1236/0930/backend/services/userWalletAddressService.js
+   ⚠️  /Users/mason1236/0930/backend/services/tatumService.js
+   ⚠️  /Users/mason1236/0930/backend/services/realTatumWalletService.js
+   ⚠️  /Users/mason1236/0930/backend/services/tatumWalletService.js
+   ⚠️  /Users/mason1236/0930/backend/services/tatumBasicWalletService.js
+
+📊 快速扫描完成
+发现的主要风险文件数量较多，建议立即处理

@@ -1,0 +1,155 @@
+{
+  "summary": {
+    "total_tests": 23,
+    "passed": 22,
+    "failed": 1,
+    "success_rate": "95.65%",
+    "duration_ms": 635,
+    "timestamp": "2025-10-12T02:12:16.263Z"
+  },
+  "test_results": [
+    {
+      "test": "KMS_INITIALIZATION",
+      "success": true,
+      "details": "密钥管理系统初始化成功",
+      "timestamp": "2025-10-12T02:12:15.630Z"
+    },
+    {
+      "test": "MASTER_PASSWORD_VERIFICATION",
+      "success": true,
+      "details": "主密码验证成功",
+      "timestamp": "2025-10-12T02:12:15.644Z"
+    },
+    {
+      "test": "ENV_SECURITY_INITIALIZATION",
+      "success": true,
+      "details": "环境安全系统初始化成功",
+      "timestamp": "2025-10-12T02:12:15.657Z"
+    },
+    {
+      "test": "MASTER_MNEMONIC_RETRIEVAL",
+      "success": true,
+      "details": "主助记词获取成功",
+      "timestamp": "2025-10-12T02:12:15.671Z"
+    },
+    {
+      "test": "KEY_RETRIEVAL_TATUM_API_KEY",
+      "success": true,
+      "details": "tatum_api_key 获取成功",
+      "timestamp": "2025-10-12T02:12:15.683Z"
+    },
+    {
+      "test": "KEY_RETRIEVAL_DATABASE_PASSWORD",
+      "success": true,
+      "details": "database_password 获取成功",
+      "timestamp": "2025-10-12T02:12:15.695Z"
+    },
+    {
+      "test": "KEY_RETRIEVAL_REDIS_PASSWORD",
+      "success": true,
+      "details": "redis_password 获取成功",
+      "timestamp": "2025-10-12T02:12:15.708Z"
+    },
+    {
+      "test": "KEY_RETRIEVAL_JWT_SECRET",
+      "success": true,
+      "details": "jwt_secret 获取成功",
+      "timestamp": "2025-10-12T02:12:15.722Z"
+    },
+    {
+      "test": "KEY_RETRIEVAL_WEBHOOK_SECRET",
+      "success": true,
+      "details": "webhook_secret 获取成功",
+      "timestamp": "2025-10-12T02:12:15.734Z"
+    },
+    {
+      "test": "KEY_CACHING",
+      "success": true,
+      "details": "密钥缓存功能正常",
+      "timestamp": "2025-10-12T02:12:15.734Z"
+    },
+    {
+      "test": "SECURE_ENV_VAR_ACCESS",
+      "success": true,
+      "details": "安全环境变量访问成功",
+      "timestamp": "2025-10-12T02:12:15.747Z"
+    },
+    {
+      "test": "ACCESS_CONTROL",
+      "success": true,
+      "details": "访问控制正常工作",
+      "timestamp": "2025-10-12T02:12:15.747Z"
+    },
+    {
+      "test": "ACCESS_LOGGING",
+      "success": true,
+      "details": "访问日志记录正常，共 25 条记录",
+      "timestamp": "2025-10-12T02:12:15.748Z"
+    },
+    {
+      "test": "TATUM_WALLET_SERVICE",
+      "success": false,
+      "details": "Tatum SDK 初始化失败或 wallets 模块不可用",
+      "timestamp": "2025-10-12T02:12:15.761Z"
+    },
+    {
+      "test": "USER_WALLET_ADDRESS_SERVICE",
+      "success": true,
+      "details": "UserWalletAddressService 初始化成功",
+      "timestamp": "2025-10-12T02:12:16.218Z"
+    },
+    {
+      "test": "TATUM_BASIC_WALLET_SERVICE",
+      "success": true,
+      "details": "TatumBasicWalletService 初始化成功",
+      "timestamp": "2025-10-12T02:12:16.250Z"
+    },
+    {
+      "test": "CACHE_STATS",
+      "success": true,
+      "details": "缓存统计正常，当前 0 个条目",
+      "timestamp": "2025-10-12T02:12:16.250Z"
+    },
+    {
+      "test": "CACHE_HIT_RATE",
+      "success": true,
+      "details": "缓存命中率: 0.00%",
+      "timestamp": "2025-10-12T02:12:16.250Z"
+    },
+    {
+      "test": "INCORRECT_PASSWORD_HANDLING",
+      "success": true,
+      "details": "错误密码正确被拒绝",
+      "timestamp": "2025-10-12T02:12:16.263Z"
+    },
+    {
+      "test": "FILE_PERMISSIONS",
+      "success": true,
+      "details": "加密文件权限设置正确 (600)",
+      "timestamp": "2025-10-12T02:12:16.263Z"
+    },
+    {
+      "test": "SENSITIVE_INFO_CLEANUP",
+      "success": true,
+      "details": "敏感环境变量已清理",
+      "timestamp": "2025-10-12T02:12:16.263Z"
+    },
+    {
+      "test": "KEY_RETRIEVAL_PERFORMANCE",
+      "success": true,
+      "details": "平均获取时间: 0.00ms",
+      "timestamp": "2025-10-12T02:12:16.263Z"
+    },
+    {
+      "test": "MEMORY_EFFICIENCY",
+      "success": true,
+      "details": "堆内存使用: 58.87MB",
+      "timestamp": "2025-10-12T02:12:16.263Z"
+    }
+  ],
+  "recommendations": [
+    "🔧 需要修复以下问题:",
+    "- TATUM_WALLET_SERVICE: Tatum SDK 初始化失败或 wallets 模块不可用",
+    "🛡️ 建议在修复问题后重新运行测试。"
+  ]
+}

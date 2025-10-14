@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>裂金7日 · 我的钱包</title>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ6GQ79K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-QQ6GQ79K7G');
+  </script>
+  
+  <link rel="stylesheet" href="themes.css">
+  <link rel="stylesheet" href="css/global-background.css">
+  
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #111823;
+      --card: #0e141d;
+      --brand: #56ccf2;
+      --brand-2: #2f80ed;
+      --text: #e6efff;
+      --muted: #9fb3cd;
+      --accent-border: rgba(111, 158, 255, 0.18);
+      /* 安全区域适配：用于 iPhone X 等带底部凹槽设备 */
+      --safe: env(safe-area-inset-bottom, 0px);
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      overflow: hidden;
+    }
+    .container { height: 100vh; display: flex; flex-direction: column; }
+    .header { position: relative; flex: 0 0 80px; display: flex; align-items: center; justify-content: center; padding-top: 8px; }
+    .header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(45deg, #2193b0, #6dd5ed);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 12px rgba(109, 213, 237, 0.5)) drop-shadow(0 0 24px rgba(109, 213, 237, 0.3));
+      margin: 0;
+    }
+    /* 小logo样式 - 压缩尺寸 */
+    .logo-small {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      margin-right: 8px;
+      filter: drop-shadow(0 0 8px rgba(109, 213, 237, 0.4)) drop-shadow(0 0 16px rgba(109, 213, 237, 0.2));
+    }
+
+    .content { flex: 1; padding: 16px; padding-bottom: 100px; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; }
+    .card {
+      width: 100%; max-width: 480px; background: linear-gradient(180deg, rgba(15,21,32,0.85), rgba(15,21,32,0.9)); border-radius: 24px; padding: 24px; border: 1px solid var(--accent-border); box-shadow: 0 6px 20px rgba(0,0,0,0.35) inset, 0 12px 28px rgba(0,0,0,0.35); backdrop-filter: blur(16px);
+    }
+    .section { margin-bottom: 16px; position: relative; }
+    .section:last-child { margin-bottom: 0; }
+    .section:not(:last-child)::after { content: ""; position: absolute; bottom: -8px; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--brand-2), transparent); opacity: 0.4; }
+    .section-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: #a3b6ff; }
+    .balance { font-size: 32px; font-weight: 700; margin: 12px 0; }
+    .transaction-list { list-style: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto; }
+    .txn-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .txn-left {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    
+    .txn-title {
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    
+    .txn-status {
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-top: 4px;
+      max-width: fit-content;
+    }
+    
+    .status-processing {
+      background-color: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+    }
+    
+    .status-confirming {
+      background-color: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+    
+    .status-completed {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .txn-amount.pos { color: #00e3ae; }
+    .txn-amount.neg { color: #ff5d5d; }
+    .address-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+    }
+    .current-address {
+      flex: 1;
+      font-size: 14px;
+      color: var(--muted);
+      word-break: break-all;
+    }
+    .bind-btn {
+      padding: 6px 12px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      border: none;
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .bind-btn:hover {
+      filter: brightness(1.1);
+    }
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 16px;
+      max-width: 400px;
+      width: 100%;
+      border: 1px solid var(--accent-border);
+    }
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .modal-input {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+    }
+    .modal-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .modal-btn.primary {
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: var(--text);
+    }
+    .modal-btn.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+    }
+    .bottom { position: fixed; bottom: 0; left: 0; right: 0; padding: 14px 16px calc(24px + var(--safe)); display: flex; background: rgba(255,255,255,0.04); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.06); margin: 0 12px 12px; border-radius: 20px 20px 0 0; z-index: 100; }
+    .bottom button {
+      flex: 1;
+      margin: 0 6px;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 0;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.08s ease, filter 0.2s ease, box-shadow 0.2s ease;
+      background-image: linear-gradient(180deg, var(--brand), var(--brand-2));
+      box-shadow: 0 8px 24px rgba(47,128,237,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
+      /* 避免移动端按钮文字换行 */
+      white-space: nowrap;
+    }
+    .bottom button:hover { transform: translateY(-3px); filter: brightness(1.2); }
+    .bottom button:active { transform: translateY(0); filter: brightness(0.95); }
+  </style>
+</head>
+<body>
+  <script src="js/smart-back.js"></script>
+  <div class="container">
+    <div class="header">
+
+      <img src="logo_gold7.png" alt="Logo" class="logo-small" />
+      <h1>我的钱包</h1>
+    </div>
+    <div class="content">
+      <div class="card">
+        <div class="section">
+          <div class="section-title">当前余额</div>
+          <div class="balance" id="balance">-- USDT</div>
+        </div>
+        <div class="section">
+          <div class="section-title">充值地址</div>
+          <div class="address-section">
+            <div class="current-address" id="depositAddress">正在获取...</div>
+            <button class="bind-btn" onclick="copyDepositAddress()">复制地址</button>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">提现地址</div>
+          <div class="address-section">
+            <div class="current-address" id="currentAddress">未绑定钱包地址</div>
+            <button class="bind-btn" onclick="showAddressBinding()">绑定地址</button>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">交易记录</div>
+          <ul class="transaction-list">
+            <li class="txn-item"><span>激活缴费</span><span class="txn-amount neg">-100 USDT</span></li>
+            <li class="txn-item"><span>任务奖励</span><span class="txn-amount pos">+10 USDT</span></li>
+            <li class="txn-item"><span>红包收入</span><span class="txn-amount pos">+0.75 USDT</span></li>
+            <li class="txn-item"><span>提现</span><span class="txn-amount neg">-30 USDT</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="bottom">
+      <button onclick="smartBack()">返回</button>
+      <button onclick="window.location.href='transaction.html'">明细</button>
+      <button onclick="window.location.href='withdraw.html'">提现</button>
+    </div>
+  </div>
+  
+  <!-- 地址绑定模态框 -->
+  <div class="modal" id="addressModal">
+    <div class="modal-content">
+      <div class="modal-title">绑定钱包地址</div>
+      <input type="text" class="modal-input" id="addressInput" placeholder="请输入USDT钱包地址（TRC20）" />
+      <div class="modal-buttons">
+        <button class="modal-btn secondary" onclick="hideAddressBinding()">取消</button>
+        <button class="modal-btn primary" onclick="saveWalletAddress()">确认</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    function loadWallet() {
+      // 从appState加载余额
+      const appState = JSON.parse(localStorage.getItem('appState') || '{}');
+      const bal = appState.walletBalance || 0;
+      document.querySelector('.balance').innerText = bal.toFixed(2) + ' USDT';
+      
+      // 加载钱包地址
+      const walletAddress = localStorage.getItem('walletAddress');
+      const addressEl = document.getElementById('currentAddress');
+      if (walletAddress) {
+        addressEl.innerText = walletAddress.substring(0, 10) + '...' + walletAddress.substring(walletAddress.length - 6);
+        addressEl.style.color = 'var(--text)';
+      } else {
+        addressEl.innerText = '未绑定钱包地址';
+        addressEl.style.color = 'var(--muted)';
+      }
+      
+      // 加载交易记录
+      let tx = [];
+      try {
+        const stored = localStorage.getItem('transactions');
+        if (stored) tx = JSON.parse(stored);
+      } catch (e) {
+        console.warn('无法解析交易记录', e);
+      }
+      
+      const listEl = document.querySelector('.transaction-list');
+      listEl.innerHTML = '';
+      
+      if (tx.length === 0) {
+        listEl.innerHTML = '<li class="txn-item"><span style="color: #666;">暂无交易记录</span></li>';
+        return;
+      }
+      
+      // 按时间倒序显示最近10条记录
+      tx.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+        .slice(0, 10)
+        .forEach((t, idx) => {
+          const li = document.createElement('li');
+          li.className = 'txn-item';
+          
+          const leftDiv = document.createElement('div');
+          leftDiv.className = 'txn-left';
+          
+          const title = document.createElement('span');
+          title.className = 'txn-title';
+          title.innerText = t.description || t.type || '未知交易';
+          
+          leftDiv.appendChild(title);
+          
+          // 如果是提现交易且有状态信息，显示状态
+          if (t.type === 'withdraw' && t.status && t.statusText) {
+            const status = document.createElement('span');
+            status.className = 'txn-status';
+            
+            // 根据状态设置不同的样式
+            if (t.status === 'processing') {
+              status.className += ' status-processing';
+            } else if (t.status === 'confirming') {
+              status.className += ' status-confirming';
+            } else if (t.status === 'completed') {
+              status.className += ' status-completed';
+            }
+            
+            status.innerText = t.statusText;
+            leftDiv.appendChild(status);
+          }
+          
+          const amt = document.createElement('span');
+          const amount = parseFloat(t.amount) || 0;
+          
+          if (t.type === 'task_reward') {
+            // 任务奖励：如果金额为0，不显示金额，只显示描述
+            if (amount === 0) {
+              amt.style.display = 'none';
+            } else {
+              amt.className = 'txn-amount pos';
+              amt.innerText = '+' + Math.abs(amount).toFixed(2) + ' USDT';
+            }
+          } else if (t.type === 'red_packet') {
+            amt.className = 'txn-amount pos';
+            amt.innerText = '+' + Math.abs(amount).toFixed(2) + ' USDT';
+          } else if (t.type === 'withdraw' || t.type === 'activation' || t.type === 'repurchase') {
+            amt.className = 'txn-amount neg';
+            amt.innerText = '-' + Math.abs(amount).toFixed(2) + ' USDT';
+          } else {
+            amt.className = 'txn-amount';
+            amt.innerText = amount.toFixed(2) + ' USDT';
+          }
+          
+          li.appendChild(leftDiv);
+          li.appendChild(amt);
+          listEl.appendChild(li);
+        });
+    }
+    async function withdraw() {
+      const balance = parseFloat(document.querySelector('.balance').textContent.replace(' USDT', ''));
+      const walletAddress = localStorage.getItem('walletAddress');
+      
+      if (!walletAddress) {
+        alert('请先绑定钱包地址');
+        return;
+      }
+      
+      if (balance < 10) {
+        alert('余额不足，最低提现金额为10 USDT');
+        return;
+      }
+      
+      const amount = prompt('请输入提现金额（最低10 USDT）：');
+      if (!amount || isNaN(amount) || parseFloat(amount) < 10) {
+        alert('请输入有效的提现金额（最低10 USDT）');
+        return;
+      }
+      
+      const withdrawAmount = parseFloat(amount);
+      if (withdrawAmount > balance) {
+        alert('提现金额不能超过当前余额');
+        return;
+      }
+      
+      if (!confirm(`确认提现 ${withdrawAmount} USDT 到地址 ${walletAddress}？\n手续费：${(withdrawAmount * 0.07).toFixed(2)} USDT`)) {
+        return;
+      }
+      
+      try {
+        const userId = localStorage.getItem('userId') || 'default';
+        const response = await fetch(`${API_BASE_URL}/api/wallet/withdraw`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userId: userId,
+            amount: withdrawAmount,
+            walletAddress: walletAddress
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          alert(`提现申请已提交！\n提现金额：${result.data.withdrawAmount} USDT\n手续费：${result.data.totalFee} USDT\n剩余余额：${result.data.remainingBalance} USDT`);
+          loadWalletData(); // 重新加载钱包数据
+          loadTransactions(); // 重新加载交易记录
+        } else {
+          alert('提现失败：' + result.message);
+        }
+      } catch (error) {
+        console.error('提现错误:', error);
+        alert('提现失败，请稍后重试');
+      }
+    }
+    // API配置
+    const API_BASE_URL = 'http://localhost:3000';
+    
+    // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadWalletData();
+            loadTransactions();
+            loadDepositAddress();
+        });
+
+    // 加载充值地址
+    async function loadDepositAddress() {
+        try {
+            const userId = localStorage.getItem('userId') || 'default';
+            const response = await fetch(`${API_BASE_URL}/api/wallet/deposit-address?userId=${userId}`);
+            const result = await response.json();
+            
+            if (result.success) {
+                const addressEl = document.getElementById('depositAddress');
+                const address = result.data.address;
+                addressEl.innerText = address.substring(0, 10) + '...' + address.substring(address.length - 6);
+                addressEl.style.color = 'var(--text)';
+                addressEl.setAttribute('data-full-address', address);
+            } else {
+                console.error('获取充值地址失败:', result.message);
+                document.getElementById('depositAddress').innerText = '获取失败';
+            }
+        } catch (error) {
+            console.error('加载充值地址错误:', error);
+            document.getElementById('depositAddress').innerText = '获取失败';
+        }
+    }
+
+    // 复制充值地址
+    function copyDepositAddress() {
+        const addressEl = document.getElementById('depositAddress');
+        const fullAddress = addressEl.getAttribute('data-full-address');
+        
+        if (!fullAddress) {
+            alert('充值地址尚未加载');
+            return;
+        }
+        
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(fullAddress).then(() => {
+                alert('充值地址已复制到剪贴板');
+            }).catch(() => {
+                fallbackCopy(fullAddress);
+            });
+        } else {
+            fallbackCopy(fullAddress);
+        }
+    }
+
+    // 降级复制方案
+    function fallbackCopy(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            alert('充值地址已复制到剪贴板');
+        } catch (err) {
+            alert('复制失败，请手动复制地址');
+        }
+        document.body.removeChild(textArea);
+    }
+
+    // 加载钱包数据
+    async function loadWalletData() {
+        try {
+            const userId = localStorage.getItem('userId') || 'default';
+            const response = await fetch(`${API_BASE_URL}/api/wallet/balance?userId=${userId}`);
+            const result = await response.json();
+            
+            if (result.success) {
+                // 更新余额显示
+                document.querySelector('.balance').textContent = result.data.balance.toFixed(2) + ' USDT';
+                
+                // 更新钱包地址状态
+                const addressEl = document.getElementById('currentAddress');
+                
+                if (result.data.walletAddress) {
+                    addressEl.innerText = result.data.walletAddress.substring(0, 10) + '...' + result.data.walletAddress.substring(result.data.walletAddress.length - 6);
+                    addressEl.style.color = 'var(--text)';
+                } else {
+                    addressEl.innerText = '未绑定钱包地址';
+                    addressEl.style.color = 'var(--muted)';
+                }
+                
+                // 保存钱包地址到本地存储
+                if (result.data.walletAddress) {
+                    localStorage.setItem('walletAddress', result.data.walletAddress);
+                }
+            } else {
+                console.error('获取钱包数据失败:', result.message);
+            }
+        } catch (error) {
+            console.error('加载钱包数据错误:', error);
+        }
+    }
+
+    // 加载交易记录
+    async function loadTransactions() {
+        try {
+            const userId = localStorage.getItem('userId') || 'default';
+            const response = await fetch(`${API_BASE_URL}/api/wallet/transactions?userId=${userId}&limit=10`);
+            const result = await response.json();
+            
+            if (result.success) {
+                // 更新本地存储的交易记录
+                localStorage.setItem('transactions', JSON.stringify(result.data.transactions));
+                loadWallet();
+            } else {
+                console.error('获取交易记录失败:', result.message);
+            }
+        } catch (error) {
+            console.error('加载交易记录错误:', error);
+            // 如果API调用失败，使用本地存储的数据
+            loadWallet();
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadWallet);
+      
+      // 地址绑定相关函数
+      function showAddressBinding() {
+        const modal = document.getElementById('addressModal');
+        const input = document.getElementById('addressInput');
+        const currentAddress = localStorage.getItem('walletAddress');
+        
+        input.value = currentAddress || '';
+        modal.style.display = 'flex';
+        input.focus();
+      }
+      
+      function hideAddressBinding() {
+        const modal = document.getElementById('addressModal');
+        modal.style.display = 'none';
+      }
+      
+      async function saveWalletAddress() {
+        const input = document.getElementById('addressInput');
+        const address = input.value.trim();
+        
+        if (!address) {
+          alert('请输入钱包地址');
+          return;
+        }
+        
+        // 简单验证USDT TRC20地址格式（以T开头，34位字符）
+        if (!address.startsWith('T') || address.length !== 34) {
+          alert('请输入有效的USDT TRC20钱包地址');
+          return;
+        }
+        
+        try {
+          const userId = localStorage.getItem('userId') || 'default';
+          const response = await fetch(`${API_BASE_URL}/api/wallet/bind-address`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              userId: userId,
+              walletAddress: address
+            })
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            alert('钱包地址绑定成功！');
+            hideAddressBinding();
+            loadWalletData(); // 重新加载钱包数据
+          } else {
+            alert('绑定失败：' + result.message);
+          }
+        } catch (error) {
+          console.error('绑定钱包地址错误:', error);
+          alert('绑定失败，请稍后重试');
+        }
+      }
+      
+      // 点击模态框背景关闭
+      document.getElementById('addressModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          hideAddressBinding();
+        }
+      });
+    </script>
+    <script src="js/global-background.js"></script>
+  </body>
+</html>

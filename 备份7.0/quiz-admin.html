@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>题库管理系统 - 裂金7日</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .header h1 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+      font-size: 2rem;
+    }
+
+    .header p {
+      color: #7f8c8d;
+      font-size: 1.1rem;
+    }
+
+    .toolbar {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+    }
+
+    .btn-success:hover {
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+      box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+    }
+
+    .btn-danger:hover {
+      box-shadow: 0 6px 20px rgba(244, 67, 54, 0.6);
+    }
+
+    .btn-warning {
+      background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+      box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+    }
+
+    .btn-warning:hover {
+      box-shadow: 0 6px 20px rgba(255, 152, 0, 0.6);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+
+    .questions-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .question-item {
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      padding: 20px;
+      background: #fafafa;
+      transition: all 0.3s ease;
+    }
+
+    .question-item:hover {
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .question-number {
+      background: #667eea;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-right: 15px;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .question-content {
+      flex: 1;
+    }
+
+    .question-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .question-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .option {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+
+    .option.correct {
+      background: #d4edda;
+      border-color: #c3e6cb;
+      color: #155724;
+      font-weight: 600;
+    }
+
+    .question-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+      background: white;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .close {
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .close:hover {
+      color: #000;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .options-container {
+      display: grid;
+      gap: 10px;
+    }
+
+    .option-input-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .option-input {
+      flex: 1;
+    }
+
+    .correct-radio {
+      margin-left: 10px;
+    }
+
+    .search-container {
+      margin-bottom: 20px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 20px;
+      border: 1px solid #ddd;
+      border-radius: 25px;
+      font-size: 16px;
+      background: white;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #7f8c8d;
+    }
+
+    .empty-state h3 {
+      margin-bottom: 10px;
+      font-size: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .btn {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+      
+      .question-options {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-content {
+        margin: 10% auto;
+        width: 95%;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 头部 -->
+    <div class="header">
+      <h1>📚 题库管理系统</h1>
+      <p>裂金7日 · 答题任务题库管理</p>
+    </div>
+
+    <!-- 统计信息 -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-number" id="totalQuestions">0</div>
+        <div class="stat-label">题目总数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="lastModified">--</div>
+        <div class="stat-label">最后修改</div>
+      </div>
+    </div>
+
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <button class="btn btn-success" onclick="showAddModal()">
+        ➕ 添加题目
+      </button>
+      <button class="btn" onclick="exportQuestions()">
+        📤 导出题库
+      </button>
+      <button class="btn" onclick="importQuestions()">
+        📥 导入题库
+      </button>
+      <button class="btn btn-warning" onclick="previewQuiz()">
+        👁️ 预览答题
+      </button>
+      <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleImport(event)">
+    </div>
+
+    <!-- 搜索 -->
+    <div class="search-container">
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍 搜索题目内容..." oninput="filterQuestions()">
+    </div>
+
+    <!-- 题目列表 -->
+    <div class="questions-container">
+      <div id="questionsList">
+        <!-- 题目列表将在这里动态生成 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 添加/编辑题目模态框 -->
+  <div id="questionModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">添加题目</h2>
+        <span class="close" onclick="closeModal()">&times;</span>
+      </div>
+      <form id="questionForm">
+        <div class="form-group">
+          <label class="form-label">题目内容 *</label>
+          <textarea class="form-input form-textarea" id="questionText" placeholder="请输入题目内容..." required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">选项设置 *</label>
+          <div class="options-container">
+            <div class="option-input-group">
+              <input type="text" class="form-input option-input" id="option1" placeholder="选项 A" required>
+              <input type="radio" name="correctAnswer" value="0" class="correct-radio" required>
+              <label>正确答案</label>
+            </div>
+            <div class="option-input-group">
+              <input type="text" class="form-input option-input" id="option2" placeholder="选项 B" required>
+              <input type="radio" name="correctAnswer" value="1" class="correct-radio">
+              <label>正确答案</label>
+            </div>
+            <div class="option-input-group">
+              <input type="text" class="form-input option-input" id="option3" placeholder="选项 C" required>
+              <input type="radio" name="correctAnswer" value="2" class="correct-radio">
+              <label>正确答案</label>
+            </div>
+            <div class="option-input-group">
+              <input type="text" class="form-input option-input" id="option4" placeholder="选项 D" required>
+              <input type="radio" name="correctAnswer" value="3" class="correct-radio">
+              <label>正确答案</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">错误提示信息</label>
+          <textarea class="form-input form-textarea" id="wrongMessage" placeholder="答错时显示的提示信息（可选）"></textarea>
+        </div>
+
+        <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+          <button type="button" class="btn" onclick="closeModal()">取消</button>
+          <button type="submit" class="btn btn-success">保存题目</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // 题库数据 - 从quiz.html中提取
+    let questions = [
+      { 
+        q: '你的专属邀请链接有效期是多久？', 
+        options: ['24小时', '72小时', '168小时（7天）', '永久'], 
+        a: '168小时（7天）',
+        wrongMsg: '链接168小时后失效，无法继续邀请；时间内越早引爆，结构成长越快。'
+      },
+      { 
+        q: '"红包"和"7层返利"，哪一句最贴切？', 
+        options: ['抢红包才有返利', '红包=今天的快感，返利=结构里明天的长流水', '红包金额决定返利金额', '红包次数越多，层级越深'], 
+        a: '红包=今天的快感，返利=结构里明天的长流水',
+        wrongMsg: '红包=短促小雨点，来得快去得快；返利=结构水库，自己往下流。\n你要的不是一把伞，而是一座水坝。'
+      },
+      { 
+        q: '你的7层网络里任意一层新增1位"激活"的成员，你拿到？', 
+        options: ['随机金额', '$10 / 每层 / 每人', '只有直推(第1层)才有$10', '只有前三层有$10'], 
+        a: '$10 / 每层 / 每人',
+        wrongMsg: '结构返利是每层每人$10，最多追踪到7层；越会"教下去"，层数越快被点亮。'
+      },
+      { 
+        q: '小算术：你直推2人（第1层=2），他们各自再推2人（第2层=4），全部激活。你拿的结构返利合计？', 
+        options: ['$20', '$40', '$60', '$80'], 
+        a: '$60',
+        wrongMsg: '第1层2×$10=$20，第2层4×$10=$40，合计**$60**。层级一旦动起来，收益叠加非常快。'
+      },
+      { 
+        q: '哪个比喻最贴近"结构优于单打独斗"的本质？', 
+        options: ['红包像小雨点，结构像水库', '红包像大奖，结构像运气', '结构全靠偶然', '红包越多，层级越深'], 
+        a: '红包像小雨点，结构像水库',
+        wrongMsg: '红包是即刻的"小雨点"；结构是能蓄水并持续来水的"水库"——关键是让水沿层级自己流。'
+      },
+      { 
+        q: '想让结构真正"动"起来，下面哪步最关键？', 
+        options: ['自己再直推3人', '再抢一轮红包', '改头像、发海报', '教会你的第1层去教TA的下一级'], 
+        a: '教会你的第1层去教TA的下一级',
+        wrongMsg: '从"会拉人"升级为"会带人去带人"，层数才会级联点亮。'
+      },
+      { 
+        q: '168小时窗口关掉后，你还能留下什么？', 
+        options: ['邀请与红包继续', '一切清零', '只能直推有返利', '你搭好的"水库"会自己流，但你再也加不进一滴水'], 
+        a: '你搭好的"水库"会自己流，但你再也加不进一滴水',
+        wrongMsg: '入口锁死，红包与邀请全灭。\n但你这7天搭的水库，会替你把水流到手里。\n区别只是——别人7天拼出水坝，你还在空杯等雨。'
+      },
+      { 
+        q: '想把结构的"爆炸型增长曲线"真正点燃，最核心的一件事是？', 
+        options: ['自己多拉一点', '多发广告', '盯着红包', '把教程下放，让每个节点都会"再教人"'], 
+        a: '把教程下放，让每个节点都会"再教人"',
+        wrongMsg: '等比爆发来自复制能力的复制，不是个人体力活。'
+      },
+      { 
+        q: '你已直推2位，下一步最增效的是？', 
+        options: ['各花30分钟，分别陪他们完成1次首邀', '自己再拉1人', '停几天', '做更酷的宣传图'], 
+        a: '各花30分钟，分别陪他们完成1次首邀',
+        wrongMsg: '扶上马并送一程，他们就能自己跑、还会带人。'
+      },
+      { 
+        q: '复制思路里，哪句最关键？', 
+        options: ['先做满好多天', '每个新人都"带出他的第一单"', '等系统推人', '内容越花越好'], 
+        a: '每个新人都"带出他的第一单"',
+        wrongMsg: '第一单被带出，他的心气就立住了，复制链条才真正启动。'
+      },
+      { 
+        q: '理想等比：若每人带2个，只到第3层，总人数（不含你）是？', 
+        options: ['8', '10', '16', '14'], 
+        a: '14',
+        wrongMsg: '2+4+8=14；到第3层就能明显感觉越做越轻。'
+      },
+      { 
+        q: '哪种选择更强？', 
+        options: ['教2个会教人的人', '一次拉10个但没人会教', '随缘等系统', '只抢即时奖励'], 
+        a: '教2个会教人的人',
+        wrongMsg: '会教人的种子会长出很多枝丫；10个不会教=很快静默。'
+      },
+      { 
+        q: '如果今天只能做一件事，选哪个？', 
+        options: ['把一个新人"带出第一单"', '写一篇长教程', '修一张海报', '刷一小时群'], 
+        a: '把一个新人"带出第一单"',
+        wrongMsg: '第一单=点火按钮；其余都是铺垫。'
+      },
+      { 
+        q: '真正引爆曲线的本质一刀是？', 
+        options: ['我自己更努力', '做更多素材', '让每个新人能带出他的第一单，并教他也这么做', '盯排行榜'], 
+        a: '让每个新人能带出他的第一单，并教他也这么做',
+        wrongMsg: '爆发来自"会的人越来越多"，不是你一个人更累。'
+      },
+      { 
+        q: '今天只做一件事，哪件最"划算"？', 
+        options: ['约1位"最熟的熟人"语音60秒，当场发出首条邀请', '写宣传文案', '修图', '学半天方法论'], 
+        a: '约1位"最熟的熟人"语音60秒，当场发出首条邀请',
+        wrongMsg: '强关系×当场出手，最快出第一单。'
+      },
+      { 
+        q: '晚上黄金1小时，你该做？', 
+        options: ['修图', '写长文', '刷群', '开三通语音：各带1位完成首邀/发出第一条邀请'], 
+        a: '开三通语音：各带1位完成首邀/发出第一条邀请',
+        wrongMsg: '语音×三次小胜利，效率比素材高太多。'
+      },
+      { 
+        q: '明天最该盯哪项结构指标？', 
+        options: ['红包次数', '排名', '私聊人数', '二层新增"首邀达成数"'], 
+        a: '二层新增"首邀达成数"',
+        wrongMsg: '二层首邀上来，结构才开始"自己跑"。'
+      },
+      { 
+        q: '如果对方犹豫，你最能点燃他的一句话是？', 
+        options: ['"你先付钱再说"', '"你慢慢研究"', '"我们先从最稳的一个朋友试起，我全程陪着你"', '"无所谓，看你吧"'], 
+        a: '"我们先从最稳的一个朋友试起，我全程陪着你"',
+        wrongMsg: '陪跑=信心灌输。\n第一步不是他一个人跳，而是你拉着他过河。\n试点+陪跑，最容易让人点火成功。'
+      },
+      { 
+        q: '首邀成功后，黄金5分钟干嘛？', 
+        options: ['放一天', '只发表情', '立刻去拉陌生人', '复盘3句话：怎么说、怎么演示、下一位是谁'], 
+        a: '复盘3句话：怎么说、怎么演示、下一位是谁',
+        wrongMsg: '复盘→固化→再复制，热度最值钱。'
+      },
+      { 
+        q: '规模化真正的"第一脚油门"？', 
+        options: ['我更努力', '多做素材', '让每个新人都能带出他的第一单，并教会他复制这三步', '盯排行榜'], 
+        a: '让每个新人都能带出他的第一单，并教会他复制这三步',
+        wrongMsg: '爆发来自会的人越来越多，不是你一个人更累。'
+      }
+    ];
+
+    let filteredQuestions = [...questions];
+    let editingIndex = -1;
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      updateStats();
+      renderQuestions();
+    });
+
+    // 更新统计信息
+    function updateStats() {
+      document.getElementById('totalQuestions').textContent = questions.length;
+      document.getElementById('lastModified').textContent = new Date().toLocaleDateString();
+    }
+
+    // 渲染题目列表
+    function renderQuestions() {
+      const container = document.getElementById('questionsList');
+      
+      if (filteredQuestions.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3>暂无题目</h3>
+            <p>点击"添加题目"开始创建您的第一道题目</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filteredQuestions.map((question, index) => {
+        const originalIndex = questions.indexOf(question);
+        return `
+          <div class="question-item">
+            <div class="question-header">
+              <div class="question-number">${originalIndex + 1}</div>
+              <div class="question-content">
+                <div class="question-text">${question.q}</div>
+                <div class="question-options">
+                  ${question.options.map(option => `
+                    <div class="option ${option === question.a ? 'correct' : ''}">${option}</div>
+                  `).join('')}
+                </div>
+                ${question.wrongMsg ? `<div style="margin-top: 10px; padding: 10px; background: #fff3cd; border-radius: 6px; font-size: 0.9rem; color: #856404;"><strong>错误提示：</strong>${question.wrongMsg}</div>` : ''}
+              </div>
+            </div>
+            <div class="question-actions">
+              <button class="btn btn-small" onclick="editQuestion(${originalIndex})">✏️ 编辑</button>
+              <button class="btn btn-small btn-warning" onclick="previewQuestion(${originalIndex})">👁️ 预览</button>
+              <button class="btn btn-small btn-danger" onclick="deleteQuestion(${originalIndex})">🗑️ 删除</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 搜索过滤
+    function filterQuestions() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      filteredQuestions = questions.filter(question => 
+        question.q.toLowerCase().includes(searchTerm) ||
+        question.options.some(option => option.toLowerCase().includes(searchTerm)) ||
+        (question.wrongMsg && question.wrongMsg.toLowerCase().includes(searchTerm))
+      );
+      renderQuestions();
+    }
+
+    // 显示添加模态框
+    function showAddModal() {
+      editingIndex = -1;
+      document.getElementById('modalTitle').textContent = '添加题目';
+      document.getElementById('questionForm').reset();
+      document.getElementById('questionModal').style.display = 'block';
+    }
+
+    // 编辑题目
+    function editQuestion(index) {
+      editingIndex = index;
+      const question = questions[index];
+      
+      document.getElementById('modalTitle').textContent = '编辑题目';
+      document.getElementById('questionText').value = question.q;
+      document.getElementById('option1').value = question.options[0];
+      document.getElementById('option2').value = question.options[1];
+      document.getElementById('option3').value = question.options[2];
+      document.getElementById('option4').value = question.options[3];
+      document.getElementById('wrongMessage').value = question.wrongMsg || '';
+      
+      // 设置正确答案
+      const correctIndex = question.options.indexOf(question.a);
+      if (correctIndex !== -1) {
+        document.querySelector(`input[name="correctAnswer"][value="${correctIndex}"]`).checked = true;
+      }
+      
+      document.getElementById('questionModal').style.display = 'block';
+    }
+
+    // 删除题目
+    function deleteQuestion(index) {
+      if (confirm('确定要删除这道题目吗？此操作不可撤销。')) {
+        questions.splice(index, 1);
+        updateStats();
+        filterQuestions();
+        showNotification('题目已删除', 'success');
+      }
+    }
+
+    // 预览题目
+    function previewQuestion(index) {
+      const question = questions[index];
+      alert(`题目：${question.q}\n\n选项：\nA. ${question.options[0]}\nB. ${question.options[1]}\nC. ${question.options[2]}\nD. ${question.options[3]}\n\n正确答案：${question.a}\n\n错误提示：${question.wrongMsg || '无'}`);
+    }
+
+    // 关闭模态框
+    function closeModal() {
+      document.getElementById('questionModal').style.display = 'none';
+    }
+
+    // 表单提交
+    document.getElementById('questionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const questionText = document.getElementById('questionText').value.trim();
+      const options = [
+        document.getElementById('option1').value.trim(),
+        document.getElementById('option2').value.trim(),
+        document.getElementById('option3').value.trim(),
+        document.getElementById('option4').value.trim()
+      ];
+      const correctAnswerIndex = parseInt(document.querySelector('input[name="correctAnswer"]:checked').value);
+      const wrongMessage = document.getElementById('wrongMessage').value.trim();
+      
+      // 验证
+      if (!questionText) {
+        alert('请输入题目内容');
+        return;
+      }
+      
+      if (options.some(option => !option)) {
+        alert('请填写所有选项');
+        return;
+      }
+      
+      const newQuestion = {
+        q: questionText,
+        options: options,
+        a: options[correctAnswerIndex],
+        wrongMsg: wrongMessage
+      };
+      
+      if (editingIndex === -1) {
+        // 添加新题目
+        questions.push(newQuestion);
+        showNotification('题目添加成功', 'success');
+      } else {
+        // 编辑现有题目
+        questions[editingIndex] = newQuestion;
+        showNotification('题目更新成功', 'success');
+      }
+      
+      updateStats();
+      filterQuestions();
+      closeModal();
+    });
+
+    // 导出题库
+    function exportQuestions() {
+      const dataStr = JSON.stringify(questions, null, 2);
+      const dataBlob = new Blob([dataStr], {type: 'application/json'});
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `quiz-questions-${new Date().toISOString().split('T')[0]}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+      showNotification('题库导出成功', 'success');
+    }
+
+    // 导入题库
+    function importQuestions() {
+      document.getElementById('importFile').click();
+    }
+
+    function handleImport(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const importedQuestions = JSON.parse(e.target.result);
+          if (Array.isArray(importedQuestions) && importedQuestions.length > 0) {
+            if (confirm(`确定要导入 ${importedQuestions.length} 道题目吗？这将替换当前所有题目。`)) {
+              questions = importedQuestions;
+              updateStats();
+              filterQuestions();
+              showNotification('题库导入成功', 'success');
+            }
+          } else {
+            alert('导入文件格式不正确');
+          }
+        } catch (error) {
+          alert('导入文件解析失败：' + error.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // 预览答题
+    function previewQuiz() {
+      window.open('quiz.html', '_blank');
+    }
+
+    // 显示通知
+    function showNotification(message, type = 'info') {
+      // 简单的通知实现
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 10000;
+        font-weight: 600;
+      `;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }
+
+    // 点击模态框外部关闭
+    window.onclick = function(event) {
+      const modal = document.getElementById('questionModal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+  </script>
+</body>
+</html>

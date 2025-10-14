@@ -1,0 +1,152 @@
+[
+  {
+    "timestamp": "2025-10-12T00:57:26.073Z",
+    "action": "STORE",
+    "key_type": "tatum_api_key",
+    "key_id": "key_tatum_api_key_7703c0be",
+    "success": true,
+    "error": null,
+    "process_id": 16753,
+    "user_agent": "mason1236"
+  },
+  {
+    "timestamp": "2025-10-12T00:57:26.086Z",
+    "action": "STORE",
+    "key_type": "database_password",
+    "key_id": "key_database_password_01d97080",
+    "success": true,
+    "error": null,
+    "process_id": 16753,
+    "user_agent": "mason1236"
+  },
+  {
+    "timestamp": "2025-10-12T00:57:26.099Z",
+    "action": "STORE",
+    "key_type": "redis_password",
+    "key_id": "key_redis_password_74b7e3fc",
+    "success": true,
+    "error": null,
+    "process_id": 16753,
+    "user_agent": "mason1236"
+  },
+  {
+    "timestamp": "2025-10-12T00:57:26.112Z",
+    "action": "STORE",
+    "key_type": "jwt_secret",
+    "key_id": "key_jwt_secret_e88040e7",
+    "success": true,
+    "error": null,
+    "process_id": 16753,
+    "user_agent": "mason1236"
+  },
+  {
+    "timestamp": "2025-10-12T00:57:26.124Z",
+    "action": "STORE",
+    "key_type": "webhook_secret",
+    "key_id": "key_webhook_secret_f997e073",
+    "success": true,
+    "error": null,
+    "process_id": 16753,
+    "user_agent": "mason1236"
+  },
+  {
+    "timestamp": "2025-10-12T00:57:26.150Z",
+    "action": "GET",
+    "key_type": "tatum_api_key",
+    "key_id": "key_tatum_api_key_7703c0be",
+    "success": true,
+    "error": null,
+    "process_id": 16753,
+    "user_agent": "mason1236"
+  },
+  {
+    "timestamp": "2025-10-12T00:57:26.163Z",
+    "action": "GET",
+    "key_type": "database_password",
+    "key_id": "key_database_password_01d97080",
+    "success": true,
+    "error": null,
+    "process_id": 16753,
+    "user_agent": "mason1236"
+  },
+  {
+    "timestamp": "2025-10-12T00:57:26.175Z",
+    "action": "GET",
+    "key_type": "jwt_secret",
+    "key_id": "key_jwt_secret_e88040e7",
+    "success": true,
+    "error": null,
+    "process_id": 16753,
+    "user_agent": "mason1236"
+  },
+  {
+    "timestamp": "2025-10-12T00:58:28.488Z",
+    "action": "GET",
+    "key_type": "tatum_api_key",
+    "key_id": "key_tatum_api_key_7703c0be",
+    "success": true,
+    "error": null,
+    "process_id": 16966,
+    "user_agent": "mason1236"
+  },
+  {
+    "timestamp": "2025-10-12T00:58:28.501Z",
+    "action": "GET",
+    "key_type": "database_password",
+    "key_id": "key_database_password_01d97080",
+    "success": true,
+    "error": null,
+    "process_id": 16966,
+    "user_agent": "mason1236"
+  },
+  {
+    "timestamp": "2025-10-12T00:58:28.514Z",
+    "action": "GET",
+    "key_type": "redis_password",
+    "key_id": "key_redis_password_74b7e3fc",
+    "success": true,
+    "error": null,
+    "process_id": 16966,
+    "user_agent": "mason1236"
+  },
+  {
+    "timestamp": "2025-10-12T00:58:28.526Z",
+    "action": "GET",
+    "key_type": "jwt_secret",
+    "key_id": "key_jwt_secret_e88040e7",
+    "success": true,
+    "error": null,
+    "process_id": 16966,
+    "user_agent": "mason1236"
+  },
+  {
+    "timestamp": "2025-10-12T00:58:28.539Z",
+    "action": "GET",
+    "key_type": "webhook_secret",
+    "key_id": "key_webhook_secret_f997e073",
+    "success": true,
+    "error": null,
+    "process_id": 16966,
+    "user_agent": "mason1236"
+  },
+  {
+    "timestamp": "2025-10-12T00:58:28.539Z",
+    "action": "GET_CACHED",
+    "key_type": "tatum_api_key",
+    "key_id": null,
+    "success": true,
+    "error": null,
+    "process_id": 16966,
+    "user_agent": "mason1236"
+  },
+  {
+    "timestamp": "2025-10-12T00:58:28.539Z",
+    "action": "GET_CACHED",
+    "key_type": "tatum_api_key",
+    "key_id": null,
+    "success": true,
+    "error": null,
+    "process_id": 16966,
+    "user_agent": "mason1236"
+  }
+]

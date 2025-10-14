@@ -1,0 +1,558 @@
+{
+  "config": {
+    "configFile": "/Users/mason1236/0930/测试/UI测试/playwright.config.js",
+    "rootDir": "/Users/mason1236/0930/测试/UI测试/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "../报告/playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../报告/test-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/mason1236/0930/测试/UI测试/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/mason1236/0930/测试/UI测试/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/mason1236/0930/测试/UI测试/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/mason1236/0930/测试/UI测试/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/mason1236/0930/测试/UI测试/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/mason1236/0930/测试/UI测试/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/mason1236/0930/测试/UI测试/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/Users/mason1236/0930/测试/UI测试/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/mason1236/0930/测试/UI测试/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/Users/mason1236/0930/测试/UI测试/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.1",
+    "workers": 4,
+    "webServer": {
+      "command": "python3 -m http.server 3001",
+      "port": 3001,
+      "cwd": "../../",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "user-registration-activation.spec.js",
+      "file": "user-registration-activation.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "用户注册和激活流程",
+          "file": "user-registration-activation.spec.js",
+          "line": 7,
+          "column": 6,
+          "specs": [
+            {
+              "title": "用户登录流程",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 20341,
+                      "error": {
+                        "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================\n    at /Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js:139:21",
+                        "location": {
+                          "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                          "column": 21,
+                          "line": 139
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 137 |\u001b[39m\n \u001b[90m 138 |\u001b[39m         \u001b[90m// 等待跳转到钱包页面\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 139 |\u001b[39m          \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'**/wallet.html'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 140 |\u001b[39m          \n \u001b[90m 141 |\u001b[39m          \u001b[90m// 验证登录成功\u001b[39m\n \u001b[90m 142 |\u001b[39m          expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoContain(\u001b[32m'wallet.html'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                            "column": 21,
+                            "line": 139
+                          },
+                          "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================\n\n\u001b[0m \u001b[90m 137 |\u001b[39m\n \u001b[90m 138 |\u001b[39m         \u001b[90m// 等待跳转到钱包页面\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 139 |\u001b[39m          \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'**/wallet.html'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 140 |\u001b[39m          \n \u001b[90m 141 |\u001b[39m          \u001b[90m// 验证登录成功\u001b[39m\n \u001b[90m 142 |\u001b[39m          expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoContain(\u001b[32m'wallet.html'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js:139:21\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试数据: {\n  email: \u001b[32m'test1759718736565@example.com'\u001b[39m,\n  password: \u001b[32m'TestPass123!@#$%'\u001b[39m,\n  username: \u001b[32m'testuser1759718736565'\u001b[39m,\n  inviteCode: \u001b[32m'GOLD7DAY'\u001b[39m\n}\n"
+                        },
+                        {
+                          "text": "🔐 开始测试用户登录流程...\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T02:45:33.661Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mason1236/0930/测试/UI测试/test-results/user-registration-activation-用户注册和激活流程-用户登录流程-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/mason1236/0930/测试/UI测试/test-results/user-registration-activation-用户注册和激活流程-用户登录流程-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mason1236/0930/测试/UI测试/test-results/user-registration-activation-用户注册和激活流程-用户登录流程-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                        "column": 21,
+                        "line": 139
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4a56c2ebff09282bdb35-a3d1b739d4039bf876c4",
+              "file": "user-registration-activation.spec.js",
+              "line": 100,
+              "column": 5
+            },
+            {
+              "title": "用户登录流程",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 21321,
+                      "error": {
+                        "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================\n    at /Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js:139:21",
+                        "location": {
+                          "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                          "column": 21,
+                          "line": 139
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 137 |\u001b[39m\n \u001b[90m 138 |\u001b[39m         \u001b[90m// 等待跳转到钱包页面\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 139 |\u001b[39m          \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'**/wallet.html'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 140 |\u001b[39m          \n \u001b[90m 141 |\u001b[39m          \u001b[90m// 验证登录成功\u001b[39m\n \u001b[90m 142 |\u001b[39m          expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoContain(\u001b[32m'wallet.html'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                            "column": 21,
+                            "line": 139
+                          },
+                          "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================\n\n\u001b[0m \u001b[90m 137 |\u001b[39m\n \u001b[90m 138 |\u001b[39m         \u001b[90m// 等待跳转到钱包页面\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 139 |\u001b[39m          \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'**/wallet.html'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 140 |\u001b[39m          \n \u001b[90m 141 |\u001b[39m          \u001b[90m// 验证登录成功\u001b[39m\n \u001b[90m 142 |\u001b[39m          expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoContain(\u001b[32m'wallet.html'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js:139:21\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试数据: {\n  email: \u001b[32m'test1759718738975@example.com'\u001b[39m,\n  password: \u001b[32m'TestPass123!@#$%'\u001b[39m,\n  username: \u001b[32m'testuser1759718738975'\u001b[39m,\n  inviteCode: \u001b[32m'GOLD7DAY'\u001b[39m\n}\n"
+                        },
+                        {
+                          "text": "🔐 开始测试用户登录流程...\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T02:45:33.654Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mason1236/0930/测试/UI测试/test-results/user-registration-activation-用户注册和激活流程-用户登录流程-firefox/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mason1236/0930/测试/UI测试/test-results/user-registration-activation-用户注册和激活流程-用户登录流程-firefox/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                        "column": 21,
+                        "line": 139
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4a56c2ebff09282bdb35-d8c4ca1d696dc16af3b5",
+              "file": "user-registration-activation.spec.js",
+              "line": 100,
+              "column": 5
+            },
+            {
+              "title": "用户登录流程",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 21749,
+                      "error": {
+                        "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================\n    at /Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js:139:21",
+                        "location": {
+                          "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                          "column": 21,
+                          "line": 139
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 137 |\u001b[39m\n \u001b[90m 138 |\u001b[39m         \u001b[90m// 等待跳转到钱包页面\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 139 |\u001b[39m          \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'**/wallet.html'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 140 |\u001b[39m          \n \u001b[90m 141 |\u001b[39m          \u001b[90m// 验证登录成功\u001b[39m\n \u001b[90m 142 |\u001b[39m          expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoContain(\u001b[32m'wallet.html'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                            "column": 21,
+                            "line": 139
+                          },
+                          "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================\n\n\u001b[0m \u001b[90m 137 |\u001b[39m\n \u001b[90m 138 |\u001b[39m         \u001b[90m// 等待跳转到钱包页面\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 139 |\u001b[39m          \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'**/wallet.html'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 140 |\u001b[39m          \n \u001b[90m 141 |\u001b[39m          \u001b[90m// 验证登录成功\u001b[39m\n \u001b[90m 142 |\u001b[39m          expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoContain(\u001b[32m'wallet.html'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js:139:21\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试数据: {\n  email: \u001b[32m'test1759718735250@example.com'\u001b[39m,\n  password: \u001b[32m'TestPass123!@#$%'\u001b[39m,\n  username: \u001b[32m'testuser1759718735250'\u001b[39m,\n  inviteCode: \u001b[32m'GOLD7DAY'\u001b[39m\n}\n"
+                        },
+                        {
+                          "text": "🔐 开始测试用户登录流程...\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T02:45:33.667Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mason1236/0930/测试/UI测试/test-results/user-registration-activation-用户注册和激活流程-用户登录流程-webkit/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/mason1236/0930/测试/UI测试/test-results/user-registration-activation-用户注册和激活流程-用户登录流程-webkit/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mason1236/0930/测试/UI测试/test-results/user-registration-activation-用户注册和激活流程-用户登录流程-webkit/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                        "column": 21,
+                        "line": 139
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4a56c2ebff09282bdb35-ed46996734eae11932eb",
+              "file": "user-registration-activation.spec.js",
+              "line": 100,
+              "column": 5
+            },
+            {
+              "title": "用户登录流程",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 21616,
+                      "error": {
+                        "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================\n    at /Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js:139:21",
+                        "location": {
+                          "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                          "column": 21,
+                          "line": 139
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 137 |\u001b[39m\n \u001b[90m 138 |\u001b[39m         \u001b[90m// 等待跳转到钱包页面\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 139 |\u001b[39m          \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'**/wallet.html'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 140 |\u001b[39m          \n \u001b[90m 141 |\u001b[39m          \u001b[90m// 验证登录成功\u001b[39m\n \u001b[90m 142 |\u001b[39m          expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoContain(\u001b[32m'wallet.html'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                            "column": 21,
+                            "line": 139
+                          },
+                          "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================\n\n\u001b[0m \u001b[90m 137 |\u001b[39m\n \u001b[90m 138 |\u001b[39m         \u001b[90m// 等待跳转到钱包页面\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 139 |\u001b[39m          \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'**/wallet.html'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 140 |\u001b[39m          \n \u001b[90m 141 |\u001b[39m          \u001b[90m// 验证登录成功\u001b[39m\n \u001b[90m 142 |\u001b[39m          expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoContain(\u001b[32m'wallet.html'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js:139:21\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试数据: {\n  email: \u001b[32m'test1759718736561@example.com'\u001b[39m,\n  password: \u001b[32m'TestPass123!@#$%'\u001b[39m,\n  username: \u001b[32m'testuser1759718736561'\u001b[39m,\n  inviteCode: \u001b[32m'GOLD7DAY'\u001b[39m\n}\n"
+                        },
+                        {
+                          "text": "🔐 开始测试用户登录流程...\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T02:45:33.675Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mason1236/0930/测试/UI测试/test-results/user-registration-activation-用户注册和激活流程-用户登录流程-Mobile-Chrome/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/mason1236/0930/测试/UI测试/test-results/user-registration-activation-用户注册和激活流程-用户登录流程-Mobile-Chrome/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mason1236/0930/测试/UI测试/test-results/user-registration-activation-用户注册和激活流程-用户登录流程-Mobile-Chrome/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                        "column": 21,
+                        "line": 139
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4a56c2ebff09282bdb35-cc1e439eb2352b6a7be9",
+              "file": "user-registration-activation.spec.js",
+              "line": 100,
+              "column": 5
+            },
+            {
+              "title": "用户登录流程",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 15276,
+                      "error": {
+                        "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================\n    at /Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js:139:21",
+                        "location": {
+                          "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                          "column": 21,
+                          "line": 139
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 137 |\u001b[39m\n \u001b[90m 138 |\u001b[39m         \u001b[90m// 等待跳转到钱包页面\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 139 |\u001b[39m          \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'**/wallet.html'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 140 |\u001b[39m          \n \u001b[90m 141 |\u001b[39m          \u001b[90m// 验证登录成功\u001b[39m\n \u001b[90m 142 |\u001b[39m          expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoContain(\u001b[32m'wallet.html'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                            "column": 21,
+                            "line": 139
+                          },
+                          "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/wallet.html\" until \"load\"\n============================================================\n\n\u001b[0m \u001b[90m 137 |\u001b[39m\n \u001b[90m 138 |\u001b[39m         \u001b[90m// 等待跳转到钱包页面\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 139 |\u001b[39m          \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'**/wallet.html'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 140 |\u001b[39m          \n \u001b[90m 141 |\u001b[39m          \u001b[90m// 验证登录成功\u001b[39m\n \u001b[90m 142 |\u001b[39m          expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoContain(\u001b[32m'wallet.html'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js:139:21\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试数据: {\n  email: \u001b[32m'test1759718757033@example.com'\u001b[39m,\n  password: \u001b[32m'TestPass123!@#$%'\u001b[39m,\n  username: \u001b[32m'testuser1759718757033'\u001b[39m,\n  inviteCode: \u001b[32m'GOLD7DAY'\u001b[39m\n}\n"
+                        },
+                        {
+                          "text": "🔐 开始测试用户登录流程...\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T02:45:56.234Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mason1236/0930/测试/UI测试/test-results/user-registration-activation-用户注册和激活流程-用户登录流程-Mobile-Safari/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/mason1236/0930/测试/UI测试/test-results/user-registration-activation-用户注册和激活流程-用户登录流程-Mobile-Safari/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mason1236/0930/测试/UI测试/test-results/user-registration-activation-用户注册和激活流程-用户登录流程-Mobile-Safari/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mason1236/0930/测试/UI测试/tests/user-registration-activation.spec.js",
+                        "column": 21,
+                        "line": 139
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4a56c2ebff09282bdb35-d1ab665b01e3538f1d77",
+              "file": "user-registration-activation.spec.js",
+              "line": 100,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-10-06T02:45:33.051Z",
+    "duration": 38959.135,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 5,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,321 @@
+<!-- 钱包管理页面 -->
+<div class="wallet-page">
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-wallet"></i>
+            钱包管理
+        </h1>
+        <p class="page-description">管理用户钱包和交易记录</p>
+    </div>
+
+    <!-- 钱包概览 -->
+    <div class="wallet-overview">
+        <div class="overview-card">
+            <div class="card-header">
+                <h3>钱包总览</h3>
+                <div class="refresh-btn" id="refresh-wallet-data">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+            </div>
+            <div class="overview-stats">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="total-balance">--</div>
+                        <div class="stat-label">总余额 (USDT)</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="active-wallets">--</div>
+                        <div class="stat-label">活跃钱包</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="daily-transactions">--</div>
+                        <div class="stat-label">今日交易</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="transaction-volume">--</div>
+                        <div class="stat-label">交易量 (USDT)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 操作工具栏 -->
+    <div class="page-toolbar">
+        <div class="toolbar-left">
+            <button class="btn btn-primary" id="create-wallet-btn">
+                <i class="fas fa-plus"></i>
+                创建钱包
+            </button>
+            <button class="btn btn-secondary" id="bulk-transfer-btn">
+                <i class="fas fa-paper-plane"></i>
+                批量转账
+            </button>
+        </div>
+        <div class="toolbar-right">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="搜索钱包地址..." id="wallet-search">
+            </div>
+            <select class="filter-select" id="wallet-filter">
+                <option value="">全部钱包</option>
+                <option value="active">活跃</option>
+                <option value="inactive">非活跃</option>
+                <option value="frozen">已冻结</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- 钱包列表 -->
+    <div class="data-table-container">
+        <table class="data-table" id="wallets-table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" id="select-all-wallets">
+                    </th>
+                    <th>钱包地址</th>
+                    <th>用户</th>
+                    <th>余额 (USDT)</th>
+                    <th>创建时间</th>
+                    <th>最后交易</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="wallets-table-body">
+                <!-- 示例数据 -->
+                <tr>
+                    <td><input type="checkbox" class="wallet-checkbox" data-wallet-id="1"></td>
+                    <td>
+                        <div class="wallet-address">
+                            <span class="address-text">0x1234...5678</span>
+                            <button class="copy-btn" title="复制地址">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="user-info">
+                            <div class="user-avatar">A</div>
+                            <span class="user-name">alice</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="balance-info">
+                            <span class="balance-amount">1,250.00</span>
+                            <span class="balance-change positive">+5.2%</span>
+                        </div>
+                    </td>
+                    <td>2024-01-15</td>
+                    <td>2024-01-20 14:30</td>
+                    <td><span class="status-badge active">活跃</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-icon" title="查看详情">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-icon" title="转账">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <button class="btn-icon" title="冻结">
+                                <i class="fas fa-lock"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="wallet-checkbox" data-wallet-id="2"></td>
+                    <td>
+                        <div class="wallet-address">
+                            <span class="address-text">0xabcd...efgh</span>
+                            <button class="copy-btn" title="复制地址">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="user-info">
+                            <div class="user-avatar">B</div>
+                            <span class="user-name">bob</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="balance-info">
+                            <span class="balance-amount">5,680.50</span>
+                            <span class="balance-change negative">-2.1%</span>
+                        </div>
+                    </td>
+                    <td>2024-01-10</td>
+                    <td>2024-01-20 16:45</td>
+                    <td><span class="status-badge active">活跃</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-icon" title="查看详情">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-icon" title="转账">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <button class="btn-icon" title="冻结">
+                                <i class="fas fa-lock"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="wallet-checkbox" data-wallet-id="3"></td>
+                    <td>
+                        <div class="wallet-address">
+                            <span class="address-text">0x9876...4321</span>
+                            <button class="copy-btn" title="复制地址">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="user-info">
+                            <div class="user-avatar">C</div>
+                            <span class="user-name">charlie</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="balance-info">
+                            <span class="balance-amount">0.00</span>
+                            <span class="balance-change neutral">0%</span>
+                        </div>
+                    </td>
+                    <td>2024-01-18</td>
+                    <td>从未交易</td>
+                    <td><span class="status-badge frozen">已冻结</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-icon" title="查看详情">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-icon" title="解冻">
+                                <i class="fas fa-unlock"></i>
+                            </button>
+                            <button class="btn-icon" title="删除">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 交易记录 -->
+    <div class="transactions-section">
+        <div class="section-header">
+            <h3>最近交易记录</h3>
+            <div class="section-controls">
+                <select class="filter-select" id="transaction-filter">
+                    <option value="">全部交易</option>
+                    <option value="transfer">转账</option>
+                    <option value="deposit">充值</option>
+                    <option value="withdraw">提现</option>
+                </select>
+                <button class="btn btn-secondary" id="export-transactions">
+                    <i class="fas fa-download"></i>
+                    导出
+                </button>
+            </div>
+        </div>
+
+        <div class="transactions-list" id="transactions-list">
+            <div class="transaction-item">
+                <div class="transaction-icon transfer">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <div class="transaction-content">
+                    <div class="transaction-title">转账交易</div>
+                    <div class="transaction-details">
+                        <span class="from">0x1234...5678</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <span class="to">0xabcd...efgh</span>
+                    </div>
+                    <div class="transaction-time">2024-01-20 16:45:32</div>
+                </div>
+                <div class="transaction-amount">
+                    <span class="amount">-50.00 USDT</span>
+                    <span class="status success">成功</span>
+                </div>
+            </div>
+
+            <div class="transaction-item">
+                <div class="transaction-icon deposit">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="transaction-content">
+                    <div class="transaction-title">充值</div>
+                    <div class="transaction-details">
+                        <span class="to">0xabcd...efgh</span>
+                    </div>
+                    <div class="transaction-time">2024-01-20 14:30:15</div>
+                </div>
+                <div class="transaction-amount">
+                    <span class="amount">+100.00 USDT</span>
+                    <span class="status success">成功</span>
+                </div>
+            </div>
+
+            <div class="transaction-item">
+                <div class="transaction-icon withdraw">
+                    <i class="fas fa-minus"></i>
+                </div>
+                <div class="transaction-content">
+                    <div class="transaction-title">提现</div>
+                    <div class="transaction-details">
+                        <span class="from">0x1234...5678</span>
+                    </div>
+                    <div class="transaction-time">2024-01-20 10:15:42</div>
+                </div>
+                <div class="transaction-amount">
+                    <span class="amount">-25.00 USDT</span>
+                    <span class="status pending">处理中</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 分页 -->
+    <div class="pagination-container">
+        <div class="pagination-info">
+            显示 1-10 条，共 89 条记录
+        </div>
+        <div class="pagination">
+            <button class="pagination-btn" disabled>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <button class="pagination-btn">...</button>
+            <button class="pagination-btn">9</button>
+            <button class="pagination-btn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+</div>

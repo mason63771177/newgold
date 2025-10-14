@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "created": "2025-10-12T00:35:56.198Z",
+  "description": "裂金7日项目 - 主钱包助记词安全存储",
+  "encryptedMnemonic": {
+    "encrypted": "g59lTFWPEovB4ZoOWt+ofuE23JJR4fruH+lAHwbW6Na3TGiRtjgRkdxj2fpa4rA+4/2WU5F23zLoHV760LWW8+DMRK/o45IYcHpmtSOdbacNzYCseC/uasyz+5tlVBxVUR0gnzFhe5TSJpM+jM8Z6gbG+9pbRGkZZxMV1U/KxWilRmE/N5740SW6Eh3CQDhMJXdh1Z5uorgrhrCM5qRFTQ==",
+    "salt": "Ud0744n+60ex7+LL8M3zObY444O2tSRWaJzEk6VqS3o=",
+    "iv": "1nIYjRza/MBmNQP3+8/3qg==",
+    "algorithm": "aes-256-cbc",
+    "iterations": 100000,
+    "timestamp": "2025-10-12T00:35:56.168Z"
+  },
+  "passwordHash": {
+    "hash": "fDXjoG2feTSoaFPZr+qPN5cg5hAgUpzRtyIA70tDTxpSnET9MFdhJImNvb+ONbr2HxJu6DS8hsYZssXt1w98Vg==",
+    "salt": "cjwh7AUfQhu8sIuLQMXMOuVitFbntXS9p9MHzU2Lu1g=",
+    "iterations": 100000
+  },
+  "security": {
+    "algorithm": "aes-256-gcm",
+    "keyDerivation": "pbkdf2",
+    "iterations": 100000,
+    "keyLength": 256,
+    "notes": "使用AES-256-GCM加密，PBKDF2密钥派生，10万次迭代"
+  }
+}
