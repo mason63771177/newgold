@@ -9,45 +9,22 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/server.js",
-      "methods": ["OPTIONS"],
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
-        "Access-Control-Max-Age": "86400"
-      }
+      "dest": "/server.js"
     },
     {
       "src": "/(.*)",
       "dest": "/server.js"
     }
   ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, POST, PUT, DELETE, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-        }
-      ]
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  },
   "functions": {
     "server.js": {
       "includeFiles": "**"
     }
+  },
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "deploymentProtection": {
+    "optionsAllowlist": ["/api"]
   }
 }
