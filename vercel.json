@@ -10,6 +10,29 @@
       "destination": "/backend/server.js"
     }
   ],
+  "routes": [
+    {
+      "src": "/css/(.*)",
+      "dest": "/css/$1",
+      "headers": {
+        "Content-Type": "text/css"
+      }
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/js/$1",
+      "headers": {
+        "Content-Type": "application/javascript"
+      }
+    },
+    {
+      "src": "/(.*\\.html)",
+      "dest": "/$1",
+      "headers": {
+        "Content-Type": "text/html"
+      }
+    }
+  ],
   "trailingSlash": false,
   "cleanUrls": false
 }
