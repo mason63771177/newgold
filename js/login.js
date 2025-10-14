@@ -6,10 +6,10 @@
 // 全局变量
 let currentForm = 'login';
 
-// API配置
+// API配置 - GitHub Pages兼容模式
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
     ? 'http://localhost:3000/api' 
-    : 'https://newgold-backend.vercel.app/api';
+    : null; // GitHub Pages模式：不使用后端API
 
 /**
  * 页面初始化函数
@@ -238,6 +238,7 @@ function hideCustomValidationTooltip(tooltip) {
 
 /**
  * 处理登录表单提交
+ * GitHub Pages模式：使用本地存储模拟登录
  */
 async function handleLogin() {
     const email = document.getElementById('loginEmail').value.trim();
@@ -253,7 +254,40 @@ async function handleLogin() {
     showLoadingState(submitBtn, '登录中...');
     
     try {
-        // 调用后端API
+        // GitHub Pages模式：检查API是否可用
+        if (!API_BASE_URL) {
+            // 模拟登录成功（GitHub Pages模式）
+            hideLoadingState(submitBtn, '开始挑战');
+            showMessage('登录成功！（演示模式）', 'success');
+            
+            // 模拟用户数据
+            const mockUser = {
+                id: 'demo-user-' + Date.now(),
+                email: email,
+                status: 1
+            };
+            
+            const mockToken = 'demo-token-' + Date.now();
+            
+            // 保存模拟数据到localStorage
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('token', mockToken);
+            localStorage.setItem('userId', mockUser.id);
+            localStorage.setItem('currentUser', JSON.stringify(mockUser));
+            localStorage.setItem('isActivated', 'true');
+            localStorage.setItem('userToken', mockToken);
+            localStorage.setItem('authToken', mockToken);
+            localStorage.setItem('userStatus', '1');
+            
+            // 跳转到主页面
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+            
+            return;
+        }
+        
+        // 本地开发模式：调用后端API
         const response = await fetch(`${API_BASE_URL}/auth/login`, {
             method: 'POST',
             headers: {
@@ -307,6 +341,7 @@ async function handleLogin() {
 
 /**
  * 处理注册表单提交
+ * GitHub Pages模式：使用本地存储模拟注册
  */
 async function handleRegister() {
     const email = document.getElementById('registerEmail').value.trim();
@@ -323,7 +358,40 @@ async function handleRegister() {
     showLoadingState(submitBtn, '注册中...');
     
     try {
-        // 调用后端API
+        // GitHub Pages模式：检查API是否可用
+        if (!API_BASE_URL) {
+            // 模拟注册成功（GitHub Pages模式）
+            hideLoadingState(submitBtn, '加入挑战');
+            showMessage('注册成功！（演示模式）', 'success');
+            
+            // 模拟用户数据
+            const mockUser = {
+                id: 'demo-user-' + Date.now(),
+                email: email,
+                status: 1
+            };
+            
+            const mockToken = 'demo-token-' + Date.now();
+            
+            // 保存模拟数据到localStorage
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('token', mockToken);
+            localStorage.setItem('userId', mockUser.id);
+            localStorage.setItem('currentUser', JSON.stringify(mockUser));
+            localStorage.setItem('isActivated', 'true');
+            localStorage.setItem('userToken', mockToken);
+            localStorage.setItem('authToken', mockToken);
+            localStorage.setItem('userStatus', '1');
+            
+            // 跳转到主页面
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+            
+            return;
+        }
+        
+        // 本地开发模式：调用后端API
         const response = await fetch(`${API_BASE_URL}/auth/register`, {
             method: 'POST',
             headers: {
