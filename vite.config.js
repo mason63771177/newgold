@@ -50,54 +50,19 @@ export default defineConfig({
     // 生成源码映射
     sourcemap: true,
     
-    // 压缩配置
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        // 移除console
-        drop_console: true,
-        // 移除debugger
-        drop_debugger: true
-      }
-    },
+    // 代码压缩
+    minify: 'esbuild',
     
-    // 代码分割配置
+    // Rollup 选项
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html')
-      },
+      input: resolve(__dirname, 'index.html'),
+      external: ['fsevents'],
       output: {
-        // 手动代码分割
-        manualChunks: {
-          // 核心模块
-          'core': [
-            './src/core/app.js',
-            './src/state/state-manager.js'
-          ],
-          
-          // 服务模块
-          'services': [
-            './src/services/api-client.js'
-          ],
-          
-          // 业务模块
-          'business': [
-            './src/core/countdown.js',
-            './src/core/wallet.js',
-            './src/core/task-manager.js'
-          ],
-          
-          // UI组件
-          'components': [
-            './src/components/ui-components.js'
-          ],
-          
-          // 工具模块
-          'utils': [
-            './src/utils/dom-helpers.js',
-            './src/utils/i18n.js'
-          ]
-        },
+          // 手动代码分割
+          manualChunks: {
+            // 移除不存在的文件引用
+            'vendor': ['vite']
+          },
         
         // 文件命名规则
         chunkFileNames: 'assets/js/[name]-[hash].js',
@@ -143,11 +108,9 @@ export default defineConfig({
       localsConvention: 'camelCase'
     },
     
-    // CSS 预处理器配置
+    // CSS 预处理器选项
     preprocessorOptions: {
-      scss: {
-        additionalData: '@import "./src/styles/variables.scss";'
-      }
+      // 移除不存在的scss配置
     },
     
     // PostCSS 配置
@@ -164,16 +127,13 @@ export default defineConfig({
     }
   },
   
-  // 路径解析配置
+  // 路径解析
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
-      '@core': resolve(__dirname, 'src/core'),
-      '@components': resolve(__dirname, 'src/components'),
-      '@services': resolve(__dirname, 'src/services'),
-      '@utils': resolve(__dirname, 'src/utils'),
-      '@styles': resolve(__dirname, 'src/styles'),
-      '@assets': resolve(__dirname, 'src/assets')
+      '@': resolve(__dirname, '.'),
+      '@css': resolve(__dirname, 'css'),
+      '@js': resolve(__dirname, 'js'),
+      '@assets': resolve(__dirname, 'assets')
     },
     
     // 文件扩展名
