@@ -69,7 +69,7 @@
     if (!document.querySelector('link[href*="global-background.css"]')) {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = 'public/css/global-background.css';
+      link.href = 'css/global-background.css';
       document.head.appendChild(link);
     }
     
