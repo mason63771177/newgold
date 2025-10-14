@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="business">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>裂金7日 · 登录注册</title>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ6GQ79K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QQ6GQ79K7G');
+  </script>
+  
+  <style>
+    /* 多主题系统 - CSS变量定义 */
+    :root {
+      /* 默认主题：赛博朋克 */
+      --bg-primary: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+      --bg-secondary: rgba(26, 26, 46, 0.8);
+      --bg-card: linear-gradient(145deg, rgba(22, 33, 62, 0.9), rgba(26, 26, 46, 0.7));
+      --text-primary: #ffffff;
+      --text-secondary: #6dd5ed;
+      --text-accent: #2193b0;
+      --btn-gradient: linear-gradient(45deg, #2193b0, #6dd5ed);
+      --btn-shadow: 0 8px 32px rgba(33, 147, 176, 0.3);
+      --btn-glow: 0 0 20px rgba(109, 213, 237, 0.4);
+      --border-color: rgba(109, 213, 237, 0.3);
+      --accent-color: #6dd5ed;
+      --logo-filter: drop-shadow(0 0 8px rgba(109, 213, 237, 0.4));
+    }
+
+    /* 登录页面专用样式 */
+    .login-container {
+        min-height: 100vh;
+        background: var(--bg-primary);
+        display: flex;
+        flex-direction: column;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-primary);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .login-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 20% 80%, rgba(109, 213, 237, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(33, 147, 176, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(109, 213, 237, 0.05) 0%, transparent 50%);
+        animation: backgroundPulse 8s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    @keyframes backgroundPulse {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.6; }
+    }
+
+    .main-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        position: relative;
+        z-index: 5;
+    }
+
+    .login-card {
+        background: var(--bg-card);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 
+            0 20px 40px rgba(0, 0, 0, 0.3),
+            0 0 0 1px var(--border-color),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .logo-section {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .logo-img {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 15px;
+        filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.3));
+    }
+
+    .app-name {
+        color: var(--text-primary);
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 8px 0;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .app-subtitle {
+        color: var(--text-secondary);
+        font-size: 14px;
+        margin: 0;
+        opacity: 0.8;
+    }
+
+    .form-tabs {
+        display: flex;
+        margin-bottom: 30px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        padding: 4px;
+        border: 1px solid var(--border-color);
+    }
+
+    .tab-btn {
+        flex: 1;
+        padding: 12px 20px;
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .tab-btn.active {
+        background: var(--btn-gradient);
+        color: var(--text-primary);
+        box-shadow: var(--btn-shadow);
+    }
+
+    .form-section {
+        display: none;
+    }
+
+    .form-section.active {
+        display: block;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .input-label {
+        display: block;
+        color: var(--text-secondary);
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        color: var(--text-primary);
+        font-size: 16px;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 3px rgba(109, 213, 237, 0.1);
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 16px;
+        background: var(--btn-gradient);
+        border: none;
+        border-radius: 12px;
+        color: var(--text-primary);
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: var(--btn-shadow);
+        margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--btn-glow), var(--btn-shadow);
+    }
+
+    .submit-btn:active {
+        transform: translateY(0);
+    }
+
+    .submit-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .input-hint {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 6px;
+        font-size: 12px;
+        color: var(--text-secondary);
+        opacity: 0.8;
+    }
+
+    .forgot-password {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .forgot-password a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+
+    .forgot-password a:hover {
+        color: var(--accent-color);
+    }
+
+    /* 消息提示样式 */
+    .message {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 16px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 1000;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        max-width: 300px;
+        word-wrap: break-word;
+    }
+
+    .message.show {
+        transform: translateX(0);
+    }
+
+    .message.success {
+        background: linear-gradient(45deg, #4CAF50, #45a049);
+    }
+
+    .message.error {
+        background: linear-gradient(45deg, #f44336, #da190b);
+    }
+
+    .message.info {
+        background: linear-gradient(45deg, #2196F3, #0b7dda);
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 480px) {
+        .login-card {
+            padding: 30px 20px;
+            margin: 10px;
+        }
+        
+        .app-name {
+            font-size: 20px;
+        }
+        
+        .form-input {
+            font-size: 16px;
+        }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-container">
+    <div class="main-content">
+      <div class="login-card">
+        <!-- Logo区域 -->
+        <div class="logo-section">
+          <img src="logo_gold7.png" alt="裂金7日" class="logo-img" />
+          <h1 class="app-name">裂金7日挑战</h1>
+          <p class="app-subtitle">开启您的财富之旅</p>
+        </div>
+
+        <!-- 表单切换标签 -->
+        <div class="form-tabs">
+          <button class="tab-btn active" data-form="login">登录</button>
+          <button class="tab-btn" data-form="register">注册</button>
+        </div>
+
+        <!-- 登录表单 -->
+        <div id="loginForm" class="form-section active">
+          <form>
+            <div class="input-group">
+              <label class="input-label" for="loginEmail">邮箱地址</label>
+              <div class="input-wrapper">
+                <input type="email" id="loginEmail" class="form-input" placeholder="请输入您的邮箱" required />
+              </div>
+              <div class="input-hint">
+                <span>🔒</span>
+                <span>我们使用加密技术保护您的信息</span>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="loginPassword">密码</label>
+              <div class="input-wrapper">
+                <input type="password" id="loginPassword" class="form-input" placeholder="请输入您的密码" required />
+              </div>
+            </div>
+
+            <button type="submit" id="loginBtn" class="submit-btn">开始挑战</button>
+            
+            <div class="input-hint" style="text-align: center; margin-top: 15px;">
+              <span>⚡</span>
+              <span>测试模式：点击即可快速体验</span>
+            </div>
+          </form>
+
+          <div class="forgot-password">
+            <a href="forgot-password.html">忘记密码？</a>
+          </div>
+        </div>
+
+        <!-- 注册表单 -->
+        <div id="registerForm" class="form-section">
+          <form>
+            <div class="input-group">
+              <label class="input-label" for="registerEmail">邮箱地址</label>
+              <div class="input-wrapper">
+                <input type="email" id="registerEmail" class="form-input" placeholder="请输入您的邮箱" required />
+              </div>
+              <div class="input-hint">
+                <span>🔒</span>
+                <span>邮箱将用于账户安全验证</span>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="registerPassword">设置密码</label>
+              <div class="input-wrapper">
+                <input type="password" id="registerPassword" class="form-input" placeholder="请设置您的密码" required />
+              </div>
+              <div class="input-hint">
+                <span>🛡️</span>
+                <span>建议使用字母、数字和符号组合</span>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="inviteCode">邀请码 <span style="color: #ff6b6b;">*</span></label>
+              <div class="input-wrapper">
+                <input type="text" id="inviteCode" class="form-input" placeholder="请输入邀请码" required />
+              </div>
+              <div class="input-hint">
+                <span>👥</span>
+                <span>我们是团队结构游戏，不支持玩家独立注册</span>
+              </div>
+            </div>
+
+            <button type="submit" id="registerBtn" class="submit-btn">加入挑战</button>
+            
+            <div class="input-hint" style="text-align: center; margin-top: 15px;">
+              <span>📋</span>
+              <span>注册即表示同意用户协议和隐私政策</span>
+            </div>
+          </form>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; color: var(--text-secondary); font-size: 14px;">
+          开启您的财富增长之旅
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 全局变量
+    let currentForm = 'login';
+
+    // API配置
+    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? 'http://localhost:3000/api' 
+        : '/api';
+
+    /**
+     * 页面初始化函数
+     */
+    document.addEventListener('DOMContentLoaded', function() {
+        setupFormTabs();
+        setupFormValidation();
+        setupKeyboardEvents();
+    });
+
+    /**
+     * 表单切换功能设置
+     */
+    function setupFormTabs() {
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const formType = this.getAttribute('data-form');
+                switchForm(formType);
+            });
+        });
+    }
+
+    /**
+     * 切换表单显示
+     */
+    function switchForm(formType) {
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        
+        // 更新标签按钮状态
+        tabButtons.forEach(button => {
+            const buttonForm = button.getAttribute('data-form');
+            if (buttonForm === formType) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        });
+        
+        // 切换表单显示
+        if (formType === 'login') {
+            loginForm.classList.add('active');
+            registerForm.classList.remove('active');
+            currentForm = 'login';
+        } else {
+            loginForm.classList.remove('active');
+            registerForm.classList.add('active');
+            currentForm = 'register';
+        }
+    }
+
+    /**
+     * 表单验证功能设置
+     */
+    function setupFormValidation() {
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        
+        // 登录表单验证
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleLogin();
+            });
+        }
+        
+        // 注册表单验证
+        if (registerForm) {
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleRegister();
+            });
+        }
+    }
+
+    /**
+     * 处理登录
+     */
+    async function handleLogin() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const loginBtn = document.getElementById('loginBtn');
+        
+        // 表单验证
+        if (!validateLoginForm(email, password)) {
+            return;
+        }
+        
+        // 显示加载状态
+        showLoadingState(loginBtn, '登录中...');
+        
+        try {
+            const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok && data.success) {
+                // 登录成功
+                showMessage('登录成功！正在跳转...', 'success');
+                
+                // 存储用户信息
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                
+                // 跳转到主页面
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            } else {
+                // 登录失败
+                showMessage(data.message || '登录失败，请检查邮箱和密码', 'error');
+            }
+        } catch (error) {
+            console.error('登录错误:', error);
+            showMessage('网络连接错误，请稍后重试', 'error');
+        } finally {
+            hideLoadingState(loginBtn, '开始挑战');
+        }
+    }
+
+    /**
+     * 处理注册
+     */
+    async function handleRegister() {
+        const email = document.getElementById('registerEmail').value.trim();
+        const password = document.getElementById('registerPassword').value;
+        const inviteCode = document.getElementById('inviteCode').value.trim();
+        const registerBtn = document.getElementById('registerBtn');
+        
+        // 表单验证
+        if (!validateRegisterForm(email, password, inviteCode)) {
+            return;
+        }
+        
+        // 显示加载状态
+        showLoadingState(registerBtn, '注册中...');
+        
+        try {
+            const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password, inviteCode })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok && data.success) {
+                // 注册成功
+                showMessage('注册成功！请查收邮箱验证邮件', 'success');
+                
+                // 清空表单
+                document.getElementById('registerEmail').value = '';
+                document.getElementById('registerPassword').value = '';
+                document.getElementById('inviteCode').value = '';
+                
+                // 切换到登录表单
+                setTimeout(() => {
+                    switchForm('login');
+                }, 2000);
+            } else {
+                // 注册失败
+                showMessage(data.message || '注册失败，请检查信息后重试', 'error');
+            }
+        } catch (error) {
+            console.error('注册错误:', error);
+            showMessage('网络连接错误，请稍后重试', 'error');
+        } finally {
+            hideLoadingState(registerBtn, '加入挑战');
+        }
+    }
+
+    /**
+     * 验证登录表单
+     */
+    function validateLoginForm(email, password) {
+        if (!email) {
+            showMessage('请输入邮箱地址', 'error');
+            return false;
+        }
+        
+        if (!isValidEmail(email)) {
+            showMessage('请输入有效的邮箱地址', 'error');
+            return false;
+        }
+        
+        if (!password) {
+            showMessage('请输入密码', 'error');
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * 验证注册表单
+     */
+    function validateRegisterForm(email, password, inviteCode) {
+        if (!email) {
+            showMessage('请输入邮箱地址', 'error');
+            return false;
+        }
+        
+        if (!isValidEmail(email)) {
+            showMessage('请输入有效的邮箱地址', 'error');
+            return false;
+        }
+        
+        if (!password) {
+            showMessage('请输入密码', 'error');
+            return false;
+        }
+        
+        if (password.length < 6) {
+            showMessage('密码长度至少6位', 'error');
+            return false;
+        }
+        
+        if (!inviteCode) {
+            showMessage('请输入邀请码', 'error');
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * 验证邮箱格式
+     */
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    /**
+     * 显示加载状态
+     */
+    function showLoadingState(button, text) {
+        button.disabled = true;
+        button.textContent = text;
+    }
+
+    /**
+     * 隐藏加载状态
+     */
+    function hideLoadingState(button, text) {
+        button.disabled = false;
+        button.textContent = text;
+    }
+
+    /**
+     * 显示消息提示
+     */
+    function showMessage(message, type = 'info') {
+        // 移除现有消息
+        const existingMessage = document.querySelector('.message');
+        if (existingMessage) {
+            existingMessage.remove();
+        }
+        
+        // 创建新消息
+        const messageEl = document.createElement('div');
+        messageEl.className = `message ${type}`;
+        messageEl.textContent = message;
+        
+        // 添加到页面
+        document.body.appendChild(messageEl);
+        
+        // 显示消息
+        setTimeout(() => {
+            messageEl.classList.add('show');
+        }, 100);
+        
+        // 自动隐藏消息
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+            setTimeout(() => {
+                if (messageEl.parentNode) {
+                    messageEl.remove();
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    /**
+     * 设置键盘事件
+     */
+    function setupKeyboardEvents() {
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                if (currentForm === 'login') {
+                    const loginBtn = document.getElementById('loginBtn');
+                    if (loginBtn && !loginBtn.disabled) {
+                        handleLogin();
+                    }
+                } else if (currentForm === 'register') {
+                    const registerBtn = document.getElementById('registerBtn');
+                    if (registerBtn && !registerBtn.disabled) {
+                        handleRegister();
+                    }
+                }
+            }
+        });
+    }
+  </script>
+</body>
+</html>
