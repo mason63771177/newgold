@@ -4369,16 +4369,8 @@
      * 显示登录注册界面
      */
     function showLoginRegister() {
-      // 显示激活账号对话框
-      showDialog('欢迎来到裂金7日', '请先激活您的账号开始游戏', [
-        {
-          text: '激活账号',
-          action: () => {
-            closeDialog();
-            activateAccount();
-          }
-        }
-      ]);
+      // 跳转到登录页面
+      window.location.href = 'login.html';
     }
 
     async function init() {

@@ -273,9 +273,18 @@ async function handleLogin() {
             localStorage.setItem('userId', data.data.user.id);
             localStorage.setItem('currentUser', JSON.stringify(data.data.user));
             
-            // 跳转到钱包页面
+            // 设置登录状态标记
+            localStorage.setItem('isActivated', 'true');
+            localStorage.setItem('userToken', data.data.token);
+            localStorage.setItem('authToken', data.data.token);
+            
+            // 根据用户状态跳转到相应页面
+            const userStatus = data.data.user.status || 1;
+            localStorage.setItem('userStatus', userStatus.toString());
+            
+            // 跳转到主页面，让主页面根据状态显示相应内容
             setTimeout(() => {
-                window.location.href = 'wallet.html';
+                window.location.href = 'index.html';
             }, 1000);
             
         } else {
@@ -334,6 +343,15 @@ async function handleRegister() {
             localStorage.setItem('token', data.data.token);
             localStorage.setItem('userId', data.data.user.id);
             localStorage.setItem('currentUser', JSON.stringify(data.data.user));
+            
+            // 设置登录状态标记
+            localStorage.setItem('isActivated', 'true');
+            localStorage.setItem('userToken', data.data.token);
+            localStorage.setItem('authToken', data.data.token);
+            
+            // 根据用户状态设置
+            const userStatus = data.data.user.status || 1;
+            localStorage.setItem('userStatus', userStatus.toString());
             
             // 跳转到主页面
             setTimeout(() => {
