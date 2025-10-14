@@ -236,7 +236,7 @@
         // 从主应用复制的API请求函数
         async function apiRequest(endpoint, options = {}) {
             const token = getAuthToken();
-            const url = `http://localhost:3000/api${endpoint}`;
+            const url = `https://backend-nf35qew4u-wongs-projects-7580d6a8.vercel.app/api${endpoint}`;
             const config = {
                 headers: {
                     'Content-Type': 'application/json',
@@ -314,7 +314,7 @@
                 logMessage('apiLog', `使用Token: ${getAuthToken()}`);
                 
                 // 先测试不带认证的请求
-                let response = await fetch('http://localhost:3000/api/state/status');
+                let response = await fetch('https://backend-nf35qew4u-wongs-projects-7580d6a8.vercel.app/api/state/status');
                 let data = await response.json();
                 
                 if (response.ok) {
