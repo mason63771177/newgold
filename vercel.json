@@ -2,19 +2,31 @@
   "version": 2,
   "builds": [
     {
-      "src": "*.html",
+      "src": "**/*.html",
       "use": "@vercel/static"
     },
     {
-      "src": "css/**",
+      "src": "**/*.css",
       "use": "@vercel/static"
     },
     {
-      "src": "js/**",
+      "src": "**/*.js",
       "use": "@vercel/static"
     },
     {
-      "src": "frontend/**",
+      "src": "**/*.png",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "**/*.jpg",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "**/*.svg",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "**/*.json",
       "use": "@vercel/static"
     },
     {
@@ -33,38 +45,64 @@
   },
   "headers": [
     {
-      "source": "/css/(.*\\.css)",
+      "source": "/(.*\\.css)",
       "headers": [
         {
           "key": "Content-Type",
-          "value": "text/css"
+          "value": "text/css; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000"
         }
       ]
     },
     {
-      "source": "/js/(.*\\.js)",
+      "source": "/(.*\\.js)",
       "headers": [
         {
           "key": "Content-Type",
-          "value": "application/javascript"
+          "value": "application/javascript; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000"
         }
       ]
     },
     {
-      "source": "/frontend/css/(.*\\.css)",
+      "source": "/(.*\\.html)",
       "headers": [
         {
           "key": "Content-Type",
-          "value": "text/css"
+          "value": "text/html; charset=utf-8"
         }
       ]
     },
     {
-      "source": "/frontend/js/(.*\\.js)",
+      "source": "/(.*\\.json)",
       "headers": [
         {
           "key": "Content-Type",
-          "value": "application/javascript"
+          "value": "application/json; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.png)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "image/png"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.svg)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "image/svg+xml"
         }
       ]
     },
