@@ -1,204 +1,335 @@
-/**
- * WebSocket 连接管理器
- * 负责建立和维护与服务器的WebSocket连接
- */
-class WebSocketManager {
-    constructor() {
-        this.ws = null;
-        this.reconnectAttempts = 0;
-        this.maxReconnectAttempts = 5;
-        this.reconnectInterval = 3000;
-        this.statusElement = null;
-        this.messageHandlers = new Map();
-        this.init();
+class WebSocketClient {
+  constructor() {
+    this.ws = null;
+    this.reconnectAttempts = 0;
+    this.maxReconnectAttempts = 5;
+    this.reconnectInterval = 3000;
+    this.heartbeatInterval = null;
+    this.isConnected = false;
+    this.messageHandlers = new Map();
+    this.init();
+  }
+
+  init() {
+    this.connect();
+    this.setupMessageHandlers();
+  }
+
+  connect() {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.warn('未找到认证token，无法连接WebSocket');
+        return;
+      }
+
+      const wsUrl = `ws://localhost:3000?token=${encodeURIComponent(token)}`;
+      this.ws = new WebSocket(wsUrl);
+
+      this.ws.onopen = this.onOpen.bind(this);
+      this.ws.onmessage = this.onMessage.bind(this);
+      this.ws.onclose = this.onClose.bind(this);
+      this.ws.onerror = this.onError.bind(this);
+
+    } catch (error) {
+      console.error('WebSocket连接失败:', error);
+      this.scheduleReconnect();
+    }
+  }
+
+  onOpen(event) {
+    console.log('WebSocket连接已建立');
+    this.isConnected = true;
+    this.reconnectAttempts = 0;
+    this.startHeartbeat();
+    
+    // 触发连接成功事件
+    this.emit('connected');
+  }
+
+  onMessage(event) {
+    try {
+      const data = JSON.parse(event.data);
+      console.log('收到WebSocket消息:', data);
+      
+      // 处理不同类型的消息
+      switch (data.type) {
+        case 'countdown_update':
+          this.handleCountdownUpdate(data.data);
+          break;
+        case 'redpacket_start':
+          this.handleRedpacketStart(data.data);
+          break;
+        case 'redpacket_end':
+          this.handleRedpacketEnd(data.data);
+          break;
+        case 'task_complete':
+          this.handleTaskComplete(data.data);
+          break;
+        case 'notification':
+          this.handleNotification(data.data);
+          break;
+        case 'pong':
+          // 心跳响应，不需要处理
+          break;
+        default:
+          console.log('未知消息类型:', data.type);
+      }
+      
+      // 触发通用消息事件
+      this.emit('message', data);
+      
+    } catch (error) {
+      console.error('解析WebSocket消息失败:', error);
+    }
+  }
+
+  onClose(event) {
+    console.log('WebSocket连接已关闭:', event.code, event.reason);
+    this.isConnected = false;
+    this.stopHeartbeat();
+    
+    // 触发断开连接事件
+    this.emit('disconnected');
+    
+    // 尝试重连
+    if (event.code !== 1000) { // 非正常关闭
+      this.scheduleReconnect();
+    }
+  }
+
+  onError(event) {
+    console.error('WebSocket错误:', event);
+    this.emit('error', event);
+  }
+
+  // 重连机制
+  scheduleReconnect() {
+    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+      console.error('WebSocket重连次数已达上限');
+      return;
     }
 
-    /**
-     * 初始化WebSocket管理器
-     */
-    init() {
-        this.createStatusElement();
-        this.connect();
+    this.reconnectAttempts++;
+    console.log(`${this.reconnectInterval / 1000}秒后尝试第${this.reconnectAttempts}次重连...`);
+    
+    setTimeout(() => {
+      this.connect();
+    }, this.reconnectInterval);
+  }
+
+  // 心跳机制
+  startHeartbeat() {
+    this.heartbeatInterval = setInterval(() => {
+      if (this.isConnected && this.ws.readyState === WebSocket.OPEN) {
+        this.send('ping');
+      }
+    }, 30000); // 每30秒发送一次心跳
+  }
+
+  stopHeartbeat() {
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval);
+      this.heartbeatInterval = null;
+    }
+  }
+
+  // 发送消息
+  send(type, data = {}) {
+    if (!this.isConnected || this.ws.readyState !== WebSocket.OPEN) {
+      console.warn('WebSocket未连接，无法发送消息');
+      return false;
     }
 
-    /**
-     * 创建状态显示元素
-     */
-    createStatusElement() {
-        this.statusElement = document.createElement('div');
-        this.statusElement.className = 'websocket-status disconnected';
-        this.statusElement.textContent = '连接中...';
-        document.body.appendChild(this.statusElement);
+    try {
+      const message = JSON.stringify({ type, data });
+      this.ws.send(message);
+      return true;
+    } catch (error) {
+      console.error('发送WebSocket消息失败:', error);
+      return false;
     }
+  }
 
-    /**
-     * 建立WebSocket连接
-     */
-    connect() {
+  // 设置消息处理器
+  setupMessageHandlers() {
+    // 倒计时更新处理
+    this.on('countdown_update', (data) => {
+      this.updateCountdownDisplay(data);
+    });
+
+    // 红包开始处理
+    this.on('redpacket_start', (data) => {
+      this.showRedpacketStartNotification(data);
+      this.updateRedpacketButton(true);
+    });
+
+    // 红包结束处理
+    this.on('redpacket_end', (data) => {
+      this.showRedpacketEndNotification(data);
+      this.updateRedpacketButton(false);
+    });
+
+    // 任务完成处理
+    this.on('task_complete', (data) => {
+      this.showTaskCompleteNotification(data);
+      this.refreshTaskList();
+      this.refreshWalletBalance();
+    });
+
+    // 通知处理
+    this.on('notification', (data) => {
+      this.showNotification(data);
+    });
+  }
+
+  // 更新倒计时显示
+  updateCountdownDisplay(data) {
+    const countdownElements = document.querySelectorAll('.countdown-display');
+    countdownElements.forEach(element => {
+      if (data.isActive) {
+        element.textContent = `红包进行中 ${data.activeRemainingTime}秒`;
+        element.classList.add('active');
+      } else {
+        const hours = Math.floor(data.remainingTime / 3600);
+        const minutes = Math.floor((data.remainingTime % 3600) / 60);
+        const seconds = data.remainingTime % 60;
+        element.textContent = `下次红包 ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        element.classList.remove('active');
+      }
+    });
+  }
+
+  // 显示红包开始通知
+  showRedpacketStartNotification(data) {
+    this.showNotification({
+      title: '红包活动开始！',
+      message: data.message || '快来抢红包！',
+      type: 'success'
+    });
+  }
+
+  // 显示红包结束通知
+  showRedpacketEndNotification(data) {
+    this.showNotification({
+      title: '红包活动结束',
+      message: data.message || '红包活动已结束',
+      type: 'info'
+    });
+  }
+
+  // 显示任务完成通知
+  showTaskCompleteNotification(data) {
+    this.showNotification({
+      title: '任务完成！',
+      message: `${data.message}，获得奖励 ${data.reward} USDT`,
+      type: 'success'
+    });
+  }
+
+  // 更新红包按钮状态
+  updateRedpacketButton(isActive) {
+    const redpacketButtons = document.querySelectorAll('.redpacket-btn');
+    redpacketButtons.forEach(button => {
+      if (isActive) {
+        button.classList.add('active');
+        button.textContent = '抢红包';
+        button.disabled = false;
+      } else {
+        button.classList.remove('active');
+        button.textContent = '抢红包';
+        button.disabled = true;
+      }
+    });
+  }
+
+  // 显示通知
+  showNotification(data) {
+    // 创建通知元素
+    const notification = document.createElement('div');
+    notification.className = `notification ${data.type || 'info'}`;
+    notification.innerHTML = `
+      <div class="notification-content">
+        <h4>${data.title}</h4>
+        <p>${data.message}</p>
+      </div>
+      <button class="notification-close">&times;</button>
+    `;
+
+    // 添加到页面
+    document.body.appendChild(notification);
+
+    // 添加关闭事件
+    const closeBtn = notification.querySelector('.notification-close');
+    closeBtn.addEventListener('click', () => {
+      notification.remove();
+    });
+
+    // 自动关闭
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.remove();
+      }
+    }, 5000);
+  }
+
+  // 刷新任务列表
+  refreshTaskList() {
+    if (typeof window.refreshTasks === 'function') {
+      window.refreshTasks();
+    }
+  }
+
+  // 刷新钱包余额
+  refreshWalletBalance() {
+    if (typeof window.refreshWallet === 'function') {
+      window.refreshWallet();
+    }
+  }
+
+  // 事件监听器
+  on(event, handler) {
+    if (!this.messageHandlers.has(event)) {
+      this.messageHandlers.set(event, []);
+    }
+    this.messageHandlers.get(event).push(handler);
+  }
+
+  // 触发事件
+  emit(event, data) {
+    if (this.messageHandlers.has(event)) {
+      this.messageHandlers.get(event).forEach(handler => {
         try {
-            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsUrl = `${protocol}//${window.location.host}/ws`;
-            
-            this.ws = new WebSocket(wsUrl);
-            this.updateStatus('connecting', '连接中...');
-
-            this.ws.onopen = () => {
-                this.onOpen();
-            };
-
-            this.ws.onmessage = (event) => {
-                this.onMessage(event);
-            };
-
-            this.ws.onclose = () => {
-                this.onClose();
-            };
-
-            this.ws.onerror = (error) => {
-                this.onError(error);
-            };
-
+          handler(data);
         } catch (error) {
-            console.error('WebSocket连接失败:', error);
-            this.updateStatus('disconnected', '连接失败');
-            this.scheduleReconnect();
+          console.error(`事件处理器错误 (${event}):`, error);
         }
+      });
     }
+  }
 
-    /**
-     * 连接成功处理
-     */
-    onOpen() {
-        console.log('WebSocket连接已建立');
-        this.reconnectAttempts = 0;
-        this.updateStatus('connected', '已连接');
+  // 断开连接
+  disconnect() {
+    if (this.ws) {
+      this.ws.close(1000, '主动断开连接');
     }
+    this.stopHeartbeat();
+  }
 
-    /**
-     * 消息接收处理
-     */
-    onMessage(event) {
-        try {
-            const data = JSON.parse(event.data);
-            console.log('收到WebSocket消息:', data);
-            
-            // 触发对应的消息处理器
-            if (this.messageHandlers.has(data.type)) {
-                this.messageHandlers.get(data.type)(data);
-            }
-            
-            // 触发全局消息事件
-            window.dispatchEvent(new CustomEvent('websocket-message', { detail: data }));
-            
-        } catch (error) {
-            console.error('解析WebSocket消息失败:', error);
-        }
-    }
-
-    /**
-     * 连接关闭处理
-     */
-    onClose() {
-        console.log('WebSocket连接已关闭');
-        this.updateStatus('disconnected', '连接断开');
-        this.scheduleReconnect();
-    }
-
-    /**
-     * 连接错误处理
-     */
-    onError(error) {
-        console.error('WebSocket错误:', error);
-        this.updateStatus('disconnected', '连接错误');
-    }
-
-    /**
-     * 更新连接状态显示
-     */
-    updateStatus(status, text) {
-        if (this.statusElement) {
-            this.statusElement.className = `websocket-status ${status}`;
-            this.statusElement.textContent = text;
-        }
-    }
-
-    /**
-     * 安排重连
-     */
-    scheduleReconnect() {
-        if (this.reconnectAttempts < this.maxReconnectAttempts) {
-            this.reconnectAttempts++;
-            console.log(`${this.reconnectInterval / 1000}秒后尝试第${this.reconnectAttempts}次重连...`);
-            
-            setTimeout(() => {
-                this.connect();
-            }, this.reconnectInterval);
-        } else {
-            console.log('已达到最大重连次数，停止重连');
-            this.updateStatus('disconnected', '连接失败');
-        }
-    }
-
-    /**
-     * 发送消息
-     */
-    send(data) {
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-            this.ws.send(JSON.stringify(data));
-            return true;
-        } else {
-            console.warn('WebSocket未连接，无法发送消息');
-            return false;
-        }
-    }
-
-    /**
-     * 注册消息处理器
-     */
-    onMessage(type, handler) {
-        this.messageHandlers.set(type, handler);
-    }
-
-    /**
-     * 移除消息处理器
-     */
-    offMessage(type) {
-        this.messageHandlers.delete(type);
-    }
-
-    /**
-     * 关闭连接
-     */
-    close() {
-        if (this.ws) {
-            this.ws.close();
-        }
-        if (this.statusElement) {
-            this.statusElement.remove();
-        }
-    }
+  // 获取连接状态
+  getConnectionStatus() {
+    return {
+      isConnected: this.isConnected,
+      readyState: this.ws ? this.ws.readyState : WebSocket.CLOSED,
+      reconnectAttempts: this.reconnectAttempts
+    };
+  }
 }
 
-// 全局WebSocket管理器实例
-let wsManager = null;
+// 创建全局WebSocket客户端实例
+window.wsClient = new WebSocketClient();
 
-// 页面加载完成后初始化WebSocket
-document.addEventListener('DOMContentLoaded', () => {
-    // 只在需要WebSocket的页面初始化
-    if (document.querySelector('[data-websocket="true"]') || 
-        window.location.pathname.includes('wallet') ||
-        window.location.pathname.includes('dashboard')) {
-        wsManager = new WebSocketManager();
-    }
-});
-
-// 页面卸载时关闭连接
-window.addEventListener('beforeunload', () => {
-    if (wsManager) {
-        wsManager.close();
-    }
-});
-
-// 导出WebSocket管理器
-window.WebSocketManager = WebSocketManager;
-window.wsManager = wsManager;
+// 导出类供其他模块使用
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = WebSocketClient;
+}
