@@ -65,7 +65,14 @@ git --version
 https://your-username.github.io/your-repo-name/
 ```
 
-例如：
+### 当前项目访问地址：
+- **主页**：`https://mason63771177.github.io/newgold/`
+- **登录页面**：`https://mason63771177.github.io/newgold/login.html`
+- **钱包页面**：`https://mason63771177.github.io/newgold/wallet.html`
+- **任务页面**：`https://mason63771177.github.io/newgold/tasks.html`
+- **团队页面**：`https://mason63771177.github.io/newgold/team.html`
+
+### 示例：
 - 用户名：`mason1236`
 - 仓库名：`lijin7-h5`
 - 网站地址：`https://mason1236.github.io/lijin7-h5/`
