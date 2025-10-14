@@ -88,7 +88,7 @@ if (isProduction) {
 // CORS配置
 app.use(cors({
     origin: isProduction 
-        ? ['https://yourdomain.com'] // 生产环境域名
+        ? ['https://mason63771177.github.io'] // GitHub Pages域名
         : ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8001', 'http://127.0.0.1:8001', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:8080', 'http://127.0.0.1:8080'], // 开发环境
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

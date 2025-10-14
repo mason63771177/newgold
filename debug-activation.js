@@ -3,7 +3,7 @@
  * 模拟前端的激活API调用过程
  */
 
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'https://backend-av1nfmkip-wongs-projects-7580d6a8.vercel.app';
 
 // 模拟前端的getAuthToken函数
 function getAuthToken() {
