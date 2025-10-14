@@ -10,32 +10,6 @@
       "destination": "/backend/server.js"
     }
   ],
-  "routes": [
-    {
-      "src": "/css/(.*)",
-      "headers": {
-        "Content-Type": "text/css"
-      }
-    },
-    {
-      "src": "/js/(.*)",
-      "headers": {
-        "Content-Type": "application/javascript"
-      }
-    },
-    {
-      "src": "/(.*\\.css)",
-      "headers": {
-        "Content-Type": "text/css"
-      }
-    },
-    {
-      "src": "/(.*\\.js)",
-      "headers": {
-        "Content-Type": "application/javascript"
-      }
-    }
-  ],
   "headers": [
     {
       "source": "/(.*\\.css)",
