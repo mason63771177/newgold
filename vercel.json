@@ -7,6 +7,22 @@
   },
   "rewrites": [
     {
+      "source": "/css/(.*)",
+      "destination": "/css/$1"
+    },
+    {
+      "source": "/js/(.*)",
+      "destination": "/js/$1"
+    },
+    {
+      "source": "/i18n/(.*)",
+      "destination": "/i18n/$1"
+    },
+    {
+      "source": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|json|html))$",
+      "destination": "/$1"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/backend/server.js"
     }
