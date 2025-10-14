@@ -14,7 +14,9 @@
     "format": "prettier --write src/**/*.{js,css,html}",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "deploy": "npm run build && vercel --prod",
+    "deploy:netlify": "npm run build && netlify deploy --prod --dir=dist"
   },
   "keywords": [
     "h5",
