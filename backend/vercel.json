@@ -1,11 +1,10 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
+  "functions": {
+    "server.js": {
+      "includeFiles": "**"
     }
-  ],
+  },
   "routes": [
     {
       "src": "/api/(.*)",
@@ -16,11 +15,6 @@
       "dest": "/server.js"
     }
   ],
-  "functions": {
-    "server.js": {
-      "includeFiles": "**"
-    }
-  },
   "env": {
     "NODE_ENV": "production"
   },
