@@ -85,14 +85,44 @@ if (isProduction) {
     }));
 }
 
-// CORS配置
+// CORS配置 - 优先处理OPTIONS请求
+app.options('*', (req, res) => {
+    const allowedOrigins = isProduction 
+        ? ['https://mason63771177.github.io', 'https://mason63771177.github.io/newgold']
+        : ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8001', 'http://127.0.0.1:8001', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:8080', 'http://127.0.0.1:8080'];
+    
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+    }
+    
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Max-Age', '86400'); // 24小时缓存
+    res.status(200).end();
+});
+
+// CORS中间件
 app.use(cors({
-    origin: isProduction 
-        ? ['https://mason63771177.github.io', 'https://mason63771177.github.io/newgold'] // GitHub Pages域名
-        : ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8001', 'http://127.0.0.1:8001', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:8080', 'http://127.0.0.1:8080'], // 开发环境
+    origin: function (origin, callback) {
+        const allowedOrigins = isProduction 
+            ? ['https://mason63771177.github.io', 'https://mason63771177.github.io/newgold']
+            : ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8001', 'http://127.0.0.1:8001', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:8080', 'http://127.0.0.1:8080'];
+        
+        // 允许没有origin的请求（如Postman）
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+    maxAge: 86400, // 24小时缓存预检请求
     optionsSuccessStatus: 200 // 支持旧版浏览器
 }));
 
@@ -144,8 +174,12 @@ app.use('/js', express.static(path.join(__dirname, '../frontend/js')));
 // 添加项目根目录静态文件服务，支持admin.html等根目录文件
 app.use(express.static(path.join(__dirname, '..')));
 
-// 健康检查
+// 健康检查 - 无需认证的公开端点
 app.get('/health', (req, res) => {
+    // 设置CORS头部确保预检请求通过
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    
     res.json({
         status: 'ok',
         timestamp: new Date().toISOString(),
