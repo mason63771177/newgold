@@ -15,17 +15,17 @@
     gtag('config', 'G-QQ6GQ79K7G');
   </script>
   
-  <!-- 引入主题系统CSS -->
-  <link rel="stylesheet" href="themes.css">
+  <!-- 主题样式 -->
+  <link rel="stylesheet" href="themes.css" />
   
-  <!-- 引入全局背景CSS -->
-  <link rel="stylesheet" href="css/global-background.css">
+  <!-- 全局背景样式 -->
+  <link rel="stylesheet" href="css/global-background.css" />
   
-  <!-- 引入登录页面专用CSS -->
-  <link rel="stylesheet" href="css/login.css">
+  <!-- 登录页面样式 -->
+  <link rel="stylesheet" href="css/login.css" />
   
-  <!-- 引入自定义验证提示框CSS -->
-  <link rel="stylesheet" href="css/custom-validation.css">
+  <!-- 自定义验证样式 -->
+  <link rel="stylesheet" href="css/custom-validation.css" />
   
   <style>
     /* 多主题系统 - CSS变量定义 */
@@ -796,117 +796,384 @@
     }
   </style>
 </head>
-<body class="login-container">
+<body>
+  <div class="login-container">
+    <div class="login-content">
+      <div class="login-header">
+        <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#2193b0"/>
+              <stop offset="100%" style="stop-color:#6dd5ed"/>
+            </linearGradient>
+          </defs>
+          <circle cx="50" cy="50" r="45" fill="none" stroke="url(#logoGradient)" stroke-width="3"/>
+          <path d="M30 35 L50 25 L70 35 L70 55 L50 65 L30 55 Z" fill="url(#logoGradient)" opacity="0.8"/>
+          <circle cx="50" cy="45" r="8" fill="#ffffff"/>
+          <path d="M42 60 Q50 70 58 60" stroke="#ffffff" stroke-width="2" fill="none"/>
+        </svg>
+        <h1 class="login-title">裂金7日</h1>
+        <p class="login-subtitle">开启您的财富增长之旅</p>
+      </div>
 
-
-    <!-- 主内容区域 -->
-    <main class="main-content">
-        <div class="login-card">
-            <!-- Logo区域 -->
-            <div class="logo-section">
-                <img src="logo_gold7.png" alt="裂金7日挑战" class="logo-img">
-                <h1 class="app-name">裂金7日挑战</h1>
-                <p class="app-subtitle">开启您的财富之旅</p>
-            </div>
-            
-            <!-- 表单切换标签 -->
-            <div class="form-tabs">
-                <button class="tab-btn active" data-form="login">登录</button>
-                <button class="tab-btn" data-form="register">注册</button>
-            </div>
-
-            <!-- 表单容器 -->
-            <div class="form-container active">
-                <!-- 登录表单 -->
-                <form id="loginForm" class="form-section active" novalidate>
-                    <div class="form-group">
-                        <label for="loginEmail" class="form-label">邮箱地址</label>
-                        <input type="email" id="loginEmail" class="form-input" placeholder="请输入邮箱地址" required>
-                        <div class="security-tip">
-                            <div class="security-icon">🔒</div>
-                            <span>我们使用加密技术保护您的信息</span>
-                        </div>
-                        <div class="error-message" style="display: none;">请输入有效的邮箱地址</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="loginPassword" class="form-label">密码</label>
-                        <input type="password" id="loginPassword" class="form-input" placeholder="请输入密码" required>
-                        <div class="error-message" style="display: none;">密码不能为空</div>
-                    </div>
-                    
-                    <button type="submit" class="submit-btn" id="loginBtn">开始挑战</button>
-                    
-                    <div class="note">
-                        <div class="security-tip">
-                            <div class="security-icon">⚡</div>
-                            <span>测试模式：点击即可快速体验</span>
-                        </div>
-                    </div>
-                    
-                    <div class="forgot-link">
-                        <a href="forgot-password.html">忘记密码？</a>
-                    </div>
-                </form>
-
-                <!-- 注册表单 -->
-                <form id="registerForm" class="form-section" novalidate>
-                    <div class="form-group">
-                        <label for="registerEmail" class="form-label">邮箱地址</label>
-                        <input type="email" id="registerEmail" class="form-input" placeholder="请输入邮箱地址" required>
-                        <div class="security-tip">
-                            <div class="security-icon">🔒</div>
-                            <span>邮箱将用于账户安全验证</span>
-                        </div>
-                        <div class="error-message" style="display: none;">请输入有效的邮箱地址</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="registerPassword" class="form-label">设置密码</label>
-                        <input type="password" id="registerPassword" class="form-input" placeholder="请设置密码（至少6位）" required>
-                        
-                        <!-- 密码强度指示器 -->
-                        <div class="password-strength" id="passwordStrength">
-                            <div class="strength-bar">
-                                <div class="strength-fill" id="passwordStrengthBar"></div>
-                            </div>
-                            <div class="strength-text"></div>
-                        </div>
-                        
-                        <div class="security-tip">
-                            <div class="security-icon">🛡️</div>
-                            <span>建议使用字母、数字和符号组合</span>
-                        </div>
-                        <div class="error-message" style="display: none;">密码至少需要6位字符</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="inviteCode" class="form-label">邀请码 <span style="color: #ff5d5d;">*</span></label>
-                        <input type="text" id="inviteCode" class="form-input" placeholder="请输入邀请码" required>
-                        <div class="security-tip">
-                            <div class="security-icon">👥</div>
-                            <span>我们是团队结构游戏，不支持玩家独立注册</span>
-                        </div>
-                        <div class="error-message" style="display: none;">邀请码为必填项，请联系推荐人获取</div>
-                    </div>
-                    
-                    <button type="submit" class="submit-btn" id="registerBtn">加入挑战</button>
-                    
-                    <div class="note">
-                        <div class="security-tip">
-                            <div class="security-icon">📋</div>
-                            <span>注册即表示同意用户协议和隐私政策</span>
-                        </div>
-                    </div>
-                </form>
-            </div>
+      <div class="login-form-container">
+        <div class="form-tabs">
+          <button class="tab-button active" onclick="switchTab('login')">登录</button>
+          <button class="tab-button" onclick="switchTab('register')">注册</button>
         </div>
-    </main>
-    
-    <div class="foot">开启您的财富增长之旅</div>
 
-  <!-- 引入登录页面JavaScript -->
+        <!-- 登录表单 -->
+        <div id="loginForm" class="form-section active">
+          <form onsubmit="handleLogin(event)">
+            <div class="form-group">
+              <label class="form-label" for="loginEmail">邮箱地址</label>
+              <input 
+                type="email" 
+                id="loginEmail" 
+                class="form-input" 
+                placeholder="请输入邮箱地址"
+                required
+                onblur="validateEmail(this)"
+              />
+              <div class="security-note">
+                <svg class="security-icon" viewBox="0 0 24 24">
+                  <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11.5C15.4,11.5 16,12.4 16,13V16C16,16.6 15.6,17 15,17H9C8.4,17 8,16.6 8,16V13C8,12.4 8.4,11.5 9,11.5V10C9,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.2,9.2 10.2,10V11.5H13.8V10C13.8,9.2 12.8,8.2 12,8.2Z"/>
+                </svg>
+                我们使用高级技术保护您的信息
+              </div>
+              <div class="error-message" id="loginEmailError"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="loginPassword">密码</label>
+              <input 
+                type="password" 
+                id="loginPassword" 
+                class="form-input" 
+                placeholder="请输入密码"
+                required
+                onblur="validateLoginPassword(this)"
+              />
+              <div class="error-message" id="loginPasswordError"></div>
+            </div>
+
+            <button type="submit" class="form-button">开始挑战</button>
+          </form>
+
+          <div class="test-account">
+            <div class="test-account-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>
+              </svg>
+              测试账号
+            </div>
+            <div class="test-account-info">
+              点击即可快速体验：<a href="#" class="test-link" onclick="fillTestAccount()">点击填入</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 注册表单 -->
+        <div id="registerForm" class="form-section">
+          <form onsubmit="handleRegister(event)">
+            <div class="form-group">
+              <label class="form-label" for="registerEmail">邮箱地址</label>
+              <input 
+                type="email" 
+                id="registerEmail" 
+                class="form-input" 
+                placeholder="请输入邮箱地址"
+                required
+                onblur="validateEmail(this)"
+              />
+              <div class="security-note">
+                <svg class="security-icon" viewBox="0 0 24 24">
+                  <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11.5C15.4,11.5 16,12.4 16,13V16C16,16.6 15.6,17 15,17H9C8.4,17 8,16.6 8,16V13C8,12.4 8.4,11.5 9,11.5V10C9,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.2,9.2 10.2,10V11.5H13.8V10C13.8,9.2 12.8,8.2 12,8.2Z"/>
+                </svg>
+                邮箱将用于账号安全验证
+              </div>
+              <div class="error-message" id="registerEmailError"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="registerPassword">设置密码</label>
+              <input 
+                type="password" 
+                id="registerPassword" 
+                class="form-input" 
+                placeholder="请设置密码（至少6位）"
+                required
+                onblur="validateRegisterPassword(this)"
+                oninput="checkPasswordStrength(this)"
+              />
+              <div class="password-requirements">
+                <div class="requirement-item">
+                  <svg class="requirement-icon" viewBox="0 0 24 24">
+                    <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z"/>
+                  </svg>
+                  建议使用字母、数字和符号组合
+                </div>
+              </div>
+              <div class="error-message" id="registerPasswordError"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="inviteCode">邀请码</label>
+              <input 
+                type="text" 
+                id="inviteCode" 
+                class="form-input" 
+                placeholder="请输入邀请码"
+                onblur="validateInviteCode(this)"
+              />
+              <div class="error-message" id="inviteCodeError"></div>
+            </div>
+
+            <button type="submit" class="form-button">开启您的财富增长之旅</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * 切换登录/注册标签页
+     * @param {string} tab - 标签页类型 ('login' 或 'register')
+     */
+    function switchTab(tab) {
+      // 移除所有活动状态
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
+      
+      // 激活选中的标签页
+      event.target.classList.add('active');
+      document.getElementById(tab + 'Form').classList.add('active');
+    }
+
+    /**
+     * 验证邮箱格式
+     * @param {HTMLInputElement} input - 邮箱输入框
+     */
+    function validateEmail(input) {
+      const email = input.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const errorElement = document.getElementById(input.id + 'Error');
+      
+      if (!email) {
+        showError(input, errorElement, '请输入邮箱地址');
+        return false;
+      }
+      
+      if (!emailRegex.test(email)) {
+        showError(input, errorElement, '请输入有效的邮箱地址');
+        return false;
+      }
+      
+      showSuccess(input, errorElement);
+      return true;
+    }
+
+    /**
+     * 验证登录密码
+     * @param {HTMLInputElement} input - 密码输入框
+     */
+    function validateLoginPassword(input) {
+      const password = input.value;
+      const errorElement = document.getElementById('loginPasswordError');
+      
+      if (!password) {
+        showError(input, errorElement, '请输入密码');
+        return false;
+      }
+      
+      showSuccess(input, errorElement);
+      return true;
+    }
+
+    /**
+     * 验证注册密码
+     * @param {HTMLInputElement} input - 密码输入框
+     */
+    function validateRegisterPassword(input) {
+      const password = input.value;
+      const errorElement = document.getElementById('registerPasswordError');
+      
+      if (!password) {
+        showError(input, errorElement, '请设置密码');
+        return false;
+      }
+      
+      if (password.length < 6) {
+        showError(input, errorElement, '密码长度至少6位');
+        return false;
+      }
+      
+      showSuccess(input, errorElement);
+      return true;
+    }
+
+    /**
+     * 检查密码强度
+     * @param {HTMLInputElement} input - 密码输入框
+     */
+    function checkPasswordStrength(input) {
+      const password = input.value;
+      // 这里可以添加密码强度检查逻辑
+      // 目前只做基本长度检查
+    }
+
+    /**
+     * 验证邀请码
+     * @param {HTMLInputElement} input - 邀请码输入框
+     */
+    function validateInviteCode(input) {
+      const code = input.value.trim();
+      const errorElement = document.getElementById('inviteCodeError');
+      
+      // 邀请码是可选的，所以空值也是有效的
+      if (code && code.length < 4) {
+        showError(input, errorElement, '邀请码格式不正确');
+        return false;
+      }
+      
+      showSuccess(input, errorElement);
+      return true;
+    }
+
+    /**
+     * 显示错误状态
+     * @param {HTMLInputElement} input - 输入框元素
+     * @param {HTMLElement} errorElement - 错误信息元素
+     * @param {string} message - 错误信息
+     */
+    function showError(input, errorElement, message) {
+      input.classList.remove('valid');
+      input.classList.add('invalid');
+      errorElement.textContent = message;
+      errorElement.classList.add('show');
+    }
+
+    /**
+     * 显示成功状态
+     * @param {HTMLInputElement} input - 输入框元素
+     * @param {HTMLElement} errorElement - 错误信息元素
+     */
+    function showSuccess(input, errorElement) {
+      input.classList.remove('invalid');
+      input.classList.add('valid');
+      errorElement.classList.remove('show');
+    }
+
+    /**
+     * 填入测试账号信息
+     */
+    function fillTestAccount() {
+      document.getElementById('loginEmail').value = 'test@example.com';
+      document.getElementById('loginPassword').value = 'test123';
+      
+      // 验证填入的信息
+      validateEmail(document.getElementById('loginEmail'));
+      validateLoginPassword(document.getElementById('loginPassword'));
+    }
+
+    /**
+     * 处理登录表单提交
+     * @param {Event} event - 表单提交事件
+     */
+    function handleLogin(event) {
+      event.preventDefault();
+      
+      const email = document.getElementById('loginEmail');
+      const password = document.getElementById('loginPassword');
+      
+      // 验证所有字段
+      const isEmailValid = validateEmail(email);
+      const isPasswordValid = validateLoginPassword(password);
+      
+      if (!isEmailValid || !isPasswordValid) {
+        return;
+      }
+      
+      // 这里添加实际的登录逻辑
+      console.log('登录信息:', {
+        email: email.value,
+        password: password.value
+      });
+      
+      // 模拟登录过程
+      const button = event.target.querySelector('.form-button');
+      button.textContent = '登录中...';
+      button.disabled = true;
+      
+      setTimeout(() => {
+        alert('登录功能正在开发中...');
+        button.textContent = '开始挑战';
+        button.disabled = false;
+      }, 1000);
+    }
+
+    /**
+     * 处理注册表单提交
+     * @param {Event} event - 表单提交事件
+     */
+    function handleRegister(event) {
+      event.preventDefault();
+      
+      const email = document.getElementById('registerEmail');
+      const password = document.getElementById('registerPassword');
+      const inviteCode = document.getElementById('inviteCode');
+      
+      // 验证所有字段
+      const isEmailValid = validateEmail(email);
+      const isPasswordValid = validateRegisterPassword(password);
+      const isInviteCodeValid = validateInviteCode(inviteCode);
+      
+      if (!isEmailValid || !isPasswordValid || !isInviteCodeValid) {
+        return;
+      }
+      
+      // 这里添加实际的注册逻辑
+      console.log('注册信息:', {
+        email: email.value,
+        password: password.value,
+        inviteCode: inviteCode.value
+      });
+      
+      // 模拟注册过程
+      const button = event.target.querySelector('.form-button');
+      button.textContent = '注册中...';
+      button.disabled = true;
+      
+      setTimeout(() => {
+        alert('注册功能正在开发中...');
+        button.textContent = '开启您的财富增长之旅';
+        button.disabled = false;
+      }, 1000);
+    }
+
+    // 页面加载完成后的初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('登录页面已加载');
+      
+      // 添加一些交互效果
+      const inputs = document.querySelectorAll('.form-input');
+      inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+          this.parentElement.classList.add('focused');
+        });
+        
+        input.addEventListener('blur', function() {
+          this.parentElement.classList.remove('focused');
+        });
+      });
+    });
+  </script>
+  
+  <!-- 登录页面脚本 -->
   <script src="js/login.js?v=1.0.1"></script>
+  
+  <!-- 全局背景脚本 -->
   <script src="js/global-background.js"></script>
 </body>
 </html>
