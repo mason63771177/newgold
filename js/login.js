@@ -6,6 +6,11 @@
 // 全局变量
 let currentForm = 'login';
 
+// API配置
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:3000/api' 
+    : '/api';
+
 /**
  * 页面初始化函数
  * 在DOM加载完成后执行所有初始化操作
@@ -249,7 +254,7 @@ async function handleLogin() {
     
     try {
         // 调用后端API
-        const response = await fetch('https://backend-nf35qew4u-wongs-projects-7580d6a8.vercel.app/api/auth/login', {
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -319,7 +324,7 @@ async function handleRegister() {
     
     try {
         // 调用后端API
-        const response = await fetch('https://backend-nf35qew4u-wongs-projects-7580d6a8.vercel.app/api/auth/register', {
+        const response = await fetch(`${API_BASE_URL}/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

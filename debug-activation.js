@@ -3,7 +3,7 @@
  * 模拟前端的激活API调用过程
  */
 
-const API_BASE_URL = 'https://backend-nf35qew4u-wongs-projects-7580d6a8.vercel.app';
+const API_BASE_URL = 'https://newgold-h5-game-abxj07n20-wongs-projects-7580d6a8.vercel.app/api';
 
 // 模拟前端的getAuthToken函数
 function getAuthToken() {

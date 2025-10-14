@@ -196,7 +196,8 @@
     async function loadTasks() {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('https://backend-nf35qew4u-wongs-projects-7580d6a8.vercel.app/api/tasks/status', {
+        const API_BASE_URL = 'https://newgold-h5-game-abxj07n20-wongs-projects-7580d6a8.vercel.app/api';
+        const response = await fetch(`${API_BASE_URL}/tasks/status`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

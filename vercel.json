@@ -1,41 +1,76 @@
 {
   "version": 2,
-  "name": "newgold-h5-game",
   "builds": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "src": "*.html",
+      "use": "@vercel/static"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "src": "css/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "js/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "frontend/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "backend/server.js",
+      "use": "@vercel/node"
     }
   ],
-  "functions": {
-    "backend/server.js": {
-      "runtime": "nodejs18.x"
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/backend/server.js"
     }
-  },
+  ],
   "env": {
     "NODE_ENV": "production"
   },
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/css/(.*\\.css)",
       "headers": [
         {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
+          "key": "Content-Type",
+          "value": "text/css"
+        }
+      ]
+    },
+    {
+      "source": "/js/(.*\\.js)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript"
+        }
+      ]
+    },
+    {
+      "source": "/frontend/css/(.*\\.css)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/css"
+        }
+      ]
+    },
+    {
+      "source": "/frontend/js/(.*\\.js)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
         {
           "key": "X-Frame-Options",
           "value": "DENY"
@@ -45,12 +80,6 @@
           "value": "1; mode=block"
         }
       ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/backend/server.js"
     }
   ]
 }

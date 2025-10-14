@@ -236,7 +236,7 @@
         // 从主应用复制的API请求函数
         async function apiRequest(endpoint, options = {}) {
             const token = getAuthToken();
-            const url = `https://backend-nf35qew4u-wongs-projects-7580d6a8.vercel.app/api${endpoint}`;
+            const url = `https://newgold-h5-game-abxj07n20-wongs-projects-7580d6a8.vercel.app/api${endpoint}`;
             const config = {
                 headers: {
                     'Content-Type': 'application/json',
@@ -289,7 +289,7 @@
                 logMessage('apiLog', '🔄 正在测试API连接...');
                 logMessage('apiLog', `使用Token: ${getAuthToken()}`);
                 
-                const response = await fetch('http://localhost:3000/health');
+                const response = await fetch('https://newgold-h5-game-abxj07n20-wongs-projects-7580d6a8.vercel.app/api/health');
                 const data = await response.json();
                 
                 if (response.ok) {
@@ -314,7 +314,7 @@
                 logMessage('apiLog', `使用Token: ${getAuthToken()}`);
                 
                 // 先测试不带认证的请求
-                let response = await fetch('https://backend-nf35qew4u-wongs-projects-7580d6a8.vercel.app/api/state/status');
+                let response = await fetch('http://localhost:3000/api/state/status');
                 let data = await response.json();
                 
                 if (response.ok) {

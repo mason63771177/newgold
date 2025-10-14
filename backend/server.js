@@ -88,13 +88,17 @@ if (isProduction) {
 // CORS配置 - 优先处理OPTIONS请求
 app.options('*', (req, res) => {
     const allowedOrigins = isProduction 
-        ? [
-            'https://mason63771177.github.io', 
-            'https://mason63771177.github.io/newgold',
-            'https://mason1236.github.io',
-            'https://mason1236.github.io/lijin7-h5'
-          ]
-        : ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8001', 'http://127.0.0.1:8001', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:8080', 'http://127.0.0.1:8080'];
+            ? [
+                'https://mason63771177.github.io', 
+                'https://mason63771177.github.io/newgold',
+                'https://mason1236.github.io',
+                'https://mason1236.github.io/lijin7-h5',
+                'https://newgold-h5-game-abxj07n20-wongs-projects-7580d6a8.vercel.app',
+                'https://newgold-h5-game-be6eue4af-wongs-projects-7580d6a8.vercel.app',
+                'https://newgold-h5-game-todiwnk51-wongs-projects-7580d6a8.vercel.app',
+                'https://newgold-h5-game.vercel.app'
+              ]
+            : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8001', 'http://127.0.0.1:8001', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:8080', 'http://127.0.0.1:8080'];
     
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
@@ -116,9 +120,13 @@ app.use(cors({
                 'https://mason63771177.github.io', 
                 'https://mason63771177.github.io/newgold',
                 'https://mason1236.github.io',
-                'https://mason1236.github.io/lijin7-h5'
+                'https://mason1236.github.io/lijin7-h5',
+                'https://newgold-h5-game-abxj07n20-wongs-projects-7580d6a8.vercel.app',
+                'https://newgold-h5-game-be6eue4af-wongs-projects-7580d6a8.vercel.app',
+                'https://newgold-h5-game-todiwnk51-wongs-projects-7580d6a8.vercel.app',
+                'https://newgold-h5-game.vercel.app'
               ]
-            : ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8001', 'http://127.0.0.1:8001', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:8080', 'http://127.0.0.1:8080'];
+            : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8001', 'http://127.0.0.1:8001', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:8080', 'http://127.0.0.1:8080'];
         
         // 允许没有origin的请求（如Postman）
         if (!origin) return callback(null, true);
