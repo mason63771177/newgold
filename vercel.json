@@ -10,6 +10,13 @@
       "destination": "/backend/server.js"
     }
   ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/login.html",
+      "permanent": false
+    }
+  ],
   "headers": [
     {
       "source": "/(.*\\.css)",
