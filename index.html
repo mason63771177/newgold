@@ -66,6 +66,75 @@
       overflow: hidden;
     }
 
+    /* 加载屏幕样式 */
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.3s ease-out;
+    }
+
+    .loading-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .loading-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 20px;
+    }
+
+    .loading-text {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border-color);
+      border-top: 3px solid var(--accent-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* 隐藏主应用直到加载完成 */
+    .app.loading {
+      opacity: 0;
+      pointer-events: none;
+    }
+
     /* 应用容器 100vh 三段式布局 */
     .app {
       height: 100vh;
@@ -2643,7 +2712,16 @@
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
   
-  <div id="app" class="app">
+  <!-- 加载屏幕 -->
+  <div id="loadingScreen" class="loading-screen">
+    <div class="loading-logo">
+      <img src="logo_gold7.png" alt="裂金7日挑战" />
+    </div>
+    <div class="loading-text">正在加载...</div>
+    <div class="loading-spinner"></div>
+  </div>
+  
+  <div id="app" class="app loading">
     <!-- 消息图标 - 移到最外层避免flex布局影响 -->
     <div id="messageIcon" class="message-icon" onclick="showMessages()">
       <img src="图标文件/message_optimized.png" alt="消息" width="36" height="36" />
@@ -4338,6 +4416,25 @@
       window.location.href = 'quiz.html';
     }
 
+    /**
+     * 隐藏加载屏幕并显示主应用
+     */
+    function hideLoadingScreen() {
+      const loadingScreen = document.getElementById('loadingScreen');
+      const app = document.getElementById('app');
+      
+      // 添加淡出动画
+      loadingScreen.classList.add('hidden');
+      
+      // 显示主应用
+      app.classList.remove('loading');
+      
+      // 300ms后完全移除加载屏幕
+      setTimeout(() => {
+        loadingScreen.style.display = 'none';
+      }, 300);
+    }
+
     async function init() {
       // 从 localStorage 加载历史状态
       loadState();
@@ -4347,7 +4444,8 @@
       const userToken = localStorage.getItem('userToken');
       
       if (!isActivated || !userToken) {
-        // 未激活或无token，显示登录注册界面
+        // 未激活或无token，直接跳转到登录页面，不显示状态1
+        hideLoadingScreen();
         showLoginRegister();
         return;
       }
@@ -4387,7 +4485,9 @@
       // 加载通知历史
       loadNotifications();
       
+      // 渲染状态并隐藏加载屏幕
       renderState();
+      hideLoadingScreen();
       
       // 初始化设置面板事件监听器
       initSettingsEvents();
