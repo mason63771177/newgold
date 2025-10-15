@@ -19,6 +19,31 @@
   --backdrop-blur: blur(16px);
 }
 
+/* Business 主题 - 金色商务风格 */
+[data-theme="business"] {
+  --bg-primary: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  --bg-secondary: rgba(45, 45, 45, 0.8);
+  --bg-card: linear-gradient(145deg, rgba(45, 45, 45, 0.9), rgba(58, 58, 58, 0.7));
+  --text-primary: #ffffff;
+  --text-secondary: #e5e5e5;
+  --text-accent: #d4af37;
+  --btn-gradient: linear-gradient(45deg, #d4af37, #c19b26);
+  --btn-shadow: 0 8px 32px rgba(212, 175, 55, 0.3);
+  --btn-glow: 0 0 20px rgba(212, 175, 55, 0.4);
+  --border-color: rgba(212, 175, 55, 0.3);
+  --accent-color: #d4af37;
+  --logo-filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
+  --bg: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  --panel: rgba(45, 45, 45, 0.8);
+  --card: linear-gradient(145deg, rgba(45, 45, 45, 0.9), rgba(58, 58, 58, 0.7));
+  --brand: #d4af37;
+  --brand-2: #c19b26;
+  --text: #ffffff;
+  --muted: #b0b0b0;
+  --danger: #ff6b6b;
+  --ok: #51cf66;
+}
+
 /* 通用样式应用CSS变量 */
 body {
   background: var(--bg-primary);
