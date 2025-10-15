@@ -79,7 +79,6 @@ jspm_packages/
 .tern-port
 
 # Build outputs
-dist/
 build/
 
 # IDE files

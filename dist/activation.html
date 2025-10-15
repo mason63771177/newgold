@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>裂金7日 · 激活账号</title>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ6GQ79K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-QQ6GQ79K7G');
+  </script>
+  
+  <link rel="stylesheet" href="css/global-background.css">
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --card: #0e141d;
+      --brand: #56ccf2;
+      --brand-2: #2f80ed;
+      --text: #e6efff;
+      --muted: #9fb3cd;
+      --accent-border: rgba(111,158,255,0.18);
+      --safe: env(safe-area-inset-bottom, 0px);
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      overflow: hidden;
+    }
+    .container { height: 100vh; display: flex; flex-direction: column; }
+    .header { position: relative; flex: 0 0 20%; display: flex; align-items: center; justify-content: center; padding-top: 20px; }
+    .header h1 { font-size: 24px; font-weight: 700; background: linear-gradient(45deg,#2193b0,#6dd5ed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 12px rgba(109,213,237,0.5)) drop-shadow(0 0 24px rgba(109,213,237,0.3)); margin:0; }
+    /* 小logo样式 */
+    .logo-small {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      margin-right: 8px;
+      filter: drop-shadow(0 0 8px rgba(109, 213, 237, 0.4)) drop-shadow(0 0 16px rgba(109, 213, 237, 0.2));
+    }
+
+    .content { flex: 1; padding: 0 16px; display: flex; align-items: center; justify-content: center; overflow-x: hidden; }
+    .card { width: 100%; max-width: 480px; background: linear-gradient(180deg, rgba(15,21,32,0.85), rgba(15,21,32,0.9)); border-radius: 24px; padding: 24px; border: 1px solid var(--accent-border); box-shadow: 0 6px 20px rgba(0,0,0,0.35) inset, 0 12px 28px rgba(0,0,0,0.35); backdrop-filter: blur(16px); display: flex; flex-direction: column; gap: 16px; }
+    .section-title { font-size: 16px; font-weight: 600; color: #a3b6ff; }
+    .address { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 12px; word-break: break-all; }
+    .btn-copy, .btn-finish { appearance: none; border: none; border-radius: 16px; padding: 12px 0; font-size: 14px; font-weight: 700; cursor: pointer; background-image: linear-gradient(180deg,var(--brand),var(--brand-2)); box-shadow: 0 8px 24px rgba(47,128,237,0.45), inset 0 1px 0 rgba(255,255,255,0.25); color: #031e2e; transition: transform 0.08s ease, filter 0.2s ease; }
+    .btn-copy:active, .btn-finish:active { transform: translateY(0); filter: brightness(0.95); }
+    .info { font-size: 14px; line-height: 1.4; color: #cdd6f7; }
+    .bottom { flex: 0 0 auto; padding: 14px 16px calc(24px + var(--safe)); display: flex; background: rgba(255,255,255,0.04); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.06); margin: 0 12px 12px; border-radius: 20px; }
+    .bottom button { flex: 1; margin: 0 6px; border: none; border-radius: 16px; padding: 14px 0; font-size: 14px; font-weight: 800; color: var(--text); cursor: pointer; background-image: linear-gradient(180deg,var(--brand),var(--brand-2)); box-shadow: 0 8px 24px rgba(47,128,237,0.45), inset 0 1px 0 rgba(255,255,255,0.25); transition: transform 0.08s ease, filter 0.2s ease; white-space: nowrap; }
+    .bottom button:hover { transform: translateY(-3px); filter: brightness(1.2); }
+    .bottom button:active { transform: translateY(0); filter: brightness(0.95); }
+  </style>
+</head>
+<body>
+  <script src="js/smart-back.js"></script>
+  <div class="container">
+    <div class="header">
+      <img src="logo_gold7.png" alt="Logo" class="logo-small" />
+      <h1>激活账号</h1>
+    </div>
+    <div class="content">
+      <div class="card">
+        <div class="section-title">请转入 100 USDT (TRC20)</div>
+        <div id="addr" class="address">生成中…</div>
+        <button class="btn-copy" onclick="copyAddr()">复制地址</button>
+        <div class="info">为保证安全，请通过您的数字钱包将 100 USDT 转入上述专属地址。链上确认后，系统将自动激活您的账号进入挑战。</div>
+        <button class="btn-finish" onclick="finish()">我已完成转账</button>
+      </div>
+    </div>
+    <div class="bottom">
+      <button onclick="smartBack()">返回</button>
+    </div>
+  </div>
+  <script>
+    async function genAddr() {
+      let addr = localStorage.getItem('activationAddress');
+      if (!addr) {
+        try {
+          // 从后端API获取真实激活地址
+          const response = await fetch('/api/user/activation-address', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            addr = data.address;
+            localStorage.setItem('activationAddress', addr);
+          } else {
+            throw new Error('获取激活地址失败');
+          }
+        } catch (error) {
+          console.error('获取激活地址失败:', error);
+          alert('获取激活地址失败，请稍后重试');
+          return;
+        }
+      }
+      document.getElementById('addr').textContent = addr;
+    }
+    function copyAddr() {
+      const addr = document.getElementById('addr').textContent;
+      navigator.clipboard.writeText(addr).then(() => {
+        alert('已复制地址');
+      }).catch(() => {
+        alert('复制失败，请手动复制');
+      });
+    }
+    function finish() {
+      // 设置状态2并跳转回主页面
+      localStorage.setItem('userStatus', '2');
+      alert('我们将在链上确认后激活您的账号，现在返回首页');
+      location.href = 'ui_design.html';
+    }
+    window.addEventListener('DOMContentLoaded', genAddr);
+  </script>
+  <script src="js/global-background.js"></script>
+</body>
+</html>

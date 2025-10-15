@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>裂金7日 · 提现</title>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ6GQ79K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-QQ6GQ79K7G');
+  </script>
+  
+  <link rel="stylesheet" href="themes.css">
+  <link rel="stylesheet" href="css/global-background.css">
+  
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #111823;
+      --card: #0e141d;
+      --brand: #56ccf2;
+      --brand-2: #2f80ed;
+      --text: #e6efff;
+      --muted: #9fb3cd;
+      --accent-border: rgba(111, 158, 255, 0.18);
+      --error: #ff5d5d;
+      --success: #00e3ae;
+      /* 安全区域适配：用于 iPhone X 等带底部凹槽设备 */
+      --safe: env(safe-area-inset-bottom, 0px);
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-size: 16px;
+      overflow: hidden;
+    }
+    .container { height: 100vh; display: flex; flex-direction: column; }
+    .header { position: relative; flex: 0 0 80px; display: flex; align-items: center; justify-content: center; padding-top: 8px; }
+    .header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(45deg, #2193b0, #6dd5ed);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 12px rgba(109, 213, 237, 0.5)) drop-shadow(0 0 24px rgba(109, 213, 237, 0.3));
+      margin: 0;
+    }
+    /* 小logo样式 - 压缩尺寸 */
+    .logo-small {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      margin-right: 8px;
+      filter: drop-shadow(0 0 8px rgba(109, 213, 237, 0.4)) drop-shadow(0 0 16px rgba(109, 213, 237, 0.2));
+    }
+
+    .content { flex: 1; padding: 16px; padding-bottom: 100px; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; }
+    .card {
+      width: 100%; max-width: 480px; background: linear-gradient(180deg, rgba(15,21,32,0.85), rgba(15,21,32,0.9)); border-radius: 24px; padding: 24px; border: 1px solid var(--accent-border); box-shadow: 0 6px 20px rgba(0,0,0,0.35) inset, 0 12px 28px rgba(0,0,0,0.35); backdrop-filter: blur(16px);
+    }
+    .section { margin-bottom: 20px; }
+    .section:last-child { margin-bottom: 0; }
+    .section-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: #a3b6ff; }
+    .balance-info {
+      background: rgba(0, 227, 174, 0.1);
+      border: 1px solid rgba(0, 227, 174, 0.3);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .balance-amount {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--success);
+      margin-bottom: 4px;
+    }
+    .balance-label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 2px rgba(86, 204, 242, 0.2);
+    }
+    .form-input.error {
+      border-color: var(--error);
+      box-shadow: 0 0 0 2px rgba(255, 93, 93, 0.2);
+    }
+    .error-message {
+      color: var(--error);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+    .fee-info {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 14px;
+    }
+    .fee-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .fee-row:last-child {
+      margin-bottom: 0;
+      font-weight: 600;
+      color: var(--brand);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 8px;
+      margin-top: 8px;
+    }
+    .quick-amounts {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .quick-amount {
+      flex: 1;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 12px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .quick-amount:hover {
+      background: rgba(86, 204, 242, 0.1);
+      border-color: var(--brand);
+    }
+    .quiz-btn {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 4px 8px;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+    }
+    .quiz-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+    }
+    .bottom { position: fixed; bottom: 0; left: 0; right: 0; padding: 14px 16px calc(24px + var(--safe)); display: flex; background: rgba(255,255,255,0.04); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.06); margin: 0 12px 12px; border-radius: 20px 20px 0 0; z-index: 100; }
+
+    /* 自定义对话框样式 */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-content {
+      background: linear-gradient(180deg, rgba(15,21,32,0.95), rgba(15,21,32,0.98));
+      border-radius: 16px;
+      width: 100%;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--accent-border);
+      backdrop-filter: blur(16px);
+    }
+
+    .modal-header {
+      padding: 20px 20px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      text-align: center;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .confirm-text {
+      margin: 0 0 15px;
+      font-size: 16px;
+      color: var(--text);
+      text-align: center;
+    }
+
+    .address-display {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid var(--accent-border);
+      border-radius: 12px;
+      padding: 15px;
+      margin: 15px 0;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .address-text {
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: var(--text);
+      word-break: break-all;
+      line-height: 1.4;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .warning-text {
+      margin: 15px 0 0;
+      font-size: 14px;
+      color: var(--error);
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .hint-text {
+      margin: 10px 0 0;
+      font-size: 14px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .modal-footer {
+      padding: 10px 20px 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .cancel-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .cancel-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .confirm-btn {
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: white;
+      box-shadow: 0 4px 12px rgba(47, 128, 237, 0.3);
+    }
+
+    .confirm-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(47, 128, 237, 0.4);
+    }
+
+    /* 移动端优化 */
+    @media (max-width: 480px) {
+      .modal-overlay {
+        padding: 10px;
+      }
+
+      .modal-content {
+        max-height: 90vh;
+      }
+
+      .address-text {
+        font-size: 12px;
+      }
+
+      .modal-btn {
+        padding: 14px 16px;
+        font-size: 15px;
+      }
+    }
+    .bottom button {
+      flex: 1;
+      margin: 0 6px;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 0;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.08s ease, filter 0.2s ease, box-shadow 0.2s ease;
+      background-image: linear-gradient(180deg, var(--brand), var(--brand-2));
+      box-shadow: 0 8px 24px rgba(47,128,237,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
+      /* 避免移动端按钮文字换行 */
+      white-space: nowrap;
+    }
+    .bottom button:hover { transform: translateY(-3px); filter: brightness(1.2); }
+    .bottom button:active { transform: translateY(0); filter: brightness(0.95); }
+    .bottom button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      filter: none;
+    }
+    .bottom .back-btn {
+      position: static;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 12px 24px;
+      color: var(--text);
+      font-size: 16px;
+      cursor: pointer;
+      flex: 1;
+      margin-right: 12px;
+    }
+    .bottom .back-btn:hover {
+      background: rgba(255,255,255,0.12);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <script src="js/smart-back.js"></script>
+  <div class="container">
+    <div class="header">
+      <img src="logo_gold7.png" alt="Logo" class="logo-small" />
+      <h1>提现</h1>
+    </div>
+    <div class="content">
+      <div class="card">
+        <div class="section">
+          <div class="balance-info">
+            <div class="balance-amount" id="currentBalance">-- USDT</div>
+            <div class="balance-label">可提现余额</div>
+          </div>
+        </div>
+        
+        <div class="section">
+          <div class="section-title">提现金额</div>
+          <div class="form-group">
+            <label class="form-label">金额 (USDT)</label>
+            <input type="number" class="form-input" id="withdrawAmount" placeholder="最低20 USDT" min="20" step="0.01">
+            <div class="error-message" id="amountError" style="display: none;"></div>
+            <div class="quick-amounts">
+              <button class="quick-amount" onclick="setQuickAmount(20)">20</button>
+              <button class="quick-amount" onclick="setQuickAmount(50)">50</button>
+              <button class="quick-amount" onclick="setQuickAmount(100)">100</button>
+              <button class="quick-amount" onclick="setQuickAmount('all')">全部</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="section">
+          <div class="section-title">收款地址</div>
+          <div class="form-group">
+            <label class="form-label">USDT钱包地址</label>
+            <input type="text" class="form-input" id="walletAddress" placeholder="请输入USDT钱包地址">
+            <div class="error-message" id="addressError" style="display: none;"></div>
+            <!-- 地址绑定状态显示 -->
+            <div id="addressBindingStatus" style="display: none; margin-top: 8px; padding: 8px 12px; background: rgba(0, 227, 174, 0.1); border: 1px solid rgba(0, 227, 174, 0.3); border-radius: 8px; font-size: 12px;">
+              <div style="color: var(--success); margin-bottom: 4px;">✓ 已绑定默认收款地址</div>
+              <div style="color: var(--muted); word-break: break-all;" id="boundAddressDisplay"></div>
+              <button type="button" id="changeAddressBtn" style="margin-top: 6px; padding: 4px 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; color: var(--text); font-size: 11px; cursor: pointer;">修改地址</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="section">
+          <div class="section-title">费用明细</div>
+          <div class="fee-info">
+            <div class="fee-row">
+              <span>提现金额</span>
+              <span id="feeAmount">0.00 USDT</span>
+            </div>
+            <div class="fee-row">
+              <span>固定手续费</span>
+              <span>2.00 USDT</span>
+            </div>
+            <div class="fee-row">
+              <span id="feeRateLabel">比例手续费 (5%)</span>
+              <span id="feePercent">0.00 USDT</span>
+            </div>
+            <div class="fee-row">
+              <span>实际扣除</span>
+              <span id="totalDeduct">0.00 USDT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom">
+      <button class="back-btn" onclick="smartBackToParent()">返回</button>
+      <button id="confirmBtn" onclick="confirmWithdraw()" disabled>确认提现</button>
+    </div>
+  </div>
+
+  <!-- 自定义地址确认对话框 -->
+  <div id="addressConfirmModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>确认收款地址</h3>
+      </div>
+      <div class="modal-body">
+        <p class="confirm-text">请仔细核对您的收款地址：</p>
+        <div class="address-display">
+          <div id="confirmAddressText" class="address-text"></div>
+        </div>
+        <p class="warning-text">⚠️ 地址一旦确认将无法修改，请仔细核对！</p>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn cancel-btn" onclick="closeAddressConfirmModal()">取消</button>
+        <button class="modal-btn confirm-btn" onclick="confirmAddress()">确认地址</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 绑定地址询问对话框 -->
+  <div id="bindAddressModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>设置默认地址</h3>
+      </div>
+      <div class="modal-body">
+        <p class="confirm-text">是否将此地址设为默认收款地址？</p>
+        <p class="hint-text">设为默认后，下次提现将自动填入此地址，方便您快速操作。</p>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn cancel-btn" onclick="skipBinding()">暂不绑定</button>
+        <button class="modal-btn confirm-btn" onclick="confirmBinding()">设为默认</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentBalance = 0;
+    let feeRate = 0.05;
+    // 用户交互状态跟踪
+    let userInteracted = {
+      amount: false,
+      address: false
+    };
+    
+    function loadWithdrawPage() {
+      // 从appState加载余额
+      const appState = JSON.parse(localStorage.getItem('appState') || '{}');
+      currentBalance = appState.walletBalance || 0;
+      
+      // 根据答题进度计算手续费率
+      const correctCount = parseInt(localStorage.getItem('quizCorrect')) || 0;
+      // 每答对1题降低0.2%，最低1%
+      feeRate = Math.max(0.01, 0.05 - (correctCount * 0.002));
+      
+      document.getElementById('currentBalance').innerText = currentBalance.toFixed(2) + ' USDT';
+      
+      // 更新手续费标签和答题按钮
+      updateFeeRateLabel();
+      
+      // 检查并加载绑定的地址
+      loadBoundAddress();
+      
+      // 监听输入变化和用户交互
+      const amountInput = document.getElementById('withdrawAmount');
+      const addressInput = document.getElementById('walletAddress');
+      
+      // 金额输入框事件
+      amountInput.addEventListener('input', function() {
+        userInteracted.amount = true;
+        updateFeeCalculation();
+      });
+      
+      amountInput.addEventListener('blur', function() {
+        userInteracted.amount = true;
+        validateForm();
+      });
+      
+      amountInput.addEventListener('focus', function() {
+        if (!userInteracted.amount) {
+          userInteracted.amount = true;
+        }
+      });
+      
+      // 地址输入框事件
+      addressInput.addEventListener('input', function() {
+        userInteracted.address = true;
+        validateForm();
+      });
+      
+      addressInput.addEventListener('blur', function() {
+        userInteracted.address = true;
+        validateForm();
+      });
+      
+      addressInput.addEventListener('focus', function() {
+        if (!userInteracted.address) {
+          userInteracted.address = true;
+        }
+      });
+      
+      // 绑定地址相关事件
+      document.getElementById('changeAddressBtn').addEventListener('click', enableAddressEdit);
+      
+      // 初始化时只计算费用，不显示验证错误
+      updateFeeCalculationOnly();
+    }
+    
+    function updateFeeRateLabel() {
+      const feeRateLabel = document.getElementById('feeRateLabel');
+      const feeRatePercent = (feeRate * 100).toFixed(1);
+      const correctCount = parseInt(localStorage.getItem('quizCorrect') || '0');
+      
+      if (correctCount >= 20) {
+        // 答对20题或以上：只显示比例手续费
+        feeRateLabel.innerHTML = `比例手续费 (${feeRatePercent}%)`;
+      } else {
+        // 答对少于20题：显示比例手续费、答题进度和答题降费按钮
+        const progressText = `已答对${correctCount}题`;
+        const quizButton = `<a href="quiz.html" style="background: linear-gradient(135deg, #ff6b35, #f7931e); color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 14px; margin-left: 10px;">答题降费</a>`;
+        feeRateLabel.innerHTML = `比例手续费 (${feeRatePercent}%) - ${progressText} ${quizButton}`;
+      }
+    }
+    
+    function setQuickAmount(amount) {
+      const amountInput = document.getElementById('withdrawAmount');
+      if (amount === 'all') {
+        // 计算最大可提现金额（扣除手续费后）
+        const fixedFee = 2;
+        // 使用更精确的计算方式，避免浮点数精度问题
+        const maxAmount = Math.floor(((currentBalance - fixedFee) / (1 + feeRate)) * 100) / 100;
+        amountInput.value = Math.max(0, maxAmount).toFixed(2);
+      } else {
+        amountInput.value = amount;
+      }
+      updateFeeCalculation();
+    }
+    
+    function updateFeeCalculationOnly() {
+      const amountInput = document.getElementById('withdrawAmount');
+      const amount = parseFloat(amountInput.value) || 0;
+      
+      const fixedFee = 2;
+      const percentFee = amount * feeRate;
+      const totalFee = fixedFee + percentFee;
+      const totalDeduct = amount + totalFee;
+      
+      document.getElementById('feeAmount').innerText = amount.toFixed(2) + ' USDT';
+      document.getElementById('feePercent').innerText = percentFee.toFixed(2) + ' USDT';
+      document.getElementById('totalDeduct').innerText = totalDeduct.toFixed(2) + ' USDT';
+      
+      // 只更新按钮状态，不显示错误信息
+      updateButtonState();
+    }
+    
+    function updateFeeCalculation() {
+      const amountInput = document.getElementById('withdrawAmount');
+      const amount = parseFloat(amountInput.value) || 0;
+      
+      const fixedFee = 2;
+      const percentFee = amount * feeRate;
+      const totalFee = fixedFee + percentFee;
+      const totalDeduct = amount + totalFee;
+      
+      document.getElementById('feeAmount').innerText = amount.toFixed(2) + ' USDT';
+      document.getElementById('feePercent').innerText = percentFee.toFixed(2) + ' USDT';
+      document.getElementById('totalDeduct').innerText = totalDeduct.toFixed(2) + ' USDT';
+      
+      validateForm();
+    }
+    
+    function updateButtonState() {
+      const amountInput = document.getElementById('withdrawAmount');
+      const addressInput = document.getElementById('walletAddress');
+      const confirmBtn = document.getElementById('confirmBtn');
+      
+      const amount = parseFloat(amountInput.value) || 0;
+      const address = addressInput.value.trim();
+      const fixedFee = 2;
+      const percentFee = amount * feeRate;
+      const totalDeduct = amount + fixedFee + percentFee;
+      
+      // 检查基本条件但不显示错误信息
+      const isAmountValid = amount >= 20 && totalDeduct <= currentBalance;
+      const isAddressValid = address.length >= 10;
+      
+      confirmBtn.disabled = !(isAmountValid && isAddressValid);
+    }
+    
+    function validateForm() {
+      const amountInput = document.getElementById('withdrawAmount');
+      const addressInput = document.getElementById('walletAddress');
+      const confirmBtn = document.getElementById('confirmBtn');
+      const amountError = document.getElementById('amountError');
+      const addressError = document.getElementById('addressError');
+      
+      let isValid = true;
+      
+      // 验证金额 - 只在用户交互过后才显示错误
+      const amount = parseFloat(amountInput.value) || 0;
+      const fixedFee = 2;
+      const percentFee = amount * feeRate;
+      const totalDeduct = amount + fixedFee + percentFee;
+      
+      amountInput.classList.remove('error');
+      amountError.style.display = 'none';
+      
+      if (userInteracted.amount) {
+        if (amount < 20) {
+          amountInput.classList.add('error');
+          amountError.innerText = '提现金额不能少于20 USDT';
+          amountError.style.display = 'block';
+          isValid = false;
+        } else if (totalDeduct > currentBalance) {
+          amountInput.classList.add('error');
+          amountError.innerText = `余额不足，需要${totalDeduct.toFixed(2)} USDT（含手续费）`;
+          amountError.style.display = 'block';
+          isValid = false;
+        }
+      } else {
+        // 用户未交互时，仍然检查有效性但不显示错误
+        if (amount < 20 || totalDeduct > currentBalance) {
+          isValid = false;
+        }
+      }
+      
+      // 验证地址 - 只在用户交互过后才显示错误
+      const address = addressInput.value.trim();
+      addressInput.classList.remove('error');
+      addressError.style.display = 'none';
+      
+      if (userInteracted.address) {
+        if (address.length < 10) {
+          addressInput.classList.add('error');
+          addressError.innerText = '请输入有效的钱包地址';
+          addressError.style.display = 'block';
+          isValid = false;
+        }
+      } else {
+        // 用户未交互时，仍然检查有效性但不显示错误
+        if (address.length < 10) {
+          isValid = false;
+        }
+      }
+      
+      confirmBtn.disabled = !isValid;
+    }
+    
+    function confirmWithdraw() {
+      const amount = parseFloat(document.getElementById('withdrawAmount').value);
+      const address = document.getElementById('walletAddress').value.trim();
+      
+      // 检查是否需要地址确认和绑定
+      const boundAddress = localStorage.getItem('boundWalletAddress');
+      const isNewAddress = !boundAddress || boundAddress !== address;
+      
+      if (isNewAddress) {
+        // 新地址需要二次确认
+        showAddressConfirmation(address, amount, () => {
+          proceedWithWithdraw(amount, address);
+        });
+      } else {
+        // 使用已绑定地址，直接提现
+        proceedWithWithdraw(amount, address);
+      }
+    }
+    
+    function showAddressConfirmation(address, amount, callback) {
+      // 使用自定义对话框替代confirm
+      const modal = document.getElementById('addressConfirmModal');
+      const addressText = document.getElementById('confirmAddressText');
+      
+      // 设置地址文本
+      addressText.textContent = address;
+      
+      // 显示对话框
+      modal.style.display = 'flex';
+      
+      // 存储回调函数和地址信息
+      window.currentAddressConfirm = {
+        address: address,
+        amount: amount,
+        callback: callback
+      };
+    }
+
+    function closeAddressConfirmModal() {
+      const modal = document.getElementById('addressConfirmModal');
+      modal.style.display = 'none';
+      window.currentAddressConfirm = null;
+    }
+
+    function confirmAddress() {
+      const modal = document.getElementById('addressConfirmModal');
+      modal.style.display = 'none';
+      
+      if (window.currentAddressConfirm) {
+        // 显示绑定询问对话框
+        showBindAddressModal();
+      }
+    }
+
+    function showBindAddressModal() {
+      const modal = document.getElementById('bindAddressModal');
+      modal.style.display = 'flex';
+    }
+
+    function skipBinding() {
+      const modal = document.getElementById('bindAddressModal');
+      modal.style.display = 'none';
+      
+      if (window.currentAddressConfirm) {
+        window.currentAddressConfirm.callback();
+        window.currentAddressConfirm = null;
+      }
+    }
+
+    function confirmBinding() {
+      const modal = document.getElementById('bindAddressModal');
+      modal.style.display = 'none';
+      
+      if (window.currentAddressConfirm) {
+        // 绑定地址
+        localStorage.setItem('boundWalletAddress', window.currentAddressConfirm.address);
+        // 刷新地址显示状态
+        loadBoundAddress();
+        
+        // 执行回调
+        window.currentAddressConfirm.callback();
+        window.currentAddressConfirm = null;
+      }
+    }
+    
+    function proceedWithWithdraw(amount, address) {
+      const fixedFee = 2;
+      const percentFee = amount * feeRate;
+      const totalFee = fixedFee + percentFee;
+      const totalDeduct = amount + totalFee;
+      
+      // 最终确认
+      const confirmed = confirm(`确认提现？\n\n提现金额：${amount.toFixed(2)} USDT\n手续费：${totalFee.toFixed(2)} USDT\n实际扣除：${totalDeduct.toFixed(2)} USDT\n提现地址：${address.substring(0, 10)}...\n\n预计24小时内到账`);
+      
+      if (!confirmed) return;
+      
+      // 执行提现
+      const appState = JSON.parse(localStorage.getItem('appState') || '{}');
+      const newBalance = currentBalance - totalDeduct;
+      appState.walletBalance = newBalance;
+      localStorage.setItem('appState', JSON.stringify(appState));
+      
+      // 生成交易ID
+      const transactionId = 'tx_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      
+      // 添加交易记录（初始状态为正在提现）
+      let transactions = [];
+      try {
+        const stored = localStorage.getItem('transactions');
+        if (stored) transactions = JSON.parse(stored);
+      } catch (e) {}
+      
+      const transaction = {
+        id: transactionId,
+        type: 'withdraw',
+        amount: -totalDeduct,
+        description: `提现${amount.toFixed(2)} USDT`,
+        timestamp: new Date().toISOString(),
+        address: address,
+        actualAmount: amount,
+        fee: totalFee,
+        status: 'processing',
+        statusText: '正在提现'
+      };
+      
+      transactions.push(transaction);
+      localStorage.setItem('transactions', JSON.stringify(transactions));
+      
+      // 模拟提现流程状态变化
+      setTimeout(() => {
+        updateWithdrawStatus(transactionId, 'confirming', '等待链上确认');
+      }, 3000); // 3秒后变为等待确认
+      
+      setTimeout(() => {
+        updateWithdrawStatus(transactionId, 'completed', '提现成功');
+      }, 15000); // 15秒后变为提现成功
+      
+      alert(`提现申请已提交！\n\n提现金额：${amount.toFixed(2)} USDT\n手续费：${totalFee.toFixed(2)} USDT\n剩余余额：${newBalance.toFixed(2)} USDT\n\n交易ID：${transactionId}`);
+      
+      // 返回钱包页面
+      history.back();
+    }
+    
+    function updateWithdrawStatus(transactionId, status, statusText) {
+      let transactions = [];
+      try {
+        const stored = localStorage.getItem('transactions');
+        if (stored) transactions = JSON.parse(stored);
+      } catch (e) {}
+      
+      const transactionIndex = transactions.findIndex(tx => tx.id === transactionId);
+      
+      if (transactionIndex !== -1) {
+        transactions[transactionIndex].status = status;
+        transactions[transactionIndex].statusText = statusText;
+        localStorage.setItem('transactions', JSON.stringify(transactions));
+        
+        // 如果当前在钱包页面，触发刷新
+        if (window.location.pathname.includes('wallet.html')) {
+          if (typeof loadTransactions === 'function') {
+            loadTransactions();
+          }
+        }
+      }
+    }
+    
+    function loadBoundAddress() {
+      const boundAddress = localStorage.getItem('boundWalletAddress');
+      const addressInput = document.getElementById('walletAddress');
+      const bindingStatus = document.getElementById('addressBindingStatus');
+      const boundAddressDisplay = document.getElementById('boundAddressDisplay');
+      
+      if (boundAddress) {
+        // 显示已绑定地址
+        addressInput.value = boundAddress;
+        addressInput.disabled = true;
+        bindingStatus.style.display = 'block';
+        boundAddressDisplay.textContent = boundAddress;
+      } else {
+        // 没有绑定地址
+        bindingStatus.style.display = 'none';
+        addressInput.disabled = false;
+      }
+      
+      validateForm();
+    }
+    
+    function enableAddressEdit() {
+      const addressInput = document.getElementById('walletAddress');
+      const bindingStatus = document.getElementById('addressBindingStatus');
+      
+      if (confirm('确定要修改收款地址吗？\n\n修改后需要重新确认新地址。')) {
+        addressInput.disabled = false;
+        addressInput.value = '';
+        addressInput.focus();
+        bindingStatus.style.display = 'none';
+        validateForm();
+      }
+    }
+    
+    window.addEventListener('DOMContentLoaded', loadWithdrawPage);
+  </script>
+  <script src="js/global-background.js"></script>
+</body>
+</html>

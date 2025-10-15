@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>裂金7日 · 任务列表</title>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ6GQ79K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-QQ6GQ79K7G');
+  </script>
+  
+  <link rel="stylesheet" href="themes.css">
+  <link rel="stylesheet" href="css/global-background.css">
+  
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #111823;
+      --card: #0e141d;
+      --brand: #56ccf2;
+      --brand-2: #2f80ed;
+      --text: #e6efff;
+      --muted: #9fb3cd;
+      --accent-border: rgba(111, 158, 255, 0.18);
+      --safe: env(safe-area-inset-bottom, 0px);
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      overflow: hidden;
+    }
+    .container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      flex: 0 0 20%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding-top: 20px;
+    }
+    .logo-small {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-right: 8px;
+      filter: drop-shadow(0 0 8px rgba(109, 213, 237, 0.4)) drop-shadow(0 0 16px rgba(109, 213, 237, 0.2));
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(45deg, #2193b0, #6dd5ed);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 12px rgba(109, 213, 237, 0.5))
+        drop-shadow(0 0 24px rgba(109, 213, 237, 0.3));
+      margin: 0;
+    }
+
+    .content {
+      flex: 1;
+      padding: 0 16px;
+      overflow-x: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: linear-gradient(180deg, rgba(15,21,32,0.85), rgba(15,21,32,0.9));
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid var(--accent-border);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35) inset, 0 12px 28px rgba(0,0,0,0.35);
+      backdrop-filter: blur(16px);
+    }
+    .section {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .section:last-child { margin-bottom: 0; }
+    .section:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--brand-2), transparent);
+      opacity: 0.4;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #a3b6ff;
+    }
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+    }
+    .task-item:not(:last-child) {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .task-title { flex: 1; font-size: 14px; color: #e0e5fb; }
+    .task-status {
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 12px;
+      background: linear-gradient(45deg, #00eaff, #0088ff);
+      box-shadow: 0 0 6px rgba(0,136,255,0.6);
+      color: #031e2e;
+    }
+    .task-status.done {
+      background: linear-gradient(45deg, #9be15d, #00e3ae);
+      box-shadow: 0 0 6px rgba(0,227,174,0.6);
+      color: #022817;
+    }
+    .bottom {
+      flex: 0 0 auto;
+      padding: 14px 16px calc(24px + var(--safe));
+      display: flex;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin: 0 12px 12px;
+      border-radius: 20px;
+    }
+    .bottom button {
+      flex: 1;
+      margin: 0 6px;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 0;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+      /* 避免移动端按钮文字换行 */
+      white-space: nowrap;
+      cursor: pointer;
+      transition: transform 0.08s ease, filter 0.2s ease, box-shadow 0.2s ease;
+      background-image: linear-gradient(180deg, var(--brand), var(--brand-2));
+      box-shadow: 0 8px 24px rgba(47,128,237,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+    .bottom button:hover { transform: translateY(-3px); filter: brightness(1.2); }
+    .bottom button:active { transform: translateY(0); filter: brightness(0.95); }
+  </style>
+</head>
+<body>
+  <script src="js/smart-back.js"></script>
+  <div class="container">
+    <div class="header">
+
+      <img src="logo_gold7.png" alt="Logo" class="logo-small" />
+      <h1>任务列表</h1>
+    </div>
+    <div class="content">
+      <div class="card">
+        <div class="section" id="newTaskSection">
+          <div class="section-title">新手任务</div>
+          <ul class="task-list" id="newTaskList"></ul>
+        </div>
+        <div class="section" id="godTaskSection">
+          <div class="section-title">大神任务</div>
+          <div id="godTaskContent"></div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom">
+      <button onclick="smartBack()">返回</button>
+    </div>
+  </div>
+  <script>
+    // 从后端API获取任务数据
+    async function loadTasks() {
+      try {
+        const token = localStorage.getItem('token');
+        const API_BASE_URL = 'https://newgold-h5-game-abxj07n20-wongs-projects-7580d6a8.vercel.app/api';
+        const response = await fetch(`${API_BASE_URL}/tasks/status`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            return {
+              newTasks: data.data.newbieTasks || [],
+              godTasks: data.data.godTasks || []
+            };
+          }
+        }
+        
+        // 如果API调用失败，使用默认数据
+        console.warn('无法从后端获取任务数据，使用默认数据');
+        return getDefaultTasks();
+      } catch (error) {
+        console.error('获取任务数据失败:', error);
+        return getDefaultTasks();
+      }
+    }
+
+    // 默认任务数据（作为后备）
+    function getDefaultTasks() {
+      return {
+        newTasks: [
+          { id: 1, title: '直接推荐1人', done: false },
+          { id: 2, title: '帮助下级推荐1人', done: false },
+          { id: 3, title: '教下级如何教他的下级推荐1人', done: false }
+        ],
+        godTasks: [
+          { id: 1, title: '大神任务一：直推2人 × 2层 = 6人', done: false },
+          { id: 2, title: '大神任务二：直推3人 × 3层 = 39人', done: false },
+          { id: 3, title: '大神任务三：直推4人 × 4层 = 340人', done: false },
+          { id: 4, title: '大神任务四：直推5人 × 5层 = 3905人', done: false },
+          { id: 5, title: '大神任务五：直推6人 × 6层 = 55986人', done: false },
+          { id: 6, title: '大神任务六：直推7人 × 7层 = 960799人', done: false }
+        ]
+      };
+    }
+    async function renderTaskLists() {
+      const { newTasks, godTasks } = await loadTasks();
+      const newList = document.getElementById('newTaskList');
+      newList.innerHTML = '';
+      // 渲染新手任务状态：第一个未完成为“进行中”，之后为“未开始”
+      let foundCurrent = false;
+      newTasks.forEach(t => {
+        const li = document.createElement('li');
+        li.className = 'task-item';
+        const spanTitle = document.createElement('span');
+        spanTitle.className = 'task-title';
+        spanTitle.innerText = t.title;
+        const spanStatus = document.createElement('span');
+        spanStatus.className = 'task-status';
+        if (t.done) {
+          spanStatus.classList.add('done');
+          spanStatus.innerText = '完成';
+        } else if (!foundCurrent) {
+          spanStatus.innerText = '进行中';
+          foundCurrent = true;
+        } else {
+          spanStatus.innerText = '未开始';
+        }
+        li.appendChild(spanTitle);
+        li.appendChild(spanStatus);
+        newList.appendChild(li);
+      });
+      // 渲染大神任务
+      const godContainer = document.getElementById('godTaskContent');
+      godContainer.innerHTML = '';
+      // 如果尚未完成所有新手任务，则提示
+      const allNewDone = newTasks.every(t => t.done);
+      if (!allNewDone) {
+        godContainer.innerHTML = '<p style="font-size:14px;color:var(--muted)">完成全部新手任务后解锁大神任务。</p>';
+      } else {
+        const ul = document.createElement('ul');
+        ul.className = 'task-list';
+        let foundGodCurrent = false;
+        godTasks.forEach(t => {
+          const li = document.createElement('li');
+          li.className = 'task-item';
+          const spanTitle = document.createElement('span');
+          spanTitle.className = 'task-title';
+          spanTitle.innerText = t.title;
+          const spanStatus = document.createElement('span');
+          spanStatus.className = 'task-status';
+          if (t.done) {
+            spanStatus.classList.add('done');
+            spanStatus.innerText = '完成';
+          } else if (!foundGodCurrent) {
+            spanStatus.innerText = '进行中';
+            foundGodCurrent = true;
+          } else {
+            spanStatus.innerText = '未开始';
+          }
+          li.appendChild(spanTitle);
+          li.appendChild(spanStatus);
+          ul.appendChild(li);
+        });
+        godContainer.appendChild(ul);
+      }
+    }
+    window.addEventListener('DOMContentLoaded', async () => {
+      await renderTaskLists();
+      
+      // 检查URL参数，如果有tab=master，则滚动到大神任务区域
+      const urlParams = new URLSearchParams(window.location.search);
+      const tab = urlParams.get('tab');
+      
+      if (tab === 'master') {
+        // 滚动到大神任务区域
+        setTimeout(() => {
+          const godTaskSection = document.getElementById('godTaskSection');
+          if (godTaskSection) {
+            godTaskSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // 高亮大神任务区域
+            godTaskSection.style.border = '2px solid var(--accent-color)';
+            godTaskSection.style.borderRadius = '12px';
+            godTaskSection.style.padding = '16px';
+            setTimeout(() => {
+              godTaskSection.style.border = '';
+              godTaskSection.style.borderRadius = '';
+              godTaskSection.style.padding = '';
+            }, 3000);
+          }
+        }, 100);
+      }
+    });
+  </script>
+  <script src="js/global-background.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>设置Token</title>
+</head>
+<body>
+    <h1>设置Auth Token</h1>
+    <button onclick="setToken()">设置Token为mock-token-2</button>
+    <button onclick="checkToken()">检查当前Token</button>
+    <div id="result"></div>
+    
+    <script>
+        function setToken() {
+            const validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiaWF0IjoxNzU5MzQ5NDczLCJleHAiOjE3NTk5NTQyNzN9.mgzJZ1ezgYGToqoz2z36Ds-6PgccB2UylHZqlbTTvwc';
+            localStorage.setItem('authToken', validToken);
+            localStorage.setItem('token', validToken);
+            localStorage.setItem('userEmail', 'test@gold7.com');
+            alert('Token已设置为有效的JWT token');
+            checkToken();
+        }
+        
+        function checkToken() {
+            const token = localStorage.getItem('authToken');
+            document.getElementById('result').innerHTML = '当前Token: ' + (token || '未设置');
+        }
+    </script>
+</body>
+</html>

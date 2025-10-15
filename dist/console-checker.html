@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>控制台错误检查器</title>
+    <style>
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 8px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+        }
+        .error-log {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-top: 16px;
+        }
+        .error { color: #e74c3c; }
+        .warning { color: #f39c12; }
+        .info { color: #3498db; }
+        .success { color: #27ae60; }
+        .timestamp { color: #95a5a6; font-size: 11px; }
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 16px;
+            margin: 12px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .step-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 16px;
+        }
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="panel">
+            <div class="title">
+                🔍 主页面错误检查器
+            </div>
+            
+            <div class="step">
+                <div class="step-title">步骤1: 自动检查主页面</div>
+                <button class="btn" onclick="loadMainPageInFrame()">在框架中加载主页面</button>
+                <button class="btn" onclick="checkMainPageErrors()">检查JavaScript错误</button>
+                <button class="btn" onclick="clearLog()">清空日志</button>
+            </div>
+            
+            <div class="step">
+                <div class="step-title">步骤2: 手动检查（推荐）</div>
+                <p>1. 点击下方按钮在新标签页打开主页面</p>
+                <p>2. 在主页面按 <code>F12</code> 打开开发者工具</p>
+                <p>3. 查看 <strong>Console</strong> 标签页中的错误信息</p>
+                <p>4. 将错误信息复制给我</p>
+                <button class="btn" onclick="openMainPageInNewTab()">在新标签页打开主页面</button>
+            </div>
+            
+            <div id="errorLog" class="error-log">等待检查结果...</div>
+            
+            <div id="iframeContainer" class="iframe-container" style="display: none;">
+                <iframe id="mainPageFrame" src=""></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const errorLog = document.getElementById('errorLog');
+        let originalConsoleError = console.error;
+        let originalConsoleWarn = console.warn;
+        let originalConsoleLog = console.log;
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const typeClass = type;
+            const logEntry = `<span class="timestamp">[${timestamp}]</span> <span class="${typeClass}">${message}</span>\n`;
+            errorLog.innerHTML += logEntry;
+            errorLog.scrollTop = errorLog.scrollHeight;
+        }
+        
+        function clearLog() {
+            errorLog.innerHTML = '日志已清空，等待新的检查结果...\n';
+        }
+        
+        function openMainPageInNewTab() {
+            log('正在新标签页中打开主页面...', 'info');
+            window.open('http://localhost:3001', '_blank');
+            log('✓ 主页面已在新标签页打开', 'success');
+            log('请在新标签页中按F12打开开发者工具，查看Console中的错误', 'info');
+        }
+        
+        function loadMainPageInFrame() {
+            log('正在框架中加载主页面...', 'info');
+            const iframe = document.getElementById('mainPageFrame');
+            const container = document.getElementById('iframeContainer');
+            
+            iframe.src = 'http://localhost:3001';
+            container.style.display = 'block';
+            
+            iframe.onload = function() {
+                log('✓ 主页面已在框架中加载完成', 'success');
+                setTimeout(() => {
+                    checkFrameContent();
+                }, 2000);
+            };
+            
+            iframe.onerror = function() {
+                log('✗ 主页面加载失败', 'error');
+            };
+        }
+        
+        function checkFrameContent() {
+            try {
+                const iframe = document.getElementById('mainPageFrame');
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                
+                log('开始检查框架中的页面内容...', 'info');
+                
+                // 检查基本元素
+                const elements = ['app', 'stateLabel', 'subtitle', 'card', 'bottomButtons'];
+                elements.forEach(id => {
+                    const el = iframeDoc.getElementById(id);
+                    if (el) {
+                        const content = el.textContent || el.innerHTML;
+                        log(`✓ 找到 #${id}: ${content.substring(0, 50)}${content.length > 50 ? '...' : ''}`, 'success');
+                    } else {
+                        log(`✗ 未找到 #${id}`, 'error');
+                    }
+                });
+                
+                // 检查页面标题
+                const title = iframeDoc.title;
+                log(`页面标题: ${title}`, 'info');
+                
+                // 检查是否有内容
+                const body = iframeDoc.body;
+                if (body && body.innerHTML.trim()) {
+                    log('✓ 页面有内容', 'success');
+                } else {
+                    log('✗ 页面内容为空', 'error');
+                }
+                
+            } catch (e) {
+                log(`检查框架内容时出错: ${e.message}`, 'error');
+                log('这可能是由于跨域限制，建议使用手动检查方法', 'warning');
+            }
+        }
+        
+        function checkMainPageErrors() {
+            log('开始检查主页面的JavaScript错误...', 'info');
+            
+            // 重写console方法来捕获错误
+            window.addEventListener('error', function(e) {
+                log(`JavaScript错误: ${e.message} (${e.filename}:${e.lineno})`, 'error');
+            });
+            
+            window.addEventListener('unhandledrejection', function(e) {
+                log(`Promise错误: ${e.reason}`, 'error');
+            });
+            
+            // 尝试在新窗口中打开并监听错误
+            const newWindow = window.open('http://localhost:3001', 'mainPageCheck');
+            
+            if (newWindow) {
+                log('✓ 已在新窗口打开主页面进行检查', 'success');
+                
+                setTimeout(() => {
+                    try {
+                        // 尝试访问新窗口的console
+                        if (newWindow.console) {
+                            log('正在监听新窗口的错误...', 'info');
+                        }
+                    } catch (e) {
+                        log('无法直接访问新窗口的console，请手动检查', 'warning');
+                    }
+                }, 2000);
+            } else {
+                log('✗ 无法打开新窗口，请手动打开主页面检查', 'error');
+            }
+        }
+        
+        // 页面加载完成
+        window.onload = function() {
+            log('错误检查器已准备就绪', 'success');
+            log('请选择检查方式：自动检查或手动检查', 'info');
+        };
+    </script>
+</body>
+</html>

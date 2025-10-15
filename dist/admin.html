@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字钱包管理后台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        /* 登录页面样式 */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        .login-box h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* 主界面样式 */
+        .admin-container {
+            display: none;
+        }
+
+        .header {
+            background: white;
+            padding: 0 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .main-content {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #34495e;
+            color: white;
+        }
+
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 16px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* 统计卡片 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-card .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .number {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stat-card.users .icon { color: #3498db; }
+        .stat-card.wallets .icon { color: #2ecc71; }
+        .stat-card.transactions .icon { color: #f39c12; }
+        .stat-card.revenue .icon { color: #e74c3c; }
+
+        /* 表格样式 */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 搜索框 */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* 状态标签 */
+        .status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status.active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                order: 2;
+            }
+
+            .content {
+                order: 1;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 加载动画 */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 错误提示 */
+        .alert {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+    </style>
+</head>
+<body>
+    <!-- 登录页面 -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <h1><i class="fas fa-shield-alt"></i> 管理后台登录</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> 登录
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 主管理界面 -->
+    <div id="adminPage" class="admin-container">
+        <!-- 头部 -->
+        <header class="header">
+            <h1><i class="fas fa-tachometer-alt"></i> 数字钱包管理后台</h1>
+            <div class="user-info">
+                <span id="currentUser">管理员</span>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> 退出
+                </button>
+            </div>
+        </header>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 侧边栏 -->
+            <nav class="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#" onclick="showPage('dashboard')" class="active">
+                        <i class="fas fa-tachometer-alt"></i> 仪表盘
+                    </a></li>
+                    <li><a href="#" onclick="showPage('users')">
+                        <i class="fas fa-users"></i> 用户管理
+                    </a></li>
+                    <li><a href="#" onclick="showPage('wallets')">
+                        <i class="fas fa-wallet"></i> 钱包管理
+                    </a></li>
+                    <li><a href="#" onclick="showPage('transactions')">
+                        <i class="fas fa-exchange-alt"></i> 交易管理
+                    </a></li>
+                    <li><a href="#" onclick="showPage('tasks')">
+                        <i class="fas fa-tasks"></i> 任务管理
+                    </a></li>
+                    <li><a href="#" onclick="showPage('redpackets')">
+                        <i class="fas fa-gift"></i> 红包管理
+                    </a></li>
+                    <li><a href="#" onclick="showPage('teams')">
+                        <i class="fas fa-users-cog"></i> 团队管理
+                    </a></li>
+                    <li><a href="#" onclick="showPage('rankings')">
+                        <i class="fas fa-trophy"></i> 排行榜
+                    </a></li>
+                    <li><a href="#" onclick="showPage('monitoring')">
+                        <i class="fas fa-chart-line"></i> 系统监控
+                    </a></li>
+                    <li><a href="#" onclick="showPage('settings')">
+                        <i class="fas fa-cog"></i> 系统设置
+                    </a></li>
+                </ul>
+            </nav>
+
+            <!-- 内容区域 -->
+            <main class="content">
+                <!-- 仪表盘页面 -->
+                <div id="dashboard" class="page active">
+                    <div class="stats-grid">
+                        <div class="stat-card users">
+                            <div class="icon"><i class="fas fa-users"></i></div>
+                            <div class="number" id="totalUsers">-</div>
+                            <div class="label">总用户数</div>
+                        </div>
+                        <div class="stat-card wallets">
+                            <div class="icon"><i class="fas fa-wallet"></i></div>
+                            <div class="number" id="totalWallets">-</div>
+                            <div class="label">钱包总数</div>
+                        </div>
+                        <div class="stat-card transactions">
+                            <div class="icon"><i class="fas fa-exchange-alt"></i></div>
+                            <div class="number" id="totalTransactions">-</div>
+                            <div class="label">交易总数</div>
+                        </div>
+                        <div class="stat-card revenue">
+                            <div class="icon"><i class="fas fa-dollar-sign"></i></div>
+                            <div class="number" id="totalRevenue">-</div>
+                            <div class="label">总收益 (USDT)</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-area"></i> 系统概览
+                        </div>
+                        <div class="card-body">
+                            <div id="systemOverview">
+                                <div class="loading">
+                                    <div class="spinner"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 用户管理页面 -->
+                <div id="users" class="page">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-users"></i> 用户管理
+                        </div>
+                        <div class="card-body">
+                            <div class="search-box">
+                                <input type="text" id="userSearch" placeholder="搜索用户...">
+                                <button class="btn btn-primary" onclick="searchUsers()">
+                                    <i class="fas fa-search"></i> 搜索
+                                </button>
+                            </div>
+                            <div class="table-container">
+                                <table id="usersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>用户ID</th>
+                                            <th>用户名</th>
+                                            <th>邮箱</th>
+                                            <th>钱包地址</th>
+                                            <th>余额</th>
+                                            <th>状态</th>
+                                            <th>注册时间</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="8" class="loading">
+                                                <div class="spinner"></div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 钱包管理页面 -->
+                <div id="wallets" class="page">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-wallet"></i> 钱包管理
+                        </div>
+                        <div class="card-body">
+                            <div class="search-box">
+                                <input type="text" id="walletSearch" placeholder="搜索钱包地址...">
+                                <button class="btn btn-primary" onclick="searchWallets()">
+                                    <i class="fas fa-search"></i> 搜索
+                                </button>
+                            </div>
+                            <div class="table-container">
+                                <table id="walletsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>钱包地址</th>
+                                            <th>用户ID</th>
+                                            <th>余额 (USDT)</th>
+                                            <th>状态</th>
+                                            <th>创建时间</th>
+                                            <th>最后活动</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="7" class="loading">
+                                                <div class="spinner"></div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 交易管理页面 -->
+                <div id="transactions" class="page">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-exchange-alt"></i> 交易管理
+                        </div>
+                        <div class="card-body">
+                            <div class="search-box">
+                                <input type="text" id="transactionSearch" placeholder="搜索交易哈希...">
+                                <select id="transactionType">
+                                    <option value="">所有类型</option>
+                                    <option value="deposit">充值</option>
+                                    <option value="withdraw">提现</option>
+                                    <option value="transfer">转账</option>
+                                </select>
+                                <button class="btn btn-primary" onclick="searchTransactions()">
+                                    <i class="fas fa-search"></i> 搜索
+                                </button>
+                            </div>
+                            <div class="table-container">
+                                <table id="transactionsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>交易哈希</th>
+                                            <th>类型</th>
+                                            <th>发送方</th>
+                                            <th>接收方</th>
+                                            <th>金额</th>
+                                            <th>状态</th>
+                                            <th>时间</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="8" class="loading">
+                                                <div class="spinner"></div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 系统监控页面 -->
+                <div id="monitoring" class="page">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-line"></i> 系统监控
+                        </div>
+                        <div class="card-body">
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="icon"><i class="fas fa-server"></i></div>
+                                    <div class="number" id="serverStatus">正常</div>
+                                    <div class="label">服务器状态</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="icon"><i class="fas fa-database"></i></div>
+                                    <div class="number" id="dbStatus">正常</div>
+                                    <div class="label">数据库状态</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="icon"><i class="fas fa-network-wired"></i></div>
+                                    <div class="number" id="networkStatus">正常</div>
+                                    <div class="label">网络状态</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="icon"><i class="fas fa-memory"></i></div>
+                                    <div class="number" id="memoryUsage">-</div>
+                                    <div class="label">内存使用率</div>
+                                </div>
+                            </div>
+                            <div id="monitoringCharts">
+                                <p>系统监控图表将在此显示...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 其他页面占位符 -->
+                <div id="tasks" class="page">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-tasks"></i> 任务管理
+                        </div>
+                        <div class="card-body">
+                            <p>任务管理功能开发中...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="redpackets" class="page">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-gift"></i> 红包管理
+                        </div>
+                        <div class="card-body">
+                            <p>红包管理功能开发中...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="teams" class="page">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-users-cog"></i> 团队管理
+                        </div>
+                        <div class="card-body">
+                            <p>团队管理功能开发中...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="rankings" class="page">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-trophy"></i> 排行榜管理
+                        </div>
+                        <div class="card-body">
+                            <p>排行榜管理功能开发中...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="settings" class="page">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-cog"></i> 系统设置
+                        </div>
+                        <div class="card-body">
+                            <p>系统设置功能开发中...</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * 管理后台主要功能脚本
+         */
+        
+        // 全局变量
+        let currentPage = 'dashboard';
+        let isLoggedIn = false;
+        let authToken = null;
+        
+        // API基础URL
+        const API_BASE_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3000/api' 
+            : 'https://mason63771177.github.io/newgold/api';
+
+        /**
+         * 页面初始化
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('管理后台初始化...');
+            
+            // 检查登录状态
+            checkLoginStatus();
+            
+            // 绑定登录表单事件
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLogin);
+            }
+        });
+
+        /**
+         * 检查登录状态
+         */
+        function checkLoginStatus() {
+            const token = localStorage.getItem('adminToken');
+            if (token) {
+                authToken = token;
+                showAdminPanel();
+            } else {
+                showLoginPage();
+            }
+        }
+
+        /**
+         * 显示登录页面
+         */
+        function showLoginPage() {
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('adminPage').style.display = 'none';
+            isLoggedIn = false;
+        }
+
+        /**
+         * 显示管理面板
+         */
+        function showAdminPanel() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('adminPage').style.display = 'block';
+            isLoggedIn = true;
+            
+            // 加载仪表盘数据
+            loadDashboardData();
+        }
+
+        /**
+         * 处理登录
+         */
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                showAlert('请输入用户名和密码', 'error');
+                return;
+            }
+
+            try {
+                // 模拟登录验证（实际应该调用后端API）
+                if (username === 'admin' && password === 'admin123') {
+                    // 生成模拟token
+                    authToken = 'mock_admin_token_' + Date.now();
+                    localStorage.setItem('adminToken', authToken);
+                    
+                    showAlert('登录成功', 'success');
+                    setTimeout(() => {
+                        showAdminPanel();
+                    }, 1000);
+                } else {
+                    showAlert('用户名或密码错误', 'error');
+                }
+            } catch (error) {
+                console.error('登录错误:', error);
+                showAlert('登录失败，请稍后重试', 'error');
+            }
+        }
+
+        /**
+         * 退出登录
+         */
+        function logout() {
+            localStorage.removeItem('adminToken');
+            authToken = null;
+            showLoginPage();
+            showAlert('已安全退出', 'success');
+        }
+
+        /**
+         * 显示页面
+         */
+        function showPage(pageId) {
+            // 隐藏所有页面
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // 显示目标页面
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            
+            // 更新菜单状态
+            const menuItems = document.querySelectorAll('.sidebar-menu a');
+            menuItems.forEach(item => item.classList.remove('active'));
+            
+            const activeMenuItem = document.querySelector(`[onclick="showPage('${pageId}')"]`);
+            if (activeMenuItem) {
+                activeMenuItem.classList.add('active');
+            }
+            
+            currentPage = pageId;
+            
+            // 加载页面数据
+            loadPageData(pageId);
+        }
+
+        /**
+         * 加载页面数据
+         */
+        function loadPageData(pageId) {
+            switch (pageId) {
+                case 'dashboard':
+                    loadDashboardData();
+                    break;
+                case 'users':
+                    loadUsersData();
+                    break;
+                case 'wallets':
+                    loadWalletsData();
+                    break;
+                case 'transactions':
+                    loadTransactionsData();
+                    break;
+                case 'monitoring':
+                    loadMonitoringData();
+                    break;
+                default:
+                    console.log(`页面 ${pageId} 数据加载功能待实现`);
+            }
+        }
+
+        /**
+         * 加载仪表盘数据
+         */
+        async function loadDashboardData() {
+            try {
+                // 模拟数据（实际应该从API获取）
+                const mockData = {
+                    totalUsers: 1250,
+                    totalWallets: 1180,
+                    totalTransactions: 5420,
+                    totalRevenue: 12580.50
+                };
+                
+                // 更新统计数据
+                document.getElementById('totalUsers').textContent = mockData.totalUsers.toLocaleString();
+                document.getElementById('totalWallets').textContent = mockData.totalWallets.toLocaleString();
+                document.getElementById('totalTransactions').textContent = mockData.totalTransactions.toLocaleString();
+                document.getElementById('totalRevenue').textContent = mockData.totalRevenue.toLocaleString();
+                
+                // 更新系统概览
+                const systemOverview = document.getElementById('systemOverview');
+                systemOverview.innerHTML = `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                        <div>
+                            <h4>今日新增用户</h4>
+                            <p style="font-size: 24px; color: #3498db;">+25</p>
+                        </div>
+                        <div>
+                            <h4>今日交易量</h4>
+                            <p style="font-size: 24px; color: #2ecc71;">$15,420</p>
+                        </div>
+                        <div>
+                            <h4>系统负载</h4>
+                            <p style="font-size: 24px; color: #f39c12;">65%</p>
+                        </div>
+                        <div>
+                            <h4>在线用户</h4>
+                            <p style="font-size: 24px; color: #e74c3c;">342</p>
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('加载仪表盘数据失败:', error);
+                showAlert('加载数据失败', 'error');
+            }
+        }
+
+        /**
+         * 加载用户数据
+         */
+        async function loadUsersData() {
+            try {
+                const tbody = document.querySelector('#usersTable tbody');
+                
+                // 模拟用户数据
+                const mockUsers = [
+                    {
+                        id: 1,
+                        username: 'user001',
+                        email: 'user001@example.com',
+                        walletAddress: '0x1234...5678',
+                        balance: 1250.50,
+                        status: 'active',
+                        createdAt: '2024-01-15'
+                    },
+                    {
+                        id: 2,
+                        username: 'user002',
+                        email: 'user002@example.com',
+                        walletAddress: '0x2345...6789',
+                        balance: 850.25,
+                        status: 'active',
+                        createdAt: '2024-01-16'
+                    },
+                    {
+                        id: 3,
+                        username: 'user003',
+                        email: 'user003@example.com',
+                        walletAddress: '0x3456...7890',
+                        balance: 0.00,
+                        status: 'inactive',
+                        createdAt: '2024-01-17'
+                    }
+                ];
+                
+                tbody.innerHTML = mockUsers.map(user => `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>${user.walletAddress}</td>
+                        <td>$${user.balance.toFixed(2)}</td>
+                        <td><span class="status ${user.status}">${user.status === 'active' ? '活跃' : '非活跃'}</span></td>
+                        <td>${user.createdAt}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="viewUser(${user.id})">查看</button>
+                            <button class="btn btn-warning btn-sm" onclick="editUser(${user.id})">编辑</button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+            } catch (error) {
+                console.error('加载用户数据失败:', error);
+                showAlert('加载用户数据失败', 'error');
+            }
+        }
+
+        /**
+         * 加载钱包数据
+         */
+        async function loadWalletsData() {
+            try {
+                const tbody = document.querySelector('#walletsTable tbody');
+                
+                // 模拟钱包数据
+                const mockWallets = [
+                    {
+                        address: '0x1234567890abcdef1234567890abcdef12345678',
+                        userId: 1,
+                        balance: 1250.50,
+                        status: 'active',
+                        createdAt: '2024-01-15',
+                        lastActivity: '2024-01-20'
+                    },
+                    {
+                        address: '0x2345678901bcdef12345678901bcdef123456789',
+                        userId: 2,
+                        balance: 850.25,
+                        status: 'active',
+                        createdAt: '2024-01-16',
+                        lastActivity: '2024-01-19'
+                    }
+                ];
+                
+                tbody.innerHTML = mockWallets.map(wallet => `
+                    <tr>
+                        <td>${wallet.address.substring(0, 10)}...${wallet.address.substring(wallet.address.length - 8)}</td>
+                        <td>${wallet.userId}</td>
+                        <td>$${wallet.balance.toFixed(2)}</td>
+                        <td><span class="status ${wallet.status}">${wallet.status === 'active' ? '活跃' : '非活跃'}</span></td>
+                        <td>${wallet.createdAt}</td>
+                        <td>${wallet.lastActivity}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="viewWallet('${wallet.address}')">查看</button>
+                            <button class="btn btn-warning btn-sm" onclick="freezeWallet('${wallet.address}')">冻结</button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+            } catch (error) {
+                console.error('加载钱包数据失败:', error);
+                showAlert('加载钱包数据失败', 'error');
+            }
+        }
+
+        /**
+         * 加载交易数据
+         */
+        async function loadTransactionsData() {
+            try {
+                const tbody = document.querySelector('#transactionsTable tbody');
+                
+                // 模拟交易数据
+                const mockTransactions = [
+                    {
+                        hash: '0xabcd1234567890abcd1234567890abcd1234567890abcd1234567890abcd1234',
+                        type: 'deposit',
+                        from: '0x1111...2222',
+                        to: '0x3333...4444',
+                        amount: 100.00,
+                        status: 'confirmed',
+                        timestamp: '2024-01-20 10:30:00'
+                    },
+                    {
+                        hash: '0xefgh5678901234efgh5678901234efgh5678901234efgh5678901234efgh5678',
+                        type: 'withdraw',
+                        from: '0x5555...6666',
+                        to: '0x7777...8888',
+                        amount: 50.00,
+                        status: 'pending',
+                        timestamp: '2024-01-20 11:15:00'
+                    }
+                ];
+                
+                tbody.innerHTML = mockTransactions.map(tx => `
+                    <tr>
+                        <td>${tx.hash.substring(0, 10)}...${tx.hash.substring(tx.hash.length - 8)}</td>
+                        <td>${tx.type === 'deposit' ? '充值' : tx.type === 'withdraw' ? '提现' : '转账'}</td>
+                        <td>${tx.from.substring(0, 8)}...${tx.from.substring(tx.from.length - 4)}</td>
+                        <td>${tx.to.substring(0, 8)}...${tx.to.substring(tx.to.length - 4)}</td>
+                        <td>$${tx.amount.toFixed(2)}</td>
+                        <td><span class="status ${tx.status}">${tx.status === 'confirmed' ? '已确认' : tx.status === 'pending' ? '待确认' : '失败'}</span></td>
+                        <td>${tx.timestamp}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="viewTransaction('${tx.hash}')">查看</button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+            } catch (error) {
+                console.error('加载交易数据失败:', error);
+                showAlert('加载交易数据失败', 'error');
+            }
+        }
+
+        /**
+         * 加载监控数据
+         */
+        async function loadMonitoringData() {
+            try {
+                // 模拟监控数据
+                document.getElementById('serverStatus').textContent = '正常';
+                document.getElementById('dbStatus').textContent = '正常';
+                document.getElementById('networkStatus').textContent = '正常';
+                document.getElementById('memoryUsage').textContent = '65%';
+                
+                const chartsContainer = document.getElementById('monitoringCharts');
+                chartsContainer.innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                        <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <h4>CPU使用率</h4>
+                            <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px;">
+                                <p>CPU使用率图表</p>
+                            </div>
+                        </div>
+                        <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <h4>内存使用率</h4>
+                            <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px;">
+                                <p>内存使用率图表</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('加载监控数据失败:', error);
+                showAlert('加载监控数据失败', 'error');
+            }
+        }
+
+        /**
+         * 搜索用户
+         */
+        function searchUsers() {
+            const searchTerm = document.getElementById('userSearch').value;
+            console.log('搜索用户:', searchTerm);
+            // 实现搜索逻辑
+        }
+
+        /**
+         * 搜索钱包
+         */
+        function searchWallets() {
+            const searchTerm = document.getElementById('walletSearch').value;
+            console.log('搜索钱包:', searchTerm);
+            // 实现搜索逻辑
+        }
+
+        /**
+         * 搜索交易
+         */
+        function searchTransactions() {
+            const searchTerm = document.getElementById('transactionSearch').value;
+            const transactionType = document.getElementById('transactionType').value;
+            console.log('搜索交易:', searchTerm, transactionType);
+            // 实现搜索逻辑
+        }
+
+        /**
+         * 查看用户详情
+         */
+        function viewUser(userId) {
+            console.log('查看用户:', userId);
+            showAlert(`查看用户 ${userId} 的详细信息`, 'success');
+        }
+
+        /**
+         * 编辑用户
+         */
+        function editUser(userId) {
+            console.log('编辑用户:', userId);
+            showAlert(`编辑用户 ${userId}`, 'success');
+        }
+
+        /**
+         * 查看钱包详情
+         */
+        function viewWallet(address) {
+            console.log('查看钱包:', address);
+            showAlert(`查看钱包 ${address}`, 'success');
+        }
+
+        /**
+         * 冻结钱包
+         */
+        function freezeWallet(address) {
+            console.log('冻结钱包:', address);
+            if (confirm('确定要冻结这个钱包吗？')) {
+                showAlert(`钱包 ${address} 已冻结`, 'warning');
+            }
+        }
+
+        /**
+         * 查看交易详情
+         */
+        function viewTransaction(hash) {
+            console.log('查看交易:', hash);
+            showAlert(`查看交易 ${hash}`, 'success');
+        }
+
+        /**
+         * 显示提示信息
+         */
+        function showAlert(message, type = 'success') {
+            // 创建提示元素
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alert.style.position = 'fixed';
+            alert.style.top = '20px';
+            alert.style.right = '20px';
+            alert.style.zIndex = '9999';
+            alert.style.minWidth = '300px';
+            
+            document.body.appendChild(alert);
+            
+            // 3秒后自动移除
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            }, 3000);
+        }
+
+        /**
+         * API请求封装
+         */
+        async function apiRequest(endpoint, options = {}) {
+            const url = `${API_BASE_URL}${endpoint}`;
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(authToken && { 'Authorization': `Bearer ${authToken}` })
+                },
+                ...options
+            };
+            
+            try {
+                const response = await fetch(url, config);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.message || '请求失败');
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('API请求错误:', error);
+                throw error;
+            }
+        }
+
+        // 定期刷新数据
+        setInterval(() => {
+            if (isLoggedIn && currentPage === 'dashboard') {
+                loadDashboardData();
+            }
+        }, 30000); // 每30秒刷新一次仪表盘数据
+    </script>
+</body>
+</html>
