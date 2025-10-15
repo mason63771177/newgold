@@ -44,9 +44,14 @@
     <link rel="apple-touch-startup-image" href="图标文件/splash-414x896.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
     
     <!-- Theme Color -->
-    <meta name="theme-color" content="#0b0f14">
-    <meta name="msapplication-navbutton-color" content="#0b0f14">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0b0f14">
+  <meta name="msapplication-navbutton-color" content="#0b0f14">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <!-- 记录页面加载开始时间 -->
+  <script>
+    window.loadStartTime = Date.now();
+  </script>
     
     <link rel="stylesheet" href="themes.css">
     <link rel="stylesheet" href="css/global-background.css">
@@ -4418,21 +4423,29 @@
 
     /**
      * 隐藏加载屏幕并显示主应用
+     * @param {number} minDisplayTime - 最小显示时间（毫秒），默认1500ms
      */
-    function hideLoadingScreen() {
+    function hideLoadingScreen(minDisplayTime = 1500) {
       const loadingScreen = document.getElementById('loadingScreen');
       const app = document.getElementById('app');
       
-      // 添加淡出动画
-      loadingScreen.classList.add('hidden');
+      // 记录页面加载开始时间
+      const loadStartTime = window.loadStartTime || Date.now();
+      const elapsedTime = Date.now() - loadStartTime;
+      const remainingTime = Math.max(0, minDisplayTime - elapsedTime);
       
-      // 显示主应用
-      app.classList.remove('loading');
-      
-      // 300ms后完全移除加载屏幕
       setTimeout(() => {
-        loadingScreen.style.display = 'none';
-      }, 300);
+        // 添加淡出动画
+        loadingScreen.classList.add('hidden');
+        
+        // 显示主应用
+        app.classList.remove('loading');
+        
+        // 300ms后完全移除加载屏幕
+        setTimeout(() => {
+          loadingScreen.style.display = 'none';
+        }, 300);
+      }, remainingTime);
     }
 
     async function init() {
