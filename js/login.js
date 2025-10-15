@@ -48,197 +48,180 @@ function setupFormTabs() {
 }
 
 /**
- * 切换表单显示
+ * 表单切换函数
+ * 在登录和注册表单之间切换
  * @param {string} formType - 表单类型 ('login' 或 'register')
  */
 function switchForm(formType) {
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
-    const tabButtons = document.querySelectorAll('.tab-btn');
+    const loginTab = document.querySelector('[data-form="login"]');
+    const registerTab = document.querySelector('[data-form="register"]');
     
-    // 更新标签按钮状态
-    tabButtons.forEach(button => {
-        const buttonForm = button.getAttribute('data-form');
-        if (buttonForm === formType) {
-            button.classList.add('active');
-        } else {
-            button.classList.remove('active');
-        }
-    });
-    
-    // 切换表单显示
     if (formType === 'login') {
-        loginForm.classList.add('active');
-        registerForm.classList.remove('active');
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+        loginTab.classList.add('active');
+        registerTab.classList.remove('active');
         currentForm = 'login';
-    } else {
-        loginForm.classList.remove('active');
-        registerForm.classList.add('active');
+    } else if (formType === 'register') {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+        loginTab.classList.remove('active');
+        registerTab.classList.add('active');
         currentForm = 'register';
     }
+    
+    // 清除所有表单验证状态
+    clearFormValidation();
 }
 
 /**
- * 表单验证功能设置
- * 为登录和注册表单添加提交事件监听器
+ * 表单验证设置
+ * 为表单输入框添加实时验证功能
  */
 function setupFormValidation() {
+    // 登录表单验证
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+    
+    if (loginEmail) {
+        setupEmailValidation(loginEmail);
+    }
+    
+    if (loginPassword) {
+        setupDynamicInputState(loginPassword, (value) => value.length >= 6);
+    }
+    
+    // 注册表单验证
+    const registerEmail = document.getElementById('registerEmail');
+    const registerPassword = document.getElementById('registerPassword');
+    const inviteCode = document.getElementById('inviteCode');
+    
+    if (registerEmail) {
+        setupEmailValidation(registerEmail);
+    }
+    
+    if (registerPassword) {
+        setupDynamicInputState(registerPassword, (value) => value.length >= 6);
+    }
+    
+    if (inviteCode) {
+        setupDynamicInputState(inviteCode, (value) => value.length >= 6);
+    }
+    
+    // 表单提交事件
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
     
-    // 登录表单验证
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
             handleLogin();
         });
-        
-        // 添加实时邮箱验证
-        const loginEmailInput = document.getElementById('loginEmail');
-        if (loginEmailInput) {
-            setupEmailValidation(loginEmailInput);
-            setupDynamicInputState(loginEmailInput, isValidEmail);
-        }
     }
     
-    // 注册表单验证
     if (registerForm) {
         registerForm.addEventListener('submit', function(e) {
             e.preventDefault();
             handleRegister();
         });
-        
-        // 添加实时邮箱验证
-        const registerEmailInput = document.getElementById('registerEmail');
-        if (registerEmailInput) {
-            setupEmailValidation(registerEmailInput);
-            setupDynamicInputState(registerEmailInput, isValidEmail);
-        }
-    }
-    
-    // 密码验证
-    const loginPasswordInput = document.getElementById('loginPassword');
-    const registerPasswordInput = document.getElementById('registerPassword');
-    
-    if (loginPasswordInput) {
-        setupDynamicInputState(loginPasswordInput, (password) => password.length >= 6);
-    }
-    
-    if (registerPasswordInput) {
-        setupDynamicInputState(registerPasswordInput, (password) => password.length >= 6);
-    }
-    
-    // 邀请码验证（注册页面）
-    const inviteCodeInput = document.getElementById('inviteCode');
-    if (inviteCodeInput) {
-        setupDynamicInputState(inviteCodeInput, (code) => code.length > 0);
     }
 }
 
 /**
- * 设置邮箱输入框的实时验证
+ * 邮箱验证设置
+ * 为邮箱输入框添加实时验证和自定义提示
  * @param {HTMLElement} emailInput - 邮箱输入框元素
  */
 function setupEmailValidation(emailInput) {
-    // 禁用原生HTML5验证
-    emailInput.setAttribute('novalidate', 'true');
+    const tooltip = emailInput.parentElement.querySelector('.custom-validation-tooltip');
+    let validationTimeout;
     
-    // 创建自定义验证提示元素
-    const customTooltip = document.createElement('div');
-    customTooltip.className = 'custom-validation-tooltip';
-    customTooltip.style.display = 'none';
-    
-    // 将提示元素插入到输入框后面
-    emailInput.parentNode.insertBefore(customTooltip, emailInput.nextSibling);
-    
-    // 标记用户是否已经开始交互
-    let hasUserInteracted = false;
-    
-    // 监听输入事件
     emailInput.addEventListener('input', function() {
-        hasUserInteracted = true;
         const email = this.value.trim();
         
-        // 清除原生验证消息
-        this.setCustomValidity('');
-        
-        // 只有在用户开始交互后才显示验证提示
-        if (hasUserInteracted) {
-            if (email && !isValidEmail(email)) {
-                // 检查是否包含@符号
-                if (!email.includes('@')) {
-                    showCustomValidationTooltip(customTooltip, '请在电子邮件地址中包括"@"符号', 'error');
-                } else {
-                    showCustomValidationTooltip(customTooltip, '请输入有效的邮箱地址', 'warning');
-                }
-            } else if (email && isValidEmail(email)) {
-                showCustomValidationTooltip(customTooltip, '邮箱格式正确', 'success');
-                setTimeout(() => {
-                    hideCustomValidationTooltip(customTooltip);
-                }, 1500);
-            } else {
-                hideCustomValidationTooltip(customTooltip);
-            }
+        // 清除之前的验证超时
+        if (validationTimeout) {
+            clearTimeout(validationTimeout);
         }
+        
+        // 移除之前的验证状态
+        this.classList.remove('valid', 'invalid');
+        hideCustomValidationTooltip(tooltip);
+        
+        if (email === '') {
+            return;
+        }
+        
+        // 延迟验证，避免输入过程中频繁提示
+        validationTimeout = setTimeout(() => {
+            if (isValidEmail(email)) {
+                this.classList.add('valid');
+                hideCustomValidationTooltip(tooltip);
+            } else {
+                this.classList.add('invalid');
+                showCustomValidationTooltip(tooltip, '请输入有效的邮箱地址', 'error');
+            }
+        }, 500);
     });
     
-    // 监听失焦事件
+    // 失去焦点时立即验证
     emailInput.addEventListener('blur', function() {
-        hasUserInteracted = true;
         const email = this.value.trim();
         
-        // 只有在用户开始交互后才显示验证提示
-        if (hasUserInteracted && email && !isValidEmail(email)) {
-            if (!email.includes('@')) {
-                showCustomValidationTooltip(customTooltip, '请在电子邮件地址中包括"@"符号', 'error');
-            } else {
-                showCustomValidationTooltip(customTooltip, '请输入有效的邮箱地址', 'error');
-            }
+        if (validationTimeout) {
+            clearTimeout(validationTimeout);
+        }
+        
+        this.classList.remove('valid', 'invalid');
+        hideCustomValidationTooltip(tooltip);
+        
+        if (email === '') {
+            return;
+        }
+        
+        if (isValidEmail(email)) {
+            this.classList.add('valid');
+            hideCustomValidationTooltip(tooltip);
+        } else {
+            this.classList.add('invalid');
+            showCustomValidationTooltip(tooltip, '请输入有效的邮箱地址', 'error');
         }
     });
     
-    // 监听获焦事件
+    // 获得焦点时隐藏提示
     emailInput.addEventListener('focus', function() {
-        // 只在没有错误时隐藏提示
-        if (!customTooltip.classList.contains('error')) {
-            hideCustomValidationTooltip(customTooltip);
-        }
-    });
-    
-    // 阻止原生验证提示
-    emailInput.addEventListener('invalid', function(e) {
-        e.preventDefault();
-        return false;
+        hideCustomValidationTooltip(tooltip);
     });
 }
 
 /**
- * 显示自定义验证提示
+ * 显示自定义验证提示框
  * @param {HTMLElement} tooltip - 提示框元素
  * @param {string} message - 提示消息
- * @param {string} type - 提示类型 ('error', 'warning', 'success', 'info')
+ * @param {string} type - 提示类型 ('error', 'success', 'warning')
  */
 function showCustomValidationTooltip(tooltip, message, type = 'error') {
-    tooltip.textContent = message;
-    tooltip.className = `custom-validation-tooltip ${type} show animate-in`;
-    tooltip.style.display = 'block';
+    if (tooltip) {
+        tooltip.textContent = message;
+        tooltip.className = `custom-validation-tooltip ${type} show`;
+    }
 }
 
 /**
- * 隐藏自定义验证提示
+ * 隐藏自定义验证提示框
  * @param {HTMLElement} tooltip - 提示框元素
  */
 function hideCustomValidationTooltip(tooltip) {
-    tooltip.classList.add('animate-out');
-    setTimeout(() => {
-        tooltip.style.display = 'none';
-        tooltip.className = 'custom-validation-tooltip';
-    }, 200);
+    if (tooltip) {
+        tooltip.classList.remove('show');
+    }
 }
 
 /**
  * 处理登录表单提交
- * GitHub Pages模式：使用本地存储模拟登录
+ * GitHub Pages模式：使用本地存储验证登录
  */
 async function handleLogin() {
     const email = document.getElementById('loginEmail').value.trim();
@@ -254,88 +237,57 @@ async function handleLogin() {
     showLoadingState(submitBtn, '登录中...');
     
     try {
-        // GitHub Pages模式：检查API是否可用
-        if (!API_BASE_URL) {
-            // 模拟登录成功（GitHub Pages模式）
-            hideLoadingState(submitBtn, '开始挑战');
-            showMessage('登录成功！（演示模式）', 'success');
+        if (API_BASE_URL) {
+            // 本地开发模式：调用后端API
+            const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password })
+            });
             
-            // 模拟用户数据
-            const mockUser = {
-                id: 'demo-user-' + Date.now(),
-                email: email,
-                status: 1
-            };
+            const data = await response.json();
             
-            const mockToken = 'demo-token-' + Date.now();
-            
-            // 保存模拟数据到localStorage
-            localStorage.setItem('userEmail', email);
-            localStorage.setItem('token', mockToken);
-            localStorage.setItem('userId', mockUser.id);
-            localStorage.setItem('currentUser', JSON.stringify(mockUser));
-            localStorage.setItem('isActivated', 'true');
-            localStorage.setItem('userToken', mockToken);
-            localStorage.setItem('authToken', mockToken);
-            localStorage.setItem('userStatus', '1');
-            
-            // 跳转到主页面
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1000);
-            
-            return;
-        }
-        
-        // 本地开发模式：调用后端API
-        const response = await fetch(`${API_BASE_URL}/auth/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok && data.success) {
-            // 登录成功
-            hideLoadingState(submitBtn, '开始挑战');
-            showMessage('登录成功！', 'success');
-            
-            // 保存用户信息到localStorage
-            localStorage.setItem('userEmail', data.data.user.email);
-            localStorage.setItem('token', data.data.token);
-            localStorage.setItem('userId', data.data.user.id);
-            localStorage.setItem('currentUser', JSON.stringify(data.data.user));
-            
-            // 设置登录状态标记
-            localStorage.setItem('isActivated', 'true');
-            localStorage.setItem('userToken', data.data.token);
-            localStorage.setItem('authToken', data.data.token);
-            
-            // 根据用户状态跳转到相应页面
-            const userStatus = data.data.user.status || 1;
-            localStorage.setItem('userStatus', userStatus.toString());
-            
-            // 跳转到主页面，让主页面根据状态显示相应内容
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1000);
-            
+            if (response.ok) {
+                // 登录成功
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                showMessage('登录成功！正在跳转...', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            } else {
+                // 登录失败
+                showMessage(data.message || '登录失败，请检查邮箱和密码', 'error');
+            }
         } else {
-            // 登录失败
-            hideLoadingState(submitBtn, '开始挑战');
-            showMessage(data.message || '登录失败，请检查邮箱和密码', 'error');
+            // GitHub Pages模式：使用本地存储模拟登录
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // 登录成功
+                const token = 'mock_token_' + Date.now();
+                localStorage.setItem('token', token);
+                localStorage.setItem('user', JSON.stringify(user));
+                showMessage('登录成功！正在跳转...', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            } else {
+                // 登录失败
+                showMessage('登录失败，请检查邮箱和密码', 'error');
+            }
         }
-        
     } catch (error) {
-        console.error('登录请求失败:', error);
-        hideLoadingState(submitBtn, '开始挑战');
-        showMessage('网络连接失败，请检查后端服务是否启动', 'error');
+        console.error('登录错误:', error);
+        showMessage('网络错误，请稍后重试', 'error');
+    } finally {
+        // 恢复按钮状态
+        hideLoadingState(submitBtn, '登录');
     }
 }
 
@@ -358,101 +310,77 @@ async function handleRegister() {
     showLoadingState(submitBtn, '注册中...');
     
     try {
-        // GitHub Pages模式：检查API是否可用
-        if (!API_BASE_URL) {
-            // 模拟注册成功（GitHub Pages模式）
-            hideLoadingState(submitBtn, '加入挑战');
-            showMessage('注册成功！（演示模式）', 'success');
+        if (API_BASE_URL) {
+            // 本地开发模式：调用后端API
+            const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password, inviteCode })
+            });
             
-            // 模拟用户数据
-            const mockUser = {
-                id: 'demo-user-' + Date.now(),
-                email: email,
-                status: 1
+            const data = await response.json();
+            
+            if (response.ok) {
+                // 注册成功
+                showMessage('注册成功！请登录', 'success');
+                
+                setTimeout(() => {
+                    switchForm('login');
+                    document.getElementById('loginEmail').value = email;
+                }, 1500);
+            } else {
+                // 注册失败
+                showMessage(data.message || '注册失败，请重试', 'error');
+            }
+        } else {
+            // GitHub Pages模式：使用本地存储模拟注册
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            // 检查邮箱是否已存在
+            if (users.some(u => u.email === email)) {
+                showMessage('该邮箱已被注册', 'error');
+                return;
+            }
+            
+            // 创建新用户
+            const newUser = {
+                id: Date.now(),
+                email,
+                password,
+                inviteCode,
+                createdAt: new Date().toISOString()
             };
             
-            const mockToken = 'demo-token-' + Date.now();
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
             
-            // 保存模拟数据到localStorage
-            localStorage.setItem('userEmail', email);
-            localStorage.setItem('token', mockToken);
-            localStorage.setItem('userId', mockUser.id);
-            localStorage.setItem('currentUser', JSON.stringify(mockUser));
-            localStorage.setItem('isActivated', 'true');
-            localStorage.setItem('userToken', mockToken);
-            localStorage.setItem('authToken', mockToken);
-            localStorage.setItem('userStatus', '1');
+            showMessage('注册成功！请登录', 'success');
             
-            // 跳转到主页面
             setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1000);
-            
-            return;
+                switchForm('login');
+                document.getElementById('loginEmail').value = email;
+            }, 1500);
         }
-        
-        // 本地开发模式：调用后端API
-        const response = await fetch(`${API_BASE_URL}/auth/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-                inviteCode: inviteCode
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok && data.success) {
-            // 注册成功
-            hideLoadingState(submitBtn, '加入挑战');
-            showMessage('注册成功！请查收验证邮件', 'success');
-            
-            // 保存用户信息到localStorage
-            localStorage.setItem('userEmail', data.data.user.email);
-            localStorage.setItem('token', data.data.token);
-            localStorage.setItem('userId', data.data.user.id);
-            localStorage.setItem('currentUser', JSON.stringify(data.data.user));
-            
-            // 设置登录状态标记
-            localStorage.setItem('isActivated', 'true');
-            localStorage.setItem('userToken', data.data.token);
-            localStorage.setItem('authToken', data.data.token);
-            
-            // 根据用户状态设置
-            const userStatus = data.data.user.status || 1;
-            localStorage.setItem('userStatus', userStatus.toString());
-            
-            // 跳转到主页面
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1000);
-            
-        } else {
-            // 注册失败
-            hideLoadingState(submitBtn, '加入挑战');
-            showMessage(data.message || '注册失败，请检查输入信息', 'error');
-        }
-        
     } catch (error) {
-        console.error('注册请求失败:', error);
-        hideLoadingState(submitBtn, '加入挑战');
-        showMessage('网络连接失败，请检查后端服务是否启动', 'error');
+        console.error('注册错误:', error);
+        showMessage('网络错误，请稍后重试', 'error');
+    } finally {
+        // 恢复按钮状态
+        hideLoadingState(submitBtn, '注册');
     }
 }
 
 /**
  * 验证登录表单
- * @param {string} email - 邮箱地址
+ * @param {string} email - 邮箱
  * @param {string} password - 密码
  * @returns {boolean} 验证是否通过
  */
 function validateLoginForm(email, password) {
     if (!email) {
-        showMessage('请输入邮箱地址', 'error');
+        showMessage('请输入邮箱', 'error');
         return false;
     }
     
@@ -471,14 +399,14 @@ function validateLoginForm(email, password) {
 
 /**
  * 验证注册表单
- * @param {string} email - 邮箱地址
+ * @param {string} email - 邮箱
  * @param {string} password - 密码
  * @param {string} inviteCode - 邀请码
  * @returns {boolean} 验证是否通过
  */
 function validateRegisterForm(email, password, inviteCode) {
     if (!email) {
-        showMessage('请输入邮箱地址', 'error');
+        showMessage('请输入邮箱', 'error');
         return false;
     }
     
@@ -502,13 +430,18 @@ function validateRegisterForm(email, password, inviteCode) {
         return false;
     }
     
+    if (inviteCode.length < 6) {
+        showMessage('邀请码长度至少6位', 'error');
+        return false;
+    }
+    
     return true;
 }
 
 /**
  * 验证邮箱格式
  * @param {string} email - 邮箱地址
- * @returns {boolean} 邮箱格式是否有效
+ * @returns {boolean} 是否为有效邮箱
  */
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -516,25 +449,17 @@ function isValidEmail(email) {
 }
 
 /**
- * 密码强度检测功能设置
+ * 密码强度检测设置
+ * 为密码输入框添加强度检测功能
  */
 function setupPasswordStrength() {
-    const passwordInput = document.getElementById('registerPassword');
+    const passwordInputs = document.querySelectorAll('input[type="password"]');
     
-    if (passwordInput) {
-        passwordInput.addEventListener('input', function() {
-            const password = this.value;
-            updatePasswordStrength(password);
+    passwordInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            updatePasswordStrength(this.value);
         });
-        
-        // 显示密码强度指示器
-        passwordInput.addEventListener('focus', function() {
-            const strengthIndicator = document.querySelector('.password-strength');
-            if (strengthIndicator) {
-                strengthIndicator.style.display = 'block';
-            }
-        });
-    }
+    });
 }
 
 /**
@@ -542,193 +467,144 @@ function setupPasswordStrength() {
  * @param {string} password - 密码
  */
 function updatePasswordStrength(password) {
-    const strengthFill = document.querySelector('.strength-fill');
-    const strengthText = document.querySelector('.strength-text');
+    const strengthMeter = document.querySelector('.password-strength-meter');
+    const strengthText = document.querySelector('.password-strength-text');
     
-    if (!strengthFill || !strengthText) return;
+    if (!strengthMeter || !strengthText) return;
     
     const strength = calculatePasswordStrength(password);
     
-    // 移除所有强度类
-    strengthFill.classList.remove('weak', 'medium', 'strong');
+    // 更新强度条
+    strengthMeter.className = `password-strength-meter strength-${strength.level}`;
+    strengthMeter.style.width = `${strength.percentage}%`;
     
-    // 根据强度设置样式和文本
-    switch (strength.level) {
-        case 'weak':
-            strengthFill.classList.add('weak');
-            strengthText.textContent = '弱';
-            strengthText.style.color = '#ff4757';
-            break;
-        case 'medium':
-            strengthFill.classList.add('medium');
-            strengthText.textContent = '中等';
-            strengthText.style.color = '#ffa502';
-            break;
-        case 'strong':
-            strengthFill.classList.add('strong');
-            strengthText.textContent = '强';
-            strengthText.style.color = '#2ed573';
-            break;
-        default:
-            strengthText.textContent = '';
-    }
+    // 更新强度文本
+    strengthText.textContent = strength.text;
+    strengthText.className = `password-strength-text strength-${strength.level}`;
 }
 
 /**
  * 计算密码强度
  * @param {string} password - 密码
- * @returns {Object} 包含强度级别和分数的对象
+ * @returns {Object} 强度信息
  */
 function calculatePasswordStrength(password) {
-    if (!password) {
-        return { level: 'none', score: 0 };
-    }
-    
     let score = 0;
+    let level = 'weak';
+    let text = '弱';
     
-    // 长度检查
-    if (password.length >= 8) score += 2;
-    else if (password.length >= 6) score += 1;
-    
-    // 包含小写字母
+    if (password.length >= 6) score += 1;
+    if (password.length >= 8) score += 1;
     if (/[a-z]/.test(password)) score += 1;
-    
-    // 包含大写字母
     if (/[A-Z]/.test(password)) score += 1;
+    if (/[0-9]/.test(password)) score += 1;
+    if (/[^A-Za-z0-9]/.test(password)) score += 1;
     
-    // 包含数字
-    if (/\d/.test(password)) score += 1;
-    
-    // 包含特殊字符
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score += 1;
-    
-    // 根据分数确定强度级别
-    if (score <= 2) {
-        return { level: 'weak', score };
-    } else if (score <= 4) {
-        return { level: 'medium', score };
-    } else {
-        return { level: 'strong', score };
+    if (score >= 5) {
+        level = 'strong';
+        text = '强';
+    } else if (score >= 3) {
+        level = 'medium';
+        text = '中';
     }
+    
+    const percentage = Math.min((score / 6) * 100, 100);
+    
+    return { level, text, percentage, score };
 }
 
 /**
  * 显示按钮加载状态
  * @param {HTMLElement} button - 按钮元素
- * @param {string} text - 加载时显示的文本
+ * @param {string} text - 加载文本
  */
 function showLoadingState(button, text) {
-    button.classList.add('loading');
     button.disabled = true;
     button.textContent = text;
+    button.classList.add('loading');
 }
 
 /**
  * 隐藏按钮加载状态
  * @param {HTMLElement} button - 按钮元素
- * @param {string} text - 恢复后显示的文本
+ * @param {string} text - 原始文本
  */
 function hideLoadingState(button, text) {
-    button.classList.remove('loading');
     button.disabled = false;
     button.textContent = text;
+    button.classList.remove('loading');
 }
 
 /**
  * 显示消息提示
  * @param {string} message - 消息内容
- * @param {string} type - 消息类型 ('success', 'error', 'info')
+ * @param {string} type - 消息类型 ('success', 'error', 'warning', 'info')
  */
 function showMessage(message, type = 'info') {
-    // 创建消息元素
-    const messageEl = document.createElement('div');
-    messageEl.className = `message message-${type}`;
-    messageEl.textContent = message;
-    
-    // 设置样式
-    Object.assign(messageEl.style, {
-        position: 'fixed',
-        top: '20px',
-        right: '20px',
-        padding: '12px 20px',
-        borderRadius: '8px',
-        color: 'white',
-        fontWeight: '500',
-        zIndex: '10000',
-        transform: 'translateX(100%)',
-        transition: 'transform 0.3s ease',
-        maxWidth: '300px',
-        wordWrap: 'break-word'
-    });
-    
-    // 根据类型设置背景色
-    switch (type) {
-        case 'success':
-            messageEl.style.background = 'linear-gradient(45deg, #2ed573, #1dd1a1)';
-            break;
-        case 'error':
-            messageEl.style.background = 'linear-gradient(45deg, #ff4757, #ff3742)';
-            break;
-        default:
-            messageEl.style.background = 'linear-gradient(45deg, #2193b0, #6dd5ed)';
+    // 移除现有的消息
+    const existingMessage = document.querySelector('.message-toast');
+    if (existingMessage) {
+        existingMessage.remove();
     }
     
+    // 创建新的消息元素
+    const messageElement = document.createElement('div');
+    messageElement.className = `message-toast ${type}`;
+    messageElement.textContent = message;
+    
     // 添加到页面
-    document.body.appendChild(messageEl);
+    document.body.appendChild(messageElement);
     
     // 显示动画
     setTimeout(() => {
-        messageEl.style.transform = 'translateX(0)';
-    }, 100);
+        messageElement.classList.add('show');
+    }, 10);
     
     // 自动隐藏
     setTimeout(() => {
-        messageEl.style.transform = 'translateX(100%)';
+        messageElement.classList.remove('show');
         setTimeout(() => {
-            if (messageEl.parentNode) {
-                messageEl.parentNode.removeChild(messageEl);
+            if (messageElement.parentNode) {
+                messageElement.remove();
             }
         }, 300);
     }, 3000);
 }
 
 /**
- * 设置键盘事件处理
+ * 键盘事件设置
+ * 为表单添加回车键提交功能
  */
 function setupKeyboardEvents() {
-    document.addEventListener('keydown', function(event) {
-        // Enter键提交表单
-        if (event.key === 'Enter' && !event.shiftKey) {
-            const activeForm = document.querySelector('.form-section:not(.hidden)');
-            if (activeForm) {
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            const activeForm = currentForm === 'login' ? 
+                document.getElementById('loginForm') : 
+                document.getElementById('registerForm');
+            
+            if (activeForm && activeForm.style.display !== 'none') {
+                e.preventDefault();
                 const submitBtn = activeForm.querySelector('.submit-btn');
                 if (submitBtn && !submitBtn.disabled) {
                     submitBtn.click();
                 }
             }
         }
-        
-        // Escape键清除焦点
-        if (event.key === 'Escape') {
-            document.activeElement.blur();
-        }
     });
 }
 
 /**
- * 设置页面可见性变化监听
+ * 页面可见性监听设置
+ * 当页面重新可见时清除表单验证状态
  */
 function setupVisibilityListener() {
     document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            console.log('页面隐藏，暂停动画');
-        } else {
-            console.log('页面显示，恢复动画');
+        if (!document.hidden) {
+            clearFormValidation();
         }
     });
 }
 
-// 兼容原有的函数名（保持向后兼容）
 function showLogin() {
     switchForm('login');
 }
@@ -738,74 +614,85 @@ function showRegister() {
 }
 
 function checkPasswordStrength(password) {
-    updatePasswordStrength(password);
+    return calculatePasswordStrength(password);
 }
 
 /**
- * 动态管理输入框状态
+ * 清除表单验证状态
+ */
+function clearFormValidation() {
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+        input.classList.remove('valid', 'invalid');
+    });
+    
+    const tooltips = document.querySelectorAll('.custom-validation-tooltip');
+    tooltips.forEach(tooltip => {
+        hideCustomValidationTooltip(tooltip);
+    });
+}
+
+/**
+ * 设置动态输入状态
  * @param {HTMLElement} input - 输入框元素
  * @param {Function} validationFn - 验证函数
  */
 function setupDynamicInputState(input, validationFn) {
-    if (!input) return;
+    const tooltip = input.parentElement.querySelector('.custom-validation-tooltip');
+    let validationTimeout;
     
-    const formGroup = input.closest('.form-group');
-    if (!formGroup) return;
-    
-    // 输入时设置为黄色（输入状态）
     input.addEventListener('input', function() {
         const value = this.value.trim();
         
-        // 清除所有状态类
-        formGroup.classList.remove('error', 'success', 'typing');
-        
-        if (value) {
-            // 有内容时先设置为输入状态（黄色）
-            formGroup.classList.add('typing');
-            
-            // 延迟验证，避免输入过程中频繁切换状态
-            clearTimeout(this.validationTimeout);
-            this.validationTimeout = setTimeout(() => {
-                const isValid = validationFn(value);
-                formGroup.classList.remove('typing');
-                
-                if (isValid) {
-                    formGroup.classList.add('success');
-                } else {
-                    formGroup.classList.add('error');
-                }
-            }, 500); // 500ms延迟验证
+        // 清除之前的验证超时
+        if (validationTimeout) {
+            clearTimeout(validationTimeout);
         }
-        // 空值时不添加任何类，保持透明状态
+        
+        // 移除之前的验证状态
+        this.classList.remove('valid', 'invalid');
+        hideCustomValidationTooltip(tooltip);
+        
+        if (value === '') {
+            return;
+        }
+        
+        // 延迟验证
+        validationTimeout = setTimeout(() => {
+            if (validationFn(value)) {
+                this.classList.add('valid');
+                hideCustomValidationTooltip(tooltip);
+            } else {
+                this.classList.add('invalid');
+            }
+        }, 500);
     });
     
-    // 失焦时立即验证
+    // 失去焦点时立即验证
     input.addEventListener('blur', function() {
         const value = this.value.trim();
         
-        // 清除延迟验证
-        clearTimeout(this.validationTimeout);
-        
-        // 清除所有状态类
-        formGroup.classList.remove('error', 'success', 'typing');
-        
-        if (value) {
-            const isValid = validationFn(value);
-            if (isValid) {
-                formGroup.classList.add('success');
-            } else {
-                formGroup.classList.add('error');
-            }
+        if (validationTimeout) {
+            clearTimeout(validationTimeout);
         }
-        // 空值时不添加任何类，保持透明状态
+        
+        this.classList.remove('valid', 'invalid');
+        hideCustomValidationTooltip(tooltip);
+        
+        if (value === '') {
+            return;
+        }
+        
+        if (validationFn(value)) {
+            this.classList.add('valid');
+            hideCustomValidationTooltip(tooltip);
+        } else {
+            this.classList.add('invalid');
+        }
     });
     
-    // 聚焦时如果有内容且不在验证状态，设置为输入状态
+    // 获得焦点时隐藏提示
     input.addEventListener('focus', function() {
-        const value = this.value.trim();
-        if (value && !formGroup.classList.contains('error') && !formGroup.classList.contains('success')) {
-            formGroup.classList.remove('typing');
-            formGroup.classList.add('typing');
-        }
+        hideCustomValidationTooltip(tooltip);
     });
 }
