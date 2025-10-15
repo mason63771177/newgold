@@ -1801,11 +1801,10 @@
       loadState();
       
       // 检查用户是否已登录
-      const isActivated = localStorage.getItem('isActivated') === 'true';
-      const userToken = localStorage.getItem('userToken');
+      const currentUser = localStorage.getItem('currentUser');
       
-      if (!isActivated || !userToken) {
-        // 未激活或无token，直接跳转到登录页面，不显示状态1
+      if (!currentUser) {
+        // 未登录，直接跳转到登录页面
         hideLoadingScreen();
         showLoginRegister();
         return;
