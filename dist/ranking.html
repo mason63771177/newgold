@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>裂金7日 · 排行榜</title>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ6GQ79K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-QQ6GQ79K7G');
+  </script>
+  
+  
+  <style>:root{--bg:#0b0f14;--panel:#111823;--card:#0e141d;--brand:#56ccf2;--brand-2:#2f80ed;--text:#e6efff;--muted:#9fb3cd;--accent-border:rgba(111,158,255,.18);--safe:env(safe-area-inset-bottom,0px)}body,html{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif;height:100vh;margin:0;overflow:hidden;padding:0}.container{display:flex;flex-direction:column;height:100vh}.header{align-items:center;display:flex;flex:0 0 20%;justify-content:center;padding-top:20px;position:relative}.header h1{background:linear-gradient(45deg,#2193b0,#6dd5ed);-webkit-background-clip:text;font-size:24px;font-weight:700;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 12px rgba(109,213,237,.5)) drop-shadow(0 0 24px rgba(109,213,237,.3));margin:0}.logo-small{filter:drop-shadow(0 0 8px rgba(109,213,237,.4)) drop-shadow(0 0 16px rgba(109,213,237,.2));height:80px;margin-right:8px;-o-object-fit:contain;object-fit:contain;width:80px}.content{align-items:center;display:flex;flex:1;justify-content:center;overflow-x:hidden;padding:0 16px}.card{backdrop-filter:blur(16px);background:linear-gradient(180deg,rgba(15,21,32,.85),rgba(15,21,32,.9));border:1px solid var(--accent-border);border-radius:24px;box-shadow:inset 0 6px 20px rgba(0,0,0,.35),0 12px 28px rgba(0,0,0,.35);max-width:480px;padding:24px;width:100%}.tabs{display:flex;justify-content:space-between;margin-bottom:16px}.tab{background:hsla(0,0%,100%,.06);border-radius:14px;cursor:pointer;flex:1;font-size:14px;margin:0 4px;padding:8px 0;text-align:center}.tab.active{background:linear-gradient(180deg,var(--brand),var(--brand-2));box-shadow:0 8px 24px rgba(47,128,237,.45),inset 0 1px 0 hsla(0,0%,100%,.25);color:#031e2e}.rank-list{list-style:none;margin:0;padding:0}.rank-item{display:flex;font-size:14px;justify-content:space-between;padding:6px 0}.rank-item:not(:last-child){border-bottom:1px solid hsla(0,0%,100%,.05)}.bottom{backdrop-filter:blur(10px);background:hsla(0,0%,100%,.04);border-radius:20px;border-top:1px solid hsla(0,0%,100%,.06);display:flex;flex:0 0 auto;margin:0 12px 12px;padding:14px 16px calc(24px + var(--safe))}.bottom button{background-image:linear-gradient(180deg,var(--brand),var(--brand-2));border:none;border-radius:16px;box-shadow:0 8px 24px rgba(47,128,237,.45),inset 0 1px 0 hsla(0,0%,100%,.25);color:var(--text);cursor:pointer;flex:1;font-size:14px;font-weight:800;margin:0 6px;padding:14px 0;transition:transform .08s ease,filter .2s ease,box-shadow .2s ease;white-space:nowrap}.bottom button:hover{filter:brightness(1.2);transform:translateY(-3px)}.bottom button:active{filter:brightness(.95);transform:translateY(0)}</style>
+  <link rel="stylesheet" crossorigin href="/newgold/assets/css/themes-Cd7cymCc.css">
+  <link rel="stylesheet" crossorigin href="/newgold/assets/css/global-background-D97W4UkV.css">
+</head>
+<body>
+  <script src="js/smart-back.js"></script>
+  <div class="container">
+    <div class="header">
+
+      <img src="/newgold/assets/images/logo_gold7-BN-9ArRY.png" alt="Logo" class="logo-small" />
+      <h1>排行榜</h1>
+    </div>
+    <div class="content">
+      <div class="card">
+        <div class="tabs">
+          <div class="tab active" onclick="switchTab(0)">团队榜</div>
+          <div class="tab" onclick="switchTab(1)">红包榜</div>
+          <div class="tab" onclick="switchTab(2)">大神榜</div>
+        </div>
+        <ul id="rankList" class="rank-list">
+          <li class="rank-item"><span>1. 用户A</span><span>团队人数：200</span></li>
+          <li class="rank-item"><span>2. 用户B</span><span>团队人数：150</span></li>
+          <li class="rank-item"><span>3. 用户C</span><span>团队人数：120</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="bottom">
+      <button onclick="smartBack()">返回</button>
+    </div>
+  </div>
+  <script>
+    let currentTab = 0;
+    const tabs = document.querySelectorAll('.tab');
+    const listEl = document.getElementById('rankList');
+    
+    // 排行榜数据存储
+    let rankingData = {
+      team: [],
+      redpacket: [],
+      master: []
+    };
+    
+    /**
+     * 从后端API加载排行榜数据
+     */
+    async function loadRankingData() {
+      try {
+        // 获取认证token
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          console.warn('未找到认证token，使用默认排行榜数据');
+          return;
+        }
+        
+        // 并行请求三种排行榜数据
+        const [teamResponse, redpacketResponse, masterResponse] = await Promise.all([
+          fetch('/api/ranking/team', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          }),
+          fetch('/api/ranking/redpacket', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          }),
+          fetch('/api/ranking/master', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          })
+        ]);
+        
+        // 处理团队排行榜数据
+        if (teamResponse.ok) {
+          const teamData = await teamResponse.json();
+          rankingData.team = teamData.rankings || [];
+        }
+        
+        // 处理红包排行榜数据
+        if (redpacketResponse.ok) {
+          const redpacketData = await redpacketResponse.json();
+          rankingData.redpacket = redpacketData.rankings || [];
+        }
+        
+        // 处理大神排行榜数据
+        if (masterResponse.ok) {
+          const masterData = await masterResponse.json();
+          rankingData.master = masterData.rankings || [];
+        }
+        
+      } catch (error) {
+        console.error('加载排行榜数据失败:', error);
+        // 使用默认空数据
+        rankingData = {
+          team: [],
+          redpacket: [],
+          master: []
+        };
+      }
+    }
+    
+    function switchTab(index) {
+      currentTab = index;
+      tabs.forEach((tab, i) => {
+        if (i === index) tab.classList.add('active');
+        else tab.classList.remove('active');
+      });
+      
+      renderRankingList();
+    }
+    
+    /**
+     * 渲染排行榜列表
+     */
+    function renderRankingList() {
+      let data = [];
+      if (currentTab === 0) {
+        data = rankingData.team;
+      } else if (currentTab === 1) {
+        data = rankingData.redpacket;
+      } else {
+        data = rankingData.master;
+      }
+      
+      let html = '';
+      if (data.length === 0) {
+        html = '<li class="rank-item" style="text-align:center;color:var(--muted);padding:20px 0;">暂无排行数据</li>';
+      } else {
+        data.forEach((item, index) => {
+          const rank = index + 1;
+          let rankIcon = '';
+          if (rank === 1) rankIcon = '🥇';
+          else if (rank === 2) rankIcon = '🥈';
+          else if (rank === 3) rankIcon = '🥉';
+          else rankIcon = rank + '.';
+          
+          const valueText = currentTab === 1 ? 
+            `${item.desc || '红包收入'}：${(item.value || 0).toFixed(2)} USDT` : 
+            `${item.desc || '数值'}：${item.value || 0}`;
+          
+          const nameStyle = item.isMe ? 'color:#56ccf2;font-weight:bold;' : '';
+          
+          html += `<li class="rank-item">
+            <span style="${nameStyle}">${rankIcon} ${item.name || '未知用户'}</span>
+            <span style="${nameStyle}">${valueText}</span>
+          </li>`;
+        });
+      }
+      
+      listEl.innerHTML = html;
+    }
+    
+    // 页面加载时初始化
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadRankingData();
+      renderRankingList();
+    });
+  </script>
+  <script src="js/global-background.js"></script>
+</body>
+</html>

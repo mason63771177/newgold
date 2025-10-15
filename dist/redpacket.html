@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抢红包</title>
+    <script src="js/smart-back.js"></script>
+    <style>*{box-sizing:border-box;margin:0;padding:0}body{background:var(--bg-primary);color:var(--text-primary);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;height:100vh;overflow:hidden}.container{display:flex;flex-direction:column;height:100vh}.header{backdrop-filter:blur(10px);background:var(--bg-secondary);border-bottom:1px solid var(--border-color);padding:20px;text-align:center}.header h1{color:var(--text-secondary);font-size:24px;font-weight:700;text-shadow:0 2px 10px rgba(255,215,0,.3)}.content{display:flex;flex:1;flex-direction:column;gap:20px;overflow-y:auto;padding:20px}.card{backdrop-filter:blur(10px);background:var(--bg-card);border:1px solid var(--border-color);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.3);padding:20px}.pool-info{margin-bottom:20px;text-align:center}.pool-amount{color:var(--text-secondary);font-size:32px;font-weight:800;margin-bottom:8px}.pool-label{color:var(--text-primary);font-size:14px;opacity:.7}.status-indicator{align-items:center;display:flex;gap:8px;justify-content:center;margin-bottom:20px}.status-dot{animation:pulse 2s infinite;border-radius:50%;height:12px;width:12px}.status-dot.active{background:var(--accent-color);box-shadow:0 0 20px rgba(109,213,237,.5)}.status-dot.waiting{background:var(--text-secondary);box-shadow:0 0 20px rgba(255,215,0,.5)}.status-dot.ended{background:#ff6b6b;box-shadow:0 0 20px hsla(0,100%,71%,.5)}@keyframes pulse{0%,to{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.2)}}.countdown{color:var(--text-secondary);font-size:18px;font-weight:600;margin-bottom:20px;text-align:center}.grab-btn{border:none;border-radius:16px;cursor:pointer;font-size:18px;font-weight:800;overflow:hidden;padding:16px;position:relative;text-overflow:ellipsis;transition:transform .08s ease,filter .2s ease,box-shadow .2s ease;white-space:nowrap;width:100%}.grab-btn.active{animation:glow 2s ease-in-out infinite alternate;background:var(--btn-gradient);box-shadow:var(--btn-shadow),var(--btn-glow);color:var(--text-primary)}.grab-btn.disabled{background:hsla(0,0%,100%,.1);color:hsla(0,0%,100%,.5);cursor:not-allowed;filter:grayscale(.6);opacity:.4}.grab-btn:not(.disabled):hover{filter:brightness(1.2);transform:translateY(-3px)}.grab-btn:not(.disabled):active{filter:brightness(.95);transform:translateY(0)}@keyframes glow{0%{box-shadow:var(--btn-shadow)}to{box-shadow:var(--btn-shadow),var(--btn-glow)}}.schedule{margin-top:20px}.schedule h3{color:var(--text-secondary);font-size:16px;margin-bottom:12px}.time-slots{display:flex;flex-wrap:wrap;gap:10px}.time-slot{background:hsla(0,0%,100%,.1);border:1px solid var(--border-color);border-radius:12px;color:var(--text-primary);flex:1;font-size:14px;min-width:80px;padding:8px 12px;text-align:center}.time-slot.active{background:var(--btn-gradient);box-shadow:var(--btn-shadow);color:var(--text-primary);font-weight:600}.no-permission{color:var(--text-primary);font-size:14px;opacity:.7;padding:20px;text-align:center}.recent{margin-top:20px}.recent h3{color:var(--text-secondary);font-size:16px;margin-bottom:12px}.recent-list{max-height:200px;overflow-y:auto}.recent-item{align-items:center;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;padding:8px 0}.recent-item:last-child{border-bottom:none}.recent-user{color:var(--text-primary);font-size:14px;opacity:.8}.recent-amount{color:var(--text-secondary);font-size:14px;font-weight:600}.success-animation{align-items:center;background:rgba(0,0,0,.8);bottom:0;display:flex;justify-content:center;left:0;opacity:0;position:fixed;right:0;top:0;transition:all .3s ease;visibility:hidden;z-index:1000}.success-animation.show{opacity:1;visibility:visible}.success-content{backdrop-filter:blur(20px);background:var(--bg-card);border:1px solid var(--border-color);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.3);padding:40px;text-align:center}.success-amount{animation:bounce .6s ease-in-out;color:var(--text-secondary);font-size:48px;font-weight:800;margin-bottom:16px}@keyframes bounce{0%,20%,50%,80%,to{transform:translateY(0)}40%{transform:translateY(-20px)}60%{transform:translateY(-10px)}}.success-text{color:var(--text-primary);font-size:18px;margin-bottom:20px}.success-btn{background:var(--btn-gradient);border:none;border-radius:16px;box-shadow:var(--btn-shadow);color:var(--text-primary);cursor:pointer;font-size:16px;font-weight:800;padding:12px 24px;transition:transform .08s ease,filter .2s ease,box-shadow .2s ease}.success-btn:hover{box-shadow:var(--btn-shadow),var(--btn-glow);filter:brightness(1.2);transform:translateY(-3px)}.success-btn:active{filter:brightness(.95);transform:translateY(0)}.bottom{backdrop-filter:blur(10px);background:hsla(0,0%,100%,.04);border-radius:20px 20px 0 0;border-top:1px solid hsla(0,0%,100%,.06);bottom:0;display:flex;flex-wrap:wrap;gap:8px;left:0;margin:0 12px 12px;padding:14px 16px calc(24px + env(safe-area-inset-bottom, 0px));position:fixed;right:0;z-index:100}.bottom button{background:var(--btn-gradient);border:none;border-radius:16px;box-shadow:var(--btn-shadow);color:var(--text-primary);cursor:pointer;flex:1;font-size:13px;font-weight:800;min-width:0;overflow:hidden;padding:12px 8px;text-overflow:ellipsis;transition:transform .08s ease,filter .2s ease,box-shadow .2s ease;white-space:nowrap}.bottom button:hover{box-shadow:var(--btn-shadow),var(--btn-glow);filter:brightness(1.2);transform:translateY(-3px)}.bottom button:active{filter:brightness(.95);transform:translateY(0)}</style>
+  <link rel="stylesheet" crossorigin href="/newgold/assets/css/themes-Cd7cymCc.css">
+  <link rel="stylesheet" crossorigin href="/newgold/assets/css/global-background-D97W4UkV.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部标题区 -->
+        <div class="header">
+            <h1>🧧 抢红包</h1>
+        </div>
+
+        <!-- 中部内容区 -->
+        <div class="content">
+            <!-- 红包池信息 -->
+            <div class="card">
+                <div class="pool-info">
+                    <div class="pool-amount" id="poolAmount">8,888.88 USDT</div>
+                    <div class="pool-label">当前红包池总额</div>
+                </div>
+                
+                <!-- 状态指示器 -->
+                <div class="status-indicator">
+                    <div class="status-dot waiting" id="statusDot"></div>
+                    <span id="statusText">等待红包开始</span>
+                </div>
+                
+                <!-- 倒计时 -->
+                <div class="countdown" id="countdown">02:15:30</div>
+                
+                <!-- 抢红包按钮 -->
+                <button class="grab-btn disabled" id="grabBtn" onclick="handleGrab()">
+                    等待红包开始
+                </button>
+            </div>
+
+            <!-- 活动时间表 -->
+            <div class="card">
+                <div class="schedule">
+                    <h3>📅 每日红包时间</h3>
+                    <div class="time-slots">
+                        <div class="time-slot" id="slot1">
+                            <div>09:00</div>
+                            <div style="font-size: 12px; opacity: 0.7;">已结束</div>
+                        </div>
+                        <div class="time-slot active" id="slot2">
+                            <div>12:00</div>
+                            <div style="font-size: 12px; opacity: 0.7;">进行中</div>
+                        </div>
+                        <div class="time-slot" id="slot3">
+                            <div>20:00</div>
+                            <div style="font-size: 12px; opacity: 0.7;">未开始</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 无权限提示 -->
+            <div class="card" id="noPermissionCard" style="display: none;">
+                <div class="no-permission">
+                    <h3>🔒 需要激活账号</h3>
+                    <p>只有激活账号的用户才能参与抢红包活动</p>
+                    <p>立即激活，开启您的财富之旅！</p>
+                </div>
+            </div>
+
+            <!-- 上一期红包排行 -->
+            <div class="card">
+                <div class="recent">
+                    <h3>🏆 上一期红包排行榜</h3>
+                    <div class="recent-list" id="recentList">
+                        <!-- 动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航 -->
+        <div class="bottom">
+            <button onclick="smartBack()">返回</button>
+        </div>
+    </div>
+
+    <!-- 成功动画 -->
+    <div class="success-animation" id="successAnimation">
+        <div class="success-content">
+            <div class="success-amount" id="successAmount">+12.34 USDT</div>
+            <div class="success-text">🎉 恭喜抢到红包！</div>
+            <button class="success-btn" onclick="closeSuccess()">太棒了</button>
+        </div>
+    </div>
+
+    <script>
+        // 全局状态
+        let currentState = {
+            userStatus: parseInt(localStorage.getItem('userStatus')) || 1,
+            isInRedPacketTime: false,
+            currentRound: 1,
+            timeLeft: 0,
+            poolAmount: 8888.88,
+            hasGrabbedThisRound: false
+        };
+
+        // 红包时间窗口配置
+        const RED_PACKET_TIMES = [
+            { hour: 9, minute: 0, duration: 77 },   // 9:00-9:01:17
+            { hour: 12, minute: 0, duration: 77 },  // 12:00-12:01:17  
+            { hour: 20, minute: 0, duration: 77 }   // 20:00-20:01:17
+        ];
+
+        // 检查当前是否在红包时间窗口
+        function checkRedPacketWindow() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentSecond = now.getSeconds();
+
+            for (let i = 0; i < RED_PACKET_TIMES.length; i++) {
+                const window = RED_PACKET_TIMES[i];
+                const windowStart = window.hour * 3600 + window.minute * 60;
+                const windowEnd = windowStart + window.duration;
+                const currentTime = currentHour * 3600 + currentMinute * 60 + currentSecond;
+
+                if (currentTime >= windowStart && currentTime <= windowEnd) {
+                    return {
+                        inWindow: true,
+                        round: i + 1,
+                        timeLeft: windowEnd - currentTime
+                    };
+                }
+            }
+
+            // 计算下一个红包时间
+            let nextWindow = null;
+            let nextRound = 1;
+            
+            for (let i = 0; i < RED_PACKET_TIMES.length; i++) {
+                const window = RED_PACKET_TIMES[i];
+                const windowTime = window.hour * 3600 + window.minute * 60;
+                const currentTime = currentHour * 3600 + currentMinute * 60 + currentSecond;
+                
+                if (windowTime > currentTime) {
+                    nextWindow = windowTime - currentTime;
+                    nextRound = i + 1;
+                    break;
+                }
+            }
+
+            // 如果今天没有下一轮，计算明天第一轮
+            if (!nextWindow) {
+                const tomorrowFirst = 24 * 3600 + RED_PACKET_TIMES[0].hour * 3600 + RED_PACKET_TIMES[0].minute * 60;
+                const currentTime = currentHour * 3600 + currentMinute * 60 + currentSecond;
+                nextWindow = tomorrowFirst - currentTime;
+                nextRound = 1;
+            }
+
+            return {
+                inWindow: false,
+                nextRound: nextRound,
+                timeLeft: nextWindow
+            };
+        }
+
+        // 格式化时间显示
+        function formatTime(seconds) {
+            if (seconds < 60) {
+                return `${seconds}秒`;
+            } else if (seconds < 3600) {
+                const minutes = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                return `${minutes}:${secs.toString().padStart(2, '0')}`;
+            } else {
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const secs = seconds % 60;
+                return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+        }
+
+        // API基础URL配置
+        const API_BASE_URL = 'https://newgold-h5-game-abxj07n20-wongs-projects-7580d6a8.vercel.app/api';
+
+        // 更新界面状态
+        async function updateStatus() {
+            // 首先从后端获取红包状态
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/redpacket/status`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    const data = result.data;
+                    
+                    // 更新状态
+                    currentState.isInRedPacketTime = data.inWindow;
+                    currentState.timeLeft = data.timeLeft;
+                    currentState.poolAmount = data.poolAmount || currentState.poolAmount;
+                    
+                    // 更新红包池显示
+                    const poolEl = document.getElementById('poolAmount');
+                    poolEl.textContent = currentState.poolAmount.toLocaleString('zh-CN', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) + ' USDT';
+                }
+            } catch (error) {
+                console.error('获取红包状态失败:', error);
+                // 如果API失败，使用本地逻辑
+            }
+
+            const windowInfo = checkRedPacketWindow();
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            const countdown = document.getElementById('countdown');
+            const grabBtn = document.getElementById('grabBtn');
+            const noPermissionCard = document.getElementById('noPermissionCard');
+
+            // 更新状态
+            currentState.isInRedPacketTime = windowInfo.inWindow;
+            currentState.currentRound = windowInfo.inWindow ? windowInfo.round : windowInfo.nextRound;
+            currentState.timeLeft = windowInfo.timeLeft;
+
+            // 检查用户权限
+            if (currentState.userStatus !== 2) {
+                // 无权限状态
+                noPermissionCard.style.display = 'block';
+                statusDot.className = 'status-dot ended';
+                statusText.textContent = '需要激活账号';
+                countdown.textContent = formatTime(currentState.timeLeft);
+                grabBtn.textContent = '激活账号参与';
+                grabBtn.className = 'grab-btn disabled';
+            } else {
+                // 有权限状态
+                noPermissionCard.style.display = 'none';
+                
+                if (currentState.isInRedPacketTime) {
+                    // 红包进行中
+                    statusDot.className = 'status-dot active';
+                    statusText.textContent = '红包进行中';
+                    countdown.textContent = formatTime(currentState.timeLeft);
+                    
+                    if (currentState.hasGrabbedThisRound) {
+                        grabBtn.textContent = '已抢过本轮';
+                        grabBtn.className = 'grab-btn disabled';
+                    } else {
+                        grabBtn.textContent = '立即抢红包';
+                        grabBtn.className = 'grab-btn active';
+                    }
+                } else {
+                    // 等待下次红包
+                    statusDot.className = 'status-dot waiting';
+                    statusText.textContent = '等待红包开始';
+                    countdown.textContent = formatTime(currentState.timeLeft);
+                    grabBtn.textContent = '等待红包开始';
+                    grabBtn.className = 'grab-btn disabled';
+                }
+            }
+
+            // 更新时间表状态
+            updateTimeSlots();
+        }
+
+        // 更新时间表状态
+        function updateTimeSlots() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            
+            for (let i = 0; i < 3; i++) {
+                const slot = document.getElementById(`slot${i + 1}`);
+                const windowHour = RED_PACKET_TIMES[i].hour;
+                
+                if (currentHour > windowHour || (currentHour === windowHour && currentMinute > 1)) {
+                    slot.className = 'time-slot';
+                    slot.querySelector('div:last-child').textContent = '已结束';
+                } else if (currentHour === windowHour && currentMinute <= 1) {
+                    slot.className = 'time-slot active';
+                    slot.querySelector('div:last-child').textContent = '进行中';
+                } else {
+                    slot.className = 'time-slot';
+                    slot.querySelector('div:last-child').textContent = '未开始';
+                }
+            }
+        }
+
+        // 处理抢红包点击
+        async function handleGrab() {
+            if (!currentState.isInRedPacketTime || currentState.hasGrabbedThisRound) {
+                return;
+            }
+
+            if (currentState.userStatus !== 2) {
+                // 跳转到激活页面
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                // 调用后端API抢红包
+                const response = await fetch(`${API_BASE_URL}/api/redpacket/grab`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userId: localStorage.getItem('userId') || 'default'
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // 抢红包成功
+                    const amount = result.data.amount;
+                    const fee = result.data.fee || 0;
+                    const net = amount - fee;
+
+                    // 显示成功动画
+                    showSuccessAnimation(net);
+
+                    // 更新状态
+                    currentState.hasGrabbedThisRound = true;
+                    updateStatus();
+
+                    // 添加交易记录
+                    addTransaction('redpacket', amount, fee, net);
+                    
+                    // 添加最近记录
+                    addRecentRecord('我', net);
+
+                    // 更新钱包余额
+                    const currentBalance = parseFloat(localStorage.getItem('walletBalance') || '0');
+                    const newBalance = currentBalance + net;
+                    localStorage.setItem('walletBalance', newBalance.toFixed(2));
+                } else {
+                    // 抢红包失败，显示错误信息
+                    alert(result.message || '抢红包失败，请稍后重试');
+                }
+            } catch (error) {
+                console.error('抢红包请求失败:', error);
+                alert('网络错误，请检查网络连接');
+            }
+        }
+
+        // 加载红包记录
+        async function loadRedpacketRecords() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/redpacket/records`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    // 更新红包池金额
+                    if (result.data.poolAmount) {
+                        currentState.poolAmount = result.data.poolAmount;
+                        const poolEl = document.getElementById('poolAmount');
+                        poolEl.textContent = result.data.poolAmount.toLocaleString('zh-CN', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }) + ' USDT';
+                    }
+
+                    // 更新最近记录
+                    if (result.data.recentRecords) {
+                        renderRecentListFromAPI(result.data.recentRecords);
+                    }
+                }
+            } catch (error) {
+                console.error('加载红包记录失败:', error);
+            }
+        }
+
+        // 从API数据渲染最近记录
+        function renderRecentListFromAPI(records) {
+            const listEl = document.getElementById('recentList');
+            listEl.innerHTML = '';
+
+            records.forEach((record, index) => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'recent-item';
+                
+                // 为前三名添加特殊样式
+                let rankIcon = '';
+                let rankStyle = '';
+                const rank = index + 1;
+                if (rank === 1) {
+                    rankIcon = '🥇';
+                    rankStyle = 'color: #FFD700; font-weight: 800;';
+                } else if (rank === 2) {
+                    rankIcon = '🥈';
+                    rankStyle = 'color: #C0C0C0; font-weight: 700;';
+                } else if (rank === 3) {
+                    rankIcon = '🥉';
+                    rankStyle = 'color: #CD7F32; font-weight: 600;';
+                } else {
+                    rankIcon = `${rank}`;
+                    rankStyle = 'color: var(--text-primary); opacity: 0.8;';
+                }
+                
+                itemEl.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 16px; ${rankStyle} min-width: 24px;">${rankIcon}</span>
+                        <span class="recent-user">${record.username || '匿名用户'}</span>
+                    </div>
+                    <span class="recent-amount">${parseFloat(record.amount).toFixed(2)} USDT</span>
+                `;
+                listEl.appendChild(itemEl);
+            });
+        }
+
+        // 显示成功动画
+        function showSuccessAnimation(amount) {
+            const successAnimation = document.getElementById('successAnimation');
+            const successAmount = document.getElementById('successAmount');
+            
+            successAmount.textContent = `+${amount.toFixed(2)} USDT`;
+            successAnimation.classList.add('show');
+        }
+
+        // 关闭成功动画
+        function closeSuccess() {
+            const successAnimation = document.getElementById('successAnimation');
+            successAnimation.classList.remove('show');
+            
+            // 更新按钮状态
+            const grabBtn = document.getElementById('grabBtn');
+            grabBtn.textContent = '已抢过本轮';
+            grabBtn.className = 'grab-btn disabled';
+        }
+
+        // 更新钱包余额
+        function updateWalletBalance(amount) {
+            const currentBalance = parseFloat(localStorage.getItem('walletBalance') || '0');
+            const newBalance = currentBalance + amount;
+            localStorage.setItem('walletBalance', newBalance.toFixed(2));
+        }
+
+        // 添加交易记录
+        function addTransaction(type, amount, fee, net) {
+            let transactions = [];
+            try {
+                const stored = localStorage.getItem('transactions');
+                if (stored) transactions = JSON.parse(stored);
+            } catch (e) {}
+
+            transactions.push({
+                type: type,
+                amount: amount,
+                fee: fee,
+                net: net,
+                time: new Date().toISOString()
+            });
+
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+        }
+
+        // 添加最近记录
+        function addRecentRecord(name, amount) {
+            let recent = [];
+            try {
+                const stored = localStorage.getItem('recentRed');
+                if (stored) recent = JSON.parse(stored);
+            } catch (e) {}
+
+            recent.push({ name: name, amount: amount.toFixed(2), time: Date.now() });
+            
+            // 保持最多20条记录
+            if (recent.length > 20) recent.shift();
+            
+            localStorage.setItem('recentRed', JSON.stringify(recent));
+            renderRecentList();
+        }
+
+        // 渲染上一期红包排行榜
+        function renderRecentList() {
+            // 生成上一期红包排行榜数据（前10名）
+            const lastRoundRanking = [
+                { name: '用户***8888', amount: '88.88', rank: 1 },
+                { name: '用户***6666', amount: '66.66', rank: 2 },
+                { name: '用户***5555', amount: '55.55', rank: 3 },
+                { name: '用户***4444', amount: '44.44', rank: 4 },
+                { name: '用户***3333', amount: '33.33', rank: 5 },
+                { name: '用户***2222', amount: '28.88', rank: 6 },
+                { name: '用户***1111', amount: '25.67', rank: 7 },
+                { name: '用户***9999', amount: '22.22', rank: 8 },
+                { name: '用户***7777', amount: '18.88', rank: 9 },
+                { name: '用户***0000', amount: '15.55', rank: 10 }
+            ];
+
+            const listEl = document.getElementById('recentList');
+            listEl.innerHTML = '';
+
+            lastRoundRanking.forEach(item => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'recent-item';
+                
+                // 为前三名添加特殊样式
+                let rankIcon = '';
+                let rankStyle = '';
+                if (item.rank === 1) {
+                    rankIcon = '🥇';
+                    rankStyle = 'color: #FFD700; font-weight: 800;';
+                } else if (item.rank === 2) {
+                    rankIcon = '🥈';
+                    rankStyle = 'color: #C0C0C0; font-weight: 700;';
+                } else if (item.rank === 3) {
+                    rankIcon = '🥉';
+                    rankStyle = 'color: #CD7F32; font-weight: 600;';
+                } else {
+                    rankIcon = `${item.rank}`;
+                    rankStyle = 'color: var(--text-primary); opacity: 0.8;';
+                }
+                
+                itemEl.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 16px; ${rankStyle} min-width: 24px;">${rankIcon}</span>
+                        <span class="recent-user">${item.name}</span>
+                    </div>
+                    <span class="recent-amount">${item.amount} USDT</span>
+                `;
+                listEl.appendChild(itemEl);
+            });
+        }
+
+        // 更新红包池金额（模拟动态变化）
+        function updatePoolAmount() {
+            const poolEl = document.getElementById('poolAmount');
+            const baseAmount = 8888.88;
+            const variation = Math.sin(Date.now() / 10000) * 500;
+            const currentAmount = baseAmount + variation;
+            poolEl.textContent = currentAmount.toLocaleString('zh-CN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + ' USDT';
+        }
+
+        // 页面初始化
+        async function init() {
+            // 加载红包记录
+            await loadRedpacketRecords();
+            
+            // 渲染上一期红包排行榜（如果API没有数据则使用默认数据）
+            renderRecentList();
+            
+            // 更新界面状态
+            updateStatus();
+            
+            // 设置定时器
+            setInterval(updateStatus, 1000);
+            setInterval(updatePoolAmount, 3000);
+            setInterval(loadRedpacketRecords, 30000); // 每30秒刷新一次红包记录
+            
+            console.log('红包页面初始化完成');
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

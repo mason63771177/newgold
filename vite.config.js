@@ -53,9 +53,30 @@ export default defineConfig({
     // 代码压缩
     minify: 'esbuild',
     
-    // Rollup 选项
+    // 构建配置
     rollupOptions: {
-      input: resolve(__dirname, 'index.html'),
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        login: resolve(__dirname, 'login.html'),
+        'forgot-password': resolve(__dirname, 'forgot-password.html'),
+        'reset-password': resolve(__dirname, 'reset-password.html'),
+        'verify-email': resolve(__dirname, 'verify-email.html'),
+        activation: resolve(__dirname, 'activation.html'),
+        invite: resolve(__dirname, 'invite.html'),
+        wallet: resolve(__dirname, 'wallet.html'),
+        withdraw: resolve(__dirname, 'withdraw.html'),
+        transaction: resolve(__dirname, 'transaction.html'),
+        tasks: resolve(__dirname, 'tasks.html'),
+        quiz: resolve(__dirname, 'quiz.html'),
+        ranking: resolve(__dirname, 'ranking.html'),
+        'ranking_user': resolve(__dirname, 'ranking_user.html'),
+        record: resolve(__dirname, 'record.html'),
+        redpacket: resolve(__dirname, 'redpacket.html'),
+        team: resolve(__dirname, 'team.html'),
+        'team_member': resolve(__dirname, 'team_member.html'),
+        admin: resolve(__dirname, 'admin.html'),
+        'admin-login': resolve(__dirname, 'admin-login.html')
+      },
       external: ['fsevents'],
       output: {
           // 手动代码分割

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>裂金7日 · 激活账号</title>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ6GQ79K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-QQ6GQ79K7G');
+  </script>
+  
+  <style>:root{--bg:#0b0f14;--card:#0e141d;--brand:#56ccf2;--brand-2:#2f80ed;--text:#e6efff;--muted:#9fb3cd;--accent-border:rgba(111,158,255,.18);--safe:env(safe-area-inset-bottom,0px)}body,html{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif;height:100vh;margin:0;overflow:hidden;padding:0}.container{display:flex;flex-direction:column;height:100vh}.header{align-items:center;display:flex;flex:0 0 20%;justify-content:center;padding-top:20px;position:relative}.header h1{background:linear-gradient(45deg,#2193b0,#6dd5ed);-webkit-background-clip:text;font-size:24px;font-weight:700;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 12px rgba(109,213,237,.5)) drop-shadow(0 0 24px rgba(109,213,237,.3));margin:0}.logo-small{filter:drop-shadow(0 0 8px rgba(109,213,237,.4)) drop-shadow(0 0 16px rgba(109,213,237,.2));height:64px;margin-right:8px;-o-object-fit:contain;object-fit:contain;width:64px}.content{align-items:center;display:flex;flex:1;justify-content:center;overflow-x:hidden;padding:0 16px}.card{backdrop-filter:blur(16px);background:linear-gradient(180deg,rgba(15,21,32,.85),rgba(15,21,32,.9));border:1px solid var(--accent-border);border-radius:24px;box-shadow:inset 0 6px 20px rgba(0,0,0,.35),0 12px 28px rgba(0,0,0,.35);display:flex;flex-direction:column;gap:16px;max-width:480px;padding:24px;width:100%}.section-title{color:#a3b6ff;font-size:16px;font-weight:600}.address{background:hsla(0,0%,100%,.05);border-radius:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;padding:10px;word-break:break-all}.btn-copy,.btn-finish{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-image:linear-gradient(180deg,var(--brand),var(--brand-2));border:none;border-radius:16px;box-shadow:0 8px 24px rgba(47,128,237,.45),inset 0 1px 0 hsla(0,0%,100%,.25);color:#031e2e;cursor:pointer;font-size:14px;font-weight:700;padding:12px 0;transition:transform .08s ease,filter .2s ease}.btn-copy:active,.btn-finish:active{filter:brightness(.95);transform:translateY(0)}.info{color:#cdd6f7;font-size:14px;line-height:1.4}.bottom{backdrop-filter:blur(10px);background:hsla(0,0%,100%,.04);border-radius:20px;border-top:1px solid hsla(0,0%,100%,.06);display:flex;flex:0 0 auto;margin:0 12px 12px;padding:14px 16px calc(24px + var(--safe))}.bottom button{background-image:linear-gradient(180deg,var(--brand),var(--brand-2));border:none;border-radius:16px;box-shadow:0 8px 24px rgba(47,128,237,.45),inset 0 1px 0 hsla(0,0%,100%,.25);color:var(--text);cursor:pointer;flex:1;font-size:14px;font-weight:800;margin:0 6px;padding:14px 0;transition:transform .08s ease,filter .2s ease;white-space:nowrap}.bottom button:hover{filter:brightness(1.2);transform:translateY(-3px)}.bottom button:active{filter:brightness(.95);transform:translateY(0)}</style>
+  <link rel="stylesheet" crossorigin href="/newgold/assets/css/global-background-D97W4UkV.css">
+</head>
+<body>
+  <script src="js/smart-back.js"></script>
+  <div class="container">
+    <div class="header">
+      <img src="/newgold/assets/images/logo_gold7-BN-9ArRY.png" alt="Logo" class="logo-small" />
+      <h1>激活账号</h1>
+    </div>
+    <div class="content">
+      <div class="card">
+        <div class="section-title">请转入 100 USDT (TRC20)</div>
+        <div id="addr" class="address">生成中…</div>
+        <button class="btn-copy" onclick="copyAddr()">复制地址</button>
+        <div class="info">为保证安全，请通过您的数字钱包将 100 USDT 转入上述专属地址。链上确认后，系统将自动激活您的账号进入挑战。</div>
+        <button class="btn-finish" onclick="finish()">我已完成转账</button>
+      </div>
+    </div>
+    <div class="bottom">
+      <button onclick="smartBack()">返回</button>
+    </div>
+  </div>
+  <script>
+    async function genAddr() {
+      let addr = localStorage.getItem('activationAddress');
+      if (!addr) {
+        try {
+          // 从后端API获取真实激活地址
+          const response = await fetch('/api/user/activation-address', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            addr = data.address;
+            localStorage.setItem('activationAddress', addr);
+          } else {
+            throw new Error('获取激活地址失败');
+          }
+        } catch (error) {
+          console.error('获取激活地址失败:', error);
+          alert('获取激活地址失败，请稍后重试');
+          return;
+        }
+      }
+      document.getElementById('addr').textContent = addr;
+    }
+    function copyAddr() {
+      const addr = document.getElementById('addr').textContent;
+      navigator.clipboard.writeText(addr).then(() => {
+        alert('已复制地址');
+      }).catch(() => {
+        alert('复制失败，请手动复制');
+      });
+    }
+    function finish() {
+      // 设置状态2并跳转回主页面
+      localStorage.setItem('userStatus', '2');
+      alert('我们将在链上确认后激活您的账号，现在返回首页');
+      location.href = 'ui_design.html';
+    }
+    window.addEventListener('DOMContentLoaded', genAddr);
+  </script>
+  <script src="js/global-background.js"></script>
+</body>
+</html>

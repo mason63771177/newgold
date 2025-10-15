@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>邮箱验证 - Gold7 Game</title>
+    <link rel="stylesheet" href="css/common.css">
+    <style>.verify-container{align-items:center;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;flex-direction:column;justify-content:center;min-height:100vh;padding:20px}.verify-card{background:#fff;border-radius:20px;box-shadow:0 20px 40px rgba(0,0,0,.1);max-width:500px;padding:40px;text-align:center;width:100%}.verify-icon{font-size:80px;margin-bottom:20px}.verify-title{color:#333;font-size:28px;font-weight:700;margin-bottom:15px}.verify-message{color:#666;font-size:16px;line-height:1.6;margin-bottom:30px}.verify-loading{align-items:center;display:flex;gap:10px;justify-content:center;margin:20px 0}.loading-spinner{animation:spin 1s linear infinite;border:2px solid #f3f3f3;border-radius:50%;border-top-color:gold;height:20px;width:20px}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.btn{background:linear-gradient(45deg,gold,orange);border:none;border-radius:25px;color:#fff;cursor:pointer;display:inline-block;font-size:16px;font-weight:700;margin:10px;padding:12px 30px;text-decoration:none;transition:all .3s ease}.btn:hover{box-shadow:0 6px 20px rgba(255,215,0,.4);transform:translateY(-2px)}.btn-secondary{background:linear-gradient(45deg,#6c757d,#495057)}.btn-secondary:hover{box-shadow:0 6px 20px hsla(208,7%,46%,.4)}.success{color:#28a745}.error{color:#dc3545}.hidden{display:none}</style>
+</head>
+<body>
+    <div class="verify-container">
+        <div class="verify-card">
+            <!-- 加载状态 -->
+            <div id="loadingState">
+                <div class="verify-icon">📧</div>
+                <h1 class="verify-title">正在验证邮箱</h1>
+                <div class="verify-loading">
+                    <div class="loading-spinner"></div>
+                    <span>请稍候...</span>
+                </div>
+            </div>
+
+            <!-- 成功状态 -->
+            <div id="successState" class="hidden">
+                <div class="verify-icon success">✅</div>
+                <h1 class="verify-title success">邮箱验证成功！</h1>
+                <p class="verify-message">
+                    恭喜您！您的邮箱已成功验证，现在可以正常使用所有功能了。
+                </p>
+                <a href="login.html" class="btn">立即登录</a>
+            </div>
+
+            <!-- 失败状态 -->
+            <div id="errorState" class="hidden">
+                <div class="verify-icon error">❌</div>
+                <h1 class="verify-title error">验证失败</h1>
+                <p class="verify-message" id="errorMessage">
+                    验证链接无效或已过期，请重新发送验证邮件。
+                </p>
+                <button onclick="resendVerification()" class="btn">重新发送验证邮件</button>
+                <a href="login.html" class="btn btn-secondary">返回登录</a>
+            </div>
+
+            <!-- 重新发送状态 -->
+            <div id="resendState" class="hidden">
+                <div class="verify-icon">📨</div>
+                <h1 class="verify-title">重新发送验证邮件</h1>
+                <p class="verify-message">
+                    请输入您的邮箱地址，我们将重新发送验证邮件给您。
+                </p>
+                <div style="margin: 20px 0;">
+                    <input type="email" id="resendEmail" placeholder="请输入邮箱地址" 
+                           style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; margin-bottom: 15px;">
+                    <button onclick="sendVerificationEmail()" class="btn" id="resendBtn">发送验证邮件</button>
+                    <button onclick="showErrorState()" class="btn btn-secondary">返回</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 从URL获取参数
+        function getUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return {
+                token: urlParams.get('token'),
+                email: urlParams.get('email')
+            };
+        }
+
+        // 显示不同状态
+        function showState(stateName) {
+            const states = ['loadingState', 'successState', 'errorState', 'resendState'];
+            states.forEach(state => {
+                document.getElementById(state).classList.add('hidden');
+            });
+            document.getElementById(stateName).classList.remove('hidden');
+        }
+
+        function showErrorState(message = '验证链接无效或已过期，请重新发送验证邮件。') {
+            document.getElementById('errorMessage').textContent = message;
+            showState('errorState');
+        }
+
+        // 验证邮箱
+        async function verifyEmail() {
+            const params = getUrlParams();
+            
+            if (!params.token || !params.email) {
+                showErrorState('验证链接格式错误，缺少必要参数。');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/auth/verify-email?token=${params.token}&email=${encodeURIComponent(params.email)}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showState('successState');
+                } else {
+                    showErrorState(data.message || '验证失败，请重试。');
+                }
+            } catch (error) {
+                console.error('验证邮箱失败:', error);
+                showErrorState('网络错误，请检查网络连接后重试。');
+            }
+        }
+
+        // 重新发送验证邮件
+        function resendVerification() {
+            const params = getUrlParams();
+            if (params.email) {
+                document.getElementById('resendEmail').value = params.email;
+            }
+            showState('resendState');
+        }
+
+        // 发送验证邮件
+        async function sendVerificationEmail() {
+            const email = document.getElementById('resendEmail').value.trim();
+            const resendBtn = document.getElementById('resendBtn');
+            
+            if (!email) {
+                alert('请输入邮箱地址');
+                return;
+            }
+
+            if (!email.includes('@')) {
+                alert('请输入有效的邮箱地址');
+                return;
+            }
+
+            resendBtn.disabled = true;
+            resendBtn.textContent = '发送中...';
+
+            try {
+                const response = await fetch('/api/auth/resend-verification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('验证邮件已发送，请检查您的邮箱！');
+                    showErrorState('验证邮件已重新发送，请检查您的邮箱并点击验证链接。');
+                } else {
+                    alert(data.message || '发送失败，请重试');
+                }
+            } catch (error) {
+                console.error('发送验证邮件失败:', error);
+                alert('网络错误，请重试');
+            } finally {
+                resendBtn.disabled = false;
+                resendBtn.textContent = '发送验证邮件';
+            }
+        }
+
+        // 页面加载时自动验证
+        window.addEventListener('load', () => {
+            verifyEmail();
+        });
+    </script>
+</body>
+</html>
