@@ -40,15 +40,48 @@ class AuthController {
         }
       }
 
-      // 创建用户并生成TRC20地址
-      const userService = new UserService();
-      const result = await userService.createUserWithTRC20Address({
-        email,
-        password,
-        inviterCode
-      });
+      // 准备用户数据
+      const bcrypt = require('bcrypt');
+      const crypto = require('crypto');
       
-      const user = result.user;
+      // 生成用户名（使用邮箱前缀）
+      const username = email.split('@')[0];
+      
+      // 加密密码
+      const passwordHash = await bcrypt.hash(password, 12);
+      
+      // 生成邀请码
+      const invitationCode = crypto.randomBytes(8).toString('hex').toUpperCase();
+      
+      // 处理邀请人ID
+      let inviterId = null;
+      if (inviterCode) {
+        const inviter = await User.findByInviteCode(inviterCode);
+        if (inviter) {
+          inviterId = inviter.id;
+        }
+      }
+
+      // 添加调试日志 - 只传递数据库表中存在的字段
+      const userData = {
+        email,
+        passwordHash,
+        invitationCode,
+        phone: null,
+        inviterId
+      };
+      console.log('🔍 AuthController传递的用户数据:', JSON.stringify(userData, null, 2));
+
+      // 创建用户并分配HD钱包地址
+      const userService = new UserService();
+      const result = await userService.createUserWithTRC20AddressHD(userData);
+      
+      // 从数据库获取完整的用户对象
+      const user = await User.findById(result.id);
+
+      if (!user) {
+        throw new Error('用户创建成功但无法获取用户信息');
+      }
 
       // 生成验证token并发送验证邮件
       const verificationToken = emailService.generateVerificationToken();

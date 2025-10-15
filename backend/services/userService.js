@@ -246,6 +246,157 @@ class UserService {
       connection.release();
     }
   }
+
+  /**
+   * 创建用户并生成专属TRC20充值地址（HD钱包版本）
+   * @param {Object} userData - 用户数据
+   * @returns {Promise<Object>} 创建的用户信息
+   */
+  async createUserWithTRC20AddressHD(userData) {
+  const connection = await pool.getConnection();
+  
+  try {
+    await connection.beginTransaction();
+    
+    // 添加调试日志
+    console.log('🔍 创建用户数据:', JSON.stringify(userData, null, 2));
+    
+    // 检查每个参数的值
+    console.log('📊 参数检查:');
+    console.log('  email:', userData.email, typeof userData.email);
+    console.log('  passwordHash:', userData.passwordHash, typeof userData.passwordHash);
+    console.log('  phone:', userData.phone, typeof userData.phone);
+    
+    // 1. 创建用户记录 - 根据实际数据库表结构调整
+    const [userResult] = await connection.execute(
+      `INSERT INTO users (
+        email, password, invite_code, inviter_id, status
+      ) VALUES (?, ?, ?, ?, 0)`,
+      [
+        userData.email || null,
+        userData.passwordHash || null,
+        userData.invitationCode || null,
+        userData.inviterId || null
+      ]
+    );
+    
+    const userId = userResult.insertId;
+    
+    // 2. 使用HD钱包为用户生成专属TRC20地址
+    console.log(`🔐 为用户${userId}生成HD钱包专属地址...`);
+    
+    // 初始化TatumService（如果还未初始化）
+    if (!this.tatumService) {
+      const TatumService = require('./tatumService');
+      this.tatumService = new TatumService();
+      await this.tatumService.init();
+    }
+    
+    // 生成用户专属HD钱包地址
+    const addressInfo = await this.tatumService.generateUserDepositAddress(userId);
+    
+    // 3. 加密存储私钥
+    const encryptedPrivateKey = this.encryptPrivateKey(addressInfo.privateKey);
+    
+    // 4. 保存钱包地址到数据库
+    await connection.execute(
+      `INSERT INTO user_addresses (
+        user_id, address, network, label
+      ) VALUES (?, ?, ?, ?)`,
+      [
+        userId,
+        addressInfo.address,
+        'TRC20',
+        'HD Wallet Deposit Address'
+      ]
+    );
+    
+    // 5. 更新用户表中的deposit_address字段（保持兼容性）
+    await connection.execute(
+      'UPDATE users SET deposit_address = ?, updated_at = NOW() WHERE id = ?',
+      [addressInfo.address, userId]
+    );
+    
+    // 6. 创建地址监控订阅
+    try {
+      await this.tatumService.createAddressSubscription(addressInfo.address);
+      console.log(`✅ 为地址 ${addressInfo.address} 创建监控订阅成功`);
+    } catch (subscriptionError) {
+      console.warn(`⚠️ 创建地址监控订阅失败: ${subscriptionError.message}`);
+      // 不影响用户创建流程，继续执行
+    }
+    
+    await connection.commit();
+    
+    // 7. 获取完整的用户信息
+    const [userRows] = await connection.execute(
+      'SELECT * FROM users WHERE id = ?',
+      [userId]
+    );
+    
+    const user = userRows[0];
+    
+    console.log(`✅ 用户${userId}创建成功，HD钱包地址: ${addressInfo.address}`);
+    
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      phone: user.phone,
+      invitationCode: user.invitation_code,
+      inviterId: user.inviter_id,
+      trc20Address: addressInfo.address,
+      addressIndex: addressInfo.derivationIndex,
+      status: user.status,
+      createdAt: user.created_at
+    };
+    
+  } catch (error) {
+    await connection.rollback();
+    console.error('创建用户失败:', error);
+    throw error;
+  } finally {
+    connection.release();
+  }
+}
+
+  /**
+   * 加密私钥
+   * @param {string} privateKey - 原始私钥
+   * @returns {string} 加密后的私钥
+   */
+  encryptPrivateKey(privateKey) {
+    const crypto = require('crypto');
+    const algorithm = 'aes-256-cbc';
+    const key = crypto.createHash('sha256').update(process.env.WALLET_ENCRYPTION_KEY || 'default-encryption-key-change-in-production').digest();
+    const iv = crypto.randomBytes(16);
+    
+    const cipher = crypto.createCipheriv(algorithm, key, iv);
+    let encrypted = cipher.update(privateKey, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    
+    return `${iv.toString('hex')}:${encrypted}`;
+  }
+
+  /**
+   * 解密私钥
+   * @param {string} encryptedPrivateKey - 加密的私钥
+   * @returns {string} 解密后的私钥
+   */
+  decryptPrivateKey(encryptedPrivateKey) {
+    const crypto = require('crypto');
+    const algorithm = 'aes-256-cbc';
+    const key = crypto.createHash('sha256').update(process.env.WALLET_ENCRYPTION_KEY || 'default-encryption-key-change-in-production').digest();
+    
+    const [ivHex, encrypted] = encryptedPrivateKey.split(':');
+    const iv = Buffer.from(ivHex, 'hex');
+    
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+    let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    
+    return decrypted;
+  }
 }
 
 module.exports = UserService;

@@ -197,11 +197,18 @@ const requireRole = (requiredRole) => {
   };
 };
 
+/**
+ * 管理员权限检查中间件
+ * 组合认证和管理员角色检查
+ */
+const requireAdminAuth = [authenticateToken, requireRole('admin')];
+
 module.exports = {
   authenticateToken,
   optionalAuth,
   generateToken,
   blacklistToken,
   checkUserStatus,
-  requireRole
+  requireRole,
+  requireAdminAuth
 };

@@ -36,6 +36,7 @@ const transactionRoutes = require('./routes/transactionRoutes');
 const feeProfitRoutes = require('./routes/fee-profit');
 const realWalletRoutes = require('./routes/realWallet');
 const monitoringRoutes = require('./routes/monitoring');
+const hdWalletRoutes = require('./routes/hdWallet');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -243,6 +244,7 @@ app.use('/api/transaction', transactionRoutes);
 app.use('/api/fee-profit', feeProfitRoutes);
 app.use('/api/real-wallet', realWalletRoutes);
 app.use('/api/monitoring', monitoringRoutes);
+app.use('/api/hd-wallet', hdWalletRoutes);
 app.use('/api/tatum', require('./routes/tatumWebhook'));
 app.use('/api/virtual-wallet', require('./routes/virtualWallet'));
 app.use('/api/test', require('./routes/testRoutes')); // 测试API路由

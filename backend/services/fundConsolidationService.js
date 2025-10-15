@@ -384,13 +384,257 @@ class FundConsolidationService {
     }
 
     /**
-     * 销毁服务
+     * 启动自动归集服务
+     * 定期检查用户钱包余额并执行资金归集
      */
-    async destroy() {
-        if (this.tatum) {
-            await this.tatum.destroy();
+    async startAutoConsolidation() {
+    if (this.isRunning) {
+        console.log('⚠️ 自动归集服务已在运行中');
+        return;
+    }
+
+    this.isRunning = true;
+    console.log('🚀 启动HD钱包自动归集服务...');
+    
+    // 立即执行一次归集
+    await this.performAutoConsolidation();
+    
+    // 设置定时任务
+    this.consolidationTimer = setInterval(async () => {
+        try {
+            await this.performAutoConsolidation();
+        } catch (error) {
+            console.error('❌ 定时归集执行失败:', error);
+        }
+    }, this.consolidationInterval);
+    
+    console.log(`✅ 自动归集服务已启动，间隔: ${this.consolidationInterval / 1000 / 60} 分钟`);
+    }
+
+    /**
+     * 停止自动归集服务
+     */
+    stopAutoConsolidation() {
+        if (this.consolidationTimer) {
+            clearInterval(this.consolidationTimer);
+            this.consolidationTimer = null;
+        }
+        this.isRunning = false;
+        console.log('🛑 自动归集服务已停止');
+    }
+
+    /**
+     * 执行自动归集
+     */
+    async performAutoConsolidation() {
+    try {
+        console.log('🔍 开始检查需要归集的HD钱包地址...');
+        
+        // 获取需要归集的钱包列表
+        const walletsToConsolidate = await this.getWalletsForConsolidation(this.minConsolidationAmount);
+        
+        if (walletsToConsolidate.length === 0) {
+            console.log('📊 暂无需要归集的钱包地址');
+            return;
+        }
+        
+        console.log(`📊 发现 ${walletsToConsolidate.length} 个钱包需要归集`);
+        
+        // 批量执行归集
+        const results = await this.batchConsolidateWallets(walletsToConsolidate);
+        
+        // 统计结果
+        const successCount = results.filter(r => r.success).length;
+        const failCount = results.filter(r => !r.success).length;
+        
+        console.log(`✅ 归集完成: 成功 ${successCount} 个，失败 ${failCount} 个`);
+        
+        // 记录归集历史
+        await this.recordBatchConsolidation(results);
+        
+    } catch (error) {
+        console.error('❌ 自动归集执行失败:', error);
+    }
+}
+
+/**
+ * 批量归集钱包资金
+ * @param {Array} wallets - 钱包列表
+ * @returns {Array} 归集结果
+ */
+async batchConsolidateWallets(wallets) {
+    const results = [];
+    
+    for (const wallet of wallets) {
+        try {
+            console.log(`🔄 正在归集钱包: ${wallet.wallet_address} (余额: ${wallet.balance} USDT)`);
+            
+            const result = await this.consolidateWallet(wallet);
+            results.push({
+                ...result,
+                success: true
+            });
+            
+            // 添加延迟避免API限制
+            await this.sleep(2000);
+            
+        } catch (error) {
+            console.error(`❌ 钱包 ${wallet.wallet_address} 归集失败:`, error);
+            results.push({
+                wallet_address: wallet.wallet_address,
+                user_id: wallet.user_id,
+                amount: wallet.balance,
+                error: error.message,
+                success: false
+            });
         }
     }
+    
+    return results;
+}
+
+/**
+ * 记录批量归集历史
+ * @param {Array} results - 归集结果
+ */
+async recordBatchConsolidation(results) {
+    try {
+        const connection = await pool.getConnection();
+        
+        for (const result of results) {
+            await connection.execute(`
+                INSERT INTO fund_consolidations 
+                (user_id, from_address, to_address, amount, transaction_hash, status, error_message, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
+            `, [
+                result.user_id,
+                result.wallet_address,
+                this.masterWalletAddress,
+                result.amount,
+                result.transaction_hash || null,
+                result.success ? 'completed' : 'failed',
+                result.error || null
+            ]);
+        }
+        
+        connection.release();
+        console.log(`📝 已记录 ${results.length} 条归集历史`);
+        
+    } catch (error) {
+        console.error('❌ 记录归集历史失败:', error);
+    }
+}
+
+/**
+ * 获取归集统计信息
+ * @returns {Object} 统计信息
+ */
+async getConsolidationStats() {
+    try {
+        const connection = await pool.getConnection();
+        
+        // 今日归集统计
+        const [todayStats] = await connection.execute(`
+            SELECT 
+                COUNT(*) as total_consolidations,
+                SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as successful_consolidations,
+                SUM(CASE WHEN status = 'completed' THEN amount ELSE 0 END) as total_amount_consolidated
+            FROM fund_consolidations 
+            WHERE DATE(created_at) = CURDATE()
+        `);
+        
+        // 本月归集统计
+        const [monthStats] = await connection.execute(`
+            SELECT 
+                COUNT(*) as total_consolidations,
+                SUM(CASE WHEN status = 'completed' THEN amount ELSE 0 END) as total_amount_consolidated
+            FROM fund_consolidations 
+            WHERE YEAR(created_at) = YEAR(CURDATE()) 
+            AND MONTH(created_at) = MONTH(CURDATE())
+        `);
+        
+        // 待归集钱包数量
+        const walletsToConsolidate = await this.getWalletsForConsolidation(this.minConsolidationAmount);
+        
+        connection.release();
+        
+        return {
+            today: todayStats[0],
+            thisMonth: monthStats[0],
+            pendingWallets: walletsToConsolidate.length,
+            isRunning: this.isRunning,
+            minConsolidationAmount: this.minConsolidationAmount,
+            consolidationInterval: this.consolidationInterval / 1000 / 60 // 转换为分钟
+        };
+        
+    } catch (error) {
+        console.error('❌ 获取归集统计失败:', error);
+        throw error;
+    }
+}
+
+/**
+ * 手动触发归集
+ * @param {number} minAmount - 最小归集金额
+ * @returns {Object} 归集结果
+ */
+async manualConsolidate(minAmount = null) {
+    try {
+        const consolidationAmount = minAmount || this.minConsolidationAmount;
+        console.log(`🔧 手动触发归集，最小金额: ${consolidationAmount} USDT`);
+        
+        const walletsToConsolidate = await this.getWalletsForConsolidation(consolidationAmount);
+        
+        if (walletsToConsolidate.length === 0) {
+            return {
+                success: true,
+                message: '暂无需要归集的钱包地址',
+                consolidatedCount: 0,
+                totalAmount: 0
+            };
+        }
+        
+        const results = await this.batchConsolidateWallets(walletsToConsolidate);
+        const successResults = results.filter(r => r.success);
+        const totalAmount = successResults.reduce((sum, r) => sum + r.amount, 0);
+        
+        await this.recordBatchConsolidation(results);
+        
+        return {
+            success: true,
+            message: `成功归集 ${successResults.length} 个钱包`,
+            consolidatedCount: successResults.length,
+            totalAmount: totalAmount,
+            results: results
+        };
+        
+    } catch (error) {
+        console.error('❌ 手动归集失败:', error);
+        return {
+            success: false,
+            message: error.message,
+            consolidatedCount: 0,
+            totalAmount: 0
+        };
+    }
+}
+
+/**
+ * 延迟函数
+ * @param {number} ms - 延迟毫秒数
+ */
+sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * 销毁服务
+ */
+async destroy() {
+    if (this.tatum) {
+        await this.tatum.destroy();
+    }
+}
 }
 
 /**
