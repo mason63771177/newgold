@@ -7634,14 +7634,46 @@
      * 显示登录注册界面
      */
     function showLoginRegister() {
-      // 跳转到登录注册页面
-      window.location.href = 'login.html';
+      // 使用兼容性模块进行优化跳转
+      if (window.BrowserCompatibility) {
+        const success = window.BrowserCompatibility.NavigationOptimizer.smoothRedirect('login.html', 'indexToLogin', 50);
+        if (!success) {
+          console.log('跳转被阻止或已在目标页面');
+        }
+      } else {
+        // 后备方案：传统跳转逻辑
+        // 防止重复跳转
+        if (window.redirectingToLogin) {
+          return;
+        }
+        window.redirectingToLogin = true;
+        
+        // 检查当前是否已在登录页面
+        const currentPath = window.location.pathname;
+        const currentHref = window.location.href;
+        
+        const isOnLoginPage = 
+          currentPath.endsWith('login.html') ||
+          currentHref.includes('login.html');
+        
+        if (isOnLoginPage) {
+          console.log('已在登录页面，无需跳转');
+          return;
+        }
+        
+        // 使用更温和的跳转方式，减少闪烁
+        console.log('跳转到登录页面');
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 50);
+      }
     }
     
 
 
   </script>
   <script src="js/auth-utils.js"></script>
+  <script src="js/browser-compatibility.js"></script>
   <script>
     window.onload = init;
   </script>

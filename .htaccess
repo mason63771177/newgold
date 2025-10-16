@@ -5,3 +5,35 @@ AddType image/png .png
 AddType image/jpeg .jpg
 AddType image/gif .gif
 AddType image/svg+xml .svg
+
+# 缓存控制 - 防止浏览器缓存导致的不一致问题
+<IfModule mod_headers.c>
+    # 对 HTML 文件设置较短的缓存时间
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+    
+    # 对 JavaScript 文件设置版本控制
+    <FilesMatch "\.(js)$">
+        Header set Cache-Control "public, max-age=300"
+        Header set ETag ""
+    </FilesMatch>
+    
+    # 对 CSS 文件设置版本控制
+    <FilesMatch "\.(css)$">
+        Header set Cache-Control "public, max-age=300"
+        Header set ETag ""
+    </FilesMatch>
+</IfModule>
+
+# 错误页面重定向
+ErrorDocument 404 /index.html
+
+# 安全头部
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>

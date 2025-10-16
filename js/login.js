@@ -3,6 +3,19 @@
  * 包含表单切换、表单验证、密码强度检测等功能
  */
 
+// 引入浏览器兼容性模块
+const script = document.createElement('script');
+script.src = 'js/browser-compatibility.js';
+document.head.appendChild(script);
+
+// 等待兼容性模块加载完成
+script.onload = function() {
+  console.log('浏览器兼容性模块已加载');
+};
+
+// 防止重复检查登录状态
+window.loginStatusChecked = false;
+
 // 全局变量
 let currentForm = 'login';
 
@@ -16,8 +29,17 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
  * 在DOM加载完成后执行所有初始化操作
  */
 document.addEventListener('DOMContentLoaded', function() {
-    // 检查登录状态，如果已登录则跳转到主页
-    checkLoginStatus();
+    console.log('登录页面 DOM 加载完成');
+    
+    // 使用兼容性模块的DOM就绪检查器
+    if (window.BrowserCompatibility) {
+        window.BrowserCompatibility.DOMReadyChecker.whenReady(() => {
+            checkLoginStatus();
+        });
+    } else {
+        // 兼容性模块未加载时的后备方案
+        setTimeout(checkLoginStatus, 100);
+    }
     
     // 设置表单切换事件
     setupFormTabs();
@@ -40,22 +62,62 @@ document.addEventListener('DOMContentLoaded', function() {
  * 如果用户已登录，则跳转到主页
  */
 function checkLoginStatus() {
-    // 检查当前页面是否已经是主页，避免不必要的跳转
-    const currentPath = window.location.pathname;
-    const isOnIndexPage = currentPath.endsWith('index.html') || currentPath.endsWith('/');
-    
-    if (isOnIndexPage) {
-        console.log('已在主页，无需跳转');
+    // 防止重复检查
+    if (window.loginStatusChecked) {
+        console.log('登录状态已检查过，跳过重复检查');
         return;
     }
     
-    const currentUser = localStorage.getItem('currentUser');
-    const token = localStorage.getItem('authToken');
+    console.log('开始检查登录状态');
     
-    if (currentUser && token) {
-        // 用户已登录，跳转到主页
-        console.log('用户已登录，跳转到主页');
-        window.location.href = 'index.html';
+    // 使用兼容性模块检查页面状态
+    let isOnLoginPage = false;
+    let isOnIndexPage = false;
+    
+    if (window.BrowserCompatibility) {
+        isOnLoginPage = window.BrowserCompatibility.PageStateManager.isOnPage('login');
+        isOnIndexPage = window.BrowserCompatibility.PageStateManager.isOnPage('index');
+    } else {
+        // 后备检查方案
+        const currentPath = window.location.pathname;
+        const currentHref = window.location.href;
+        
+        isOnLoginPage = currentPath.endsWith('login.html') || currentHref.includes('login.html');
+        isOnIndexPage = currentPath.endsWith('/') || 
+                       currentPath.endsWith('/newgold/') ||
+                       currentPath.endsWith('index.html') ||
+                       currentHref.includes('index.html');
+    }
+    
+    // 只在登录页面执行登录状态检查
+    if (!isOnLoginPage) {
+        console.log('不在登录页面，跳过登录状态检查');
+        return;
+    }
+    
+    window.loginStatusChecked = true;
+    
+    // 检查用户是否已登录
+    if (typeof AuthUtils !== 'undefined' && AuthUtils.isLoggedIn()) {
+        console.log('用户已登录，准备跳转到主页');
+        
+        // 如果已在主页，不进行跳转
+        if (isOnIndexPage) {
+            console.log('已在主页，无需跳转');
+            return;
+        }
+        
+        // 使用兼容性模块进行优化跳转
+        if (window.BrowserCompatibility) {
+            window.BrowserCompatibility.NavigationOptimizer.smoothRedirect('index.html', 'loginToIndex', 100);
+        } else {
+            // 后备跳转方案
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 100);
+        }
+    } else {
+        console.log('用户未登录，显示登录界面');
     }
 }
 
