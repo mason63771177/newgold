@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function checkLoginStatus() {
     const currentUser = localStorage.getItem('currentUser');
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('authToken');
     
     if (currentUser && token) {
         // 用户已登录，跳转到主页
@@ -269,7 +269,7 @@ async function handleLogin() {
             
             if (response.ok) {
                 // 登录成功
-                localStorage.setItem('token', data.token);
+                localStorage.setItem('authToken', data.token);
                 localStorage.setItem('currentUser', JSON.stringify(data.user));
                 showMessage('登录成功！正在跳转...', 'success');
                 
@@ -288,7 +288,7 @@ async function handleLogin() {
             if (user) {
                 // 登录成功
                 const token = 'mock_token_' + Date.now();
-                localStorage.setItem('token', token);
+                localStorage.setItem('authToken', token);
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 showMessage('登录成功！正在跳转...', 'success');
                 
