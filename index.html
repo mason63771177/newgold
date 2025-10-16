@@ -4075,7 +4075,13 @@
         return;
       }
       
-      // 连接WebSocket服务器（使用正确的路径和token）
+      // 检查是否在GitHub Pages环境（生产环境）
+      if (window.location.hostname === 'mason63771177.github.io') {
+        console.log('生产环境下跳过WebSocket连接');
+        return;
+      }
+      
+      // 连接WebSocket服务器（仅在开发环境）
       websocket = new WebSocket(`ws://localhost:3000/ws?token=${encodeURIComponent(token)}`);
       
       websocket.onopen = function(event) {
@@ -4093,8 +4099,10 @@
       
       websocket.onclose = function(event) {
         console.log('WebSocket连接已关闭');
-        // 5秒后尝试重连
-        setTimeout(initWebSocket, 5000);
+        // 仅在开发环境下尝试重连
+        if (window.location.hostname !== 'mason63771177.github.io') {
+          setTimeout(initWebSocket, 5000);
+        }
       };
       
       websocket.onerror = function(error) {
