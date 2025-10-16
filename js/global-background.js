@@ -59,10 +59,8 @@
         <!-- 内圈装饰 -->
         <circle cx="100" cy="100" r="55" fill="none" stroke="url(#innerGradient)" stroke-width="2" opacity="0.7" />
         <circle cx="100" cy="100" r="40" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.5" />
-        <!-- 金币符号 ¥ -->
-        <g transform="translate(100,100)" fill="#FFFFFF" opacity="0.9">
-          <text x="0" y="8" text-anchor="middle" font-size="32" font-weight="bold" font-family="serif">¥</text>
-        </g>
+        <!-- 中心装饰圆点 -->
+        <circle cx="100" cy="100" r="20" fill="#8B4513" opacity="0.8" />
         <!-- 装饰性光点 -->
         <circle cx="70" cy="70" r="3" fill="#FFFF00" opacity="0.8">
           <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite"/>
