@@ -23,7 +23,7 @@ class WebSocketClient {
         return;
       }
 
-      const wsUrl = `ws://localhost:3000?token=${encodeURIComponent(token)}`;
+      const wsUrl = `ws://localhost:3000/ws?token=${encodeURIComponent(token)}`;
       this.ws = new WebSocket(wsUrl);
 
       this.ws.onopen = this.onOpen.bind(this);

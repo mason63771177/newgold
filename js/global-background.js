@@ -24,7 +24,7 @@
     // 创建logo图片
     const logoImage = document.createElement('img');
     logoImage.className = 'global-logo-image';
-    logoImage.src = 'logo_gold7.png'; // 正确的logo文件路径
+    logoImage.src = '/newgold/assets/images/logo_gold7-BN-9ArRY.png'; // 正确的logo文件路径
     logoImage.alt = 'Background Logo';
     logoImage.loading = 'lazy';
     

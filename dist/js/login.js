@@ -16,6 +16,9 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
  * 在DOM加载完成后执行所有初始化操作
  */
 document.addEventListener('DOMContentLoaded', function() {
+    // 检查登录状态，如果已登录则跳转到主页
+    checkLoginStatus();
+    
     // 设置表单切换事件
     setupFormTabs();
     
@@ -31,6 +34,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // 设置页面可见性监听
     setupVisibilityListener();
 });
+
+/**
+ * 检查登录状态
+ * 如果用户已登录，则跳转到主页
+ */
+function checkLoginStatus() {
+    const currentUser = localStorage.getItem('currentUser');
+    const token = localStorage.getItem('token');
+    
+    if (currentUser && token) {
+        // 用户已登录，跳转到主页
+        console.log('用户已登录，跳转到主页');
+        window.location.href = 'index.html';
+    }
+}
 
 /**
  * 表单切换功能设置

@@ -8,6 +8,8 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
+import fs from 'fs';
+import path from 'path';
 
 export default defineConfig({
   // 根目录
@@ -178,6 +180,29 @@ export default defineConfig({
   
   // 插件配置
   plugins: [
+    // 自定义插件：复制JavaScript文件
+    {
+      name: 'copy-js-files',
+      generateBundle() {
+        // 复制js目录下的所有文件
+        const jsDir = path.resolve(process.cwd(), 'js');
+        
+        if (fs.existsSync(jsDir)) {
+          const files = fs.readdirSync(jsDir);
+          files.forEach(file => {
+            if (file.endsWith('.js')) {
+              const filePath = path.join(jsDir, file);
+              const content = fs.readFileSync(filePath, 'utf-8');
+              this.emitFile({
+                type: 'asset',
+                fileName: `js/${file}`,
+                source: content
+              });
+            }
+          });
+        }
+      }
+    },
     // 自定义插件：生成构建信息
     {
       name: 'build-info',

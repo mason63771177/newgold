@@ -24,7 +24,7 @@
     // 创建logo图片
     const logoImage = document.createElement('img');
     logoImage.className = 'global-logo-image';
-    logoImage.src = 'logo_gold7.png'; // 正确的logo文件路径
+    logoImage.src = '/newgold/assets/images/logo_gold7-BN-9ArRY.png'; // 正确的logo文件路径
     logoImage.alt = 'Background Logo';
     logoImage.loading = 'lazy';
     
@@ -43,14 +43,31 @@
       svgLogo.innerHTML = `
         <defs>
           <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:var(--accent-color, #40E0D0);stop-opacity:0.8" />
-            <stop offset="100%" style="stop-color:var(--secondary-color, #FF6B6B);stop-opacity:0.6" />
+            <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.9" />
+            <stop offset="50%" style="stop-color:#FFA500;stop-opacity:0.8" />
+            <stop offset="100%" style="stop-color:#FF6B35;stop-opacity:0.7" />
+          </linearGradient>
+          <linearGradient id="innerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#FFFF00;stop-opacity:0.6" />
+            <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0.4" />
           </linearGradient>
         </defs>
-        <circle cx="100" cy="100" r="80" fill="url(#logoGradient)" />
-        <circle cx="100" cy="100" r="60" fill="none" stroke="var(--accent-color, #40E0D0)" stroke-width="2" opacity="0.6" />
-        <circle cx="100" cy="100" r="40" fill="none" stroke="var(--accent-color, #40E0D0)" stroke-width="1" opacity="0.4" />
-        <text x="100" y="110" text-anchor="middle" fill="var(--text-primary, #ffffff)" font-size="24" font-weight="bold" opacity="0.8">LOGO</text>
+        <!-- 外圈金色光环 -->
+        <circle cx="100" cy="100" r="85" fill="none" stroke="url(#logoGradient)" stroke-width="3" opacity="0.8" />
+        <!-- 主体金币 -->
+        <circle cx="100" cy="100" r="70" fill="url(#logoGradient)" />
+        <!-- 内圈装饰 -->
+        <circle cx="100" cy="100" r="55" fill="none" stroke="url(#innerGradient)" stroke-width="2" opacity="0.7" />
+        <circle cx="100" cy="100" r="40" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.5" />
+        <!-- 中心装饰圆点 -->
+        <circle cx="100" cy="100" r="20" fill="#8B4513" opacity="0.8" />
+        <!-- 装饰性光点 -->
+        <circle cx="70" cy="70" r="3" fill="#FFFF00" opacity="0.8">
+          <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="130" cy="130" r="2" fill="#FFD700" opacity="0.6">
+          <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3s" repeatCount="indefinite"/>
+        </circle>
       `;
       
       // 替换失败的图片
