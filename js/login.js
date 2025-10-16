@@ -270,7 +270,7 @@ async function handleLogin() {
             if (response.ok) {
                 // 登录成功
                 localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('currentUser', JSON.stringify(data.user));
                 showMessage('登录成功！正在跳转...', 'success');
                 
                 setTimeout(() => {
@@ -289,7 +289,7 @@ async function handleLogin() {
                 // 登录成功
                 const token = 'mock_token_' + Date.now();
                 localStorage.setItem('token', token);
-                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('currentUser', JSON.stringify(user));
                 showMessage('登录成功！正在跳转...', 'success');
                 
                 setTimeout(() => {
