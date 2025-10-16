@@ -70,9 +70,9 @@ const TokenManager = {
       return false;
     }
     
-    // 排除测试token
-    if (token === 'demo-token' || token === 'mock-token-1' || token.startsWith('test-token-')) {
-      return true; // 测试环境下认为有效
+    // 排除测试token - 但GitHub Pages模式下的token应该被认为有效
+    if (token === 'demo-token' || token === 'mock-token-1' || token.startsWith('test-token-') || token.startsWith('github-pages-token-') || token.startsWith('mock_token_')) {
+      return true; // 测试环境和GitHub Pages环境下认为有效
     }
     
     // JWT token基本格式检查（三段式，用.分隔）
