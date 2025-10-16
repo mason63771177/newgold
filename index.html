@@ -6530,6 +6530,11 @@
     }
     
     function logout() {
+      // 使用AuthUtils进行完整的登出操作
+      if (typeof AuthUtils !== 'undefined') {
+        AuthUtils.logout();
+      }
+      
       // 清除所有用户相关的本地存储数据
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userPassword');
@@ -6539,6 +6544,8 @@
       localStorage.removeItem('language');
       localStorage.removeItem('userStatus');
       localStorage.removeItem('inviteCode');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('currentUser');
       
       // 直接跳转到登录页面
       window.location.href = 'login.html';
