@@ -40,6 +40,15 @@ document.addEventListener('DOMContentLoaded', function() {
  * 如果用户已登录，则跳转到主页
  */
 function checkLoginStatus() {
+    // 检查当前页面是否已经是主页，避免不必要的跳转
+    const currentPath = window.location.pathname;
+    const isOnIndexPage = currentPath.endsWith('index.html') || currentPath.endsWith('/');
+    
+    if (isOnIndexPage) {
+        console.log('已在主页，无需跳转');
+        return;
+    }
+    
     const currentUser = localStorage.getItem('currentUser');
     const token = localStorage.getItem('authToken');
     
