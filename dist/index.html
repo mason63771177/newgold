@@ -871,10 +871,10 @@
     // ===== API 调用工具函数 =====
     const API_BASE_URL = 'http://localhost:3000';
     
-    // 获取认证token
+    // 获取认证token（使用统一的认证工具）
     function getAuthToken() {
-      // 从localStorage获取真实的JWT token
-      const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+      // 使用AuthUtils获取token
+      const token = AuthUtils.getToken();
       
       // 如果没有有效token，使用默认的模拟token
       if (!token || token === 'demo-token') {
@@ -1800,15 +1800,17 @@
       // 从 localStorage 加载历史状态
       loadState();
       
-      // 检查用户是否已登录
-      const currentUser = localStorage.getItem('currentUser');
-      
-      if (!currentUser) {
+      // 使用统一的认证工具检查登录状态
+      if (!AuthUtils.isLoggedIn()) {
         // 未登录，直接跳转到登录页面
         hideLoadingScreen();
         showLoginRegister();
         return;
       }
+      
+      // 获取当前用户信息（已验证过的）
+      const currentUser = AuthUtils.getCurrentUser();
+      console.log('用户已登录:', currentUser.email || currentUser.id);
       
       // 尝试从后端同步状态
       syncWithBackend();
@@ -4980,6 +4982,7 @@
 
     window.onload = init;
   </script>
+  <script src="js/auth-utils.js"></script>
   <script src="js/global-background.js"></script>
   <script src="js/performance-optimization.js"></script>
   <script src="public/js/websocket.js"></script>
