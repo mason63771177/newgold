@@ -326,33 +326,46 @@ async function handleLogin() {
     showLoadingState(submitBtn, '登录中...');
     
     try {
+        let useLocalStorage = false;
+        
         if (API_BASE_URL) {
-            // 本地开发模式：调用后端API
-            const response = await fetch(`${API_BASE_URL}/auth/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password })
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok) {
-                // 登录成功
-                localStorage.setItem('authToken', data.token);
-                localStorage.setItem('currentUser', JSON.stringify(data.user));
-                showMessage('登录成功！正在跳转...', 'success');
+            try {
+                // 本地开发模式：调用后端API
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
                 
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1500);
-            } else {
-                // 登录失败
-                showMessage(data.message || '登录失败，请检查邮箱和密码', 'error');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // 登录成功
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('currentUser', JSON.stringify(data.user));
+                    localStorage.setItem('userEmail', data.user.email);
+                    localStorage.setItem('userInviteCode', data.user.inviteCode);
+                    showMessage('登录成功！正在跳转...', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                } else {
+                    // 登录失败
+                    showMessage(data.message || '登录失败，请检查邮箱和密码', 'error');
+                }
+            } catch (error) {
+                console.warn('API连接失败，回退到本地存储模式:', error);
+                useLocalStorage = true;
             }
         } else {
-            // GitHub Pages模式：使用本地存储模拟登录
+            useLocalStorage = true;
+        }
+        
+        if (useLocalStorage) {
+            // GitHub Pages模式或API连接失败：使用本地存储模拟登录
             const users = JSON.parse(localStorage.getItem('users') || '[]');
             const user = users.find(u => u.email === email && u.password === password);
             
@@ -361,6 +374,8 @@ async function handleLogin() {
                 const token = 'mock_token_' + Date.now();
                 localStorage.setItem('authToken', token);
                 localStorage.setItem('currentUser', JSON.stringify(user));
+                localStorage.setItem('userEmail', user.email);
+                localStorage.setItem('userInviteCode', user.inviteCode);
                 showMessage('登录成功！正在跳转...', 'success');
                 
                 setTimeout(() => {
@@ -399,32 +414,43 @@ async function handleRegister() {
     showLoadingState(submitBtn, '注册中...');
     
     try {
+        let useLocalStorage = false;
+        
         if (API_BASE_URL) {
-            // 本地开发模式：调用后端API
-            const response = await fetch(`${API_BASE_URL}/auth/register`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password, inviteCode })
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok) {
-                // 注册成功
-                showMessage('注册成功！请登录', 'success');
+            try {
+                // 尝试调用后端API
+                const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password, inviteCode })
+                });
                 
-                setTimeout(() => {
-                    switchForm('login');
-                    document.getElementById('loginEmail').value = email;
-                }, 1500);
-            } else {
-                // 注册失败
-                showMessage(data.message || '注册失败，请重试', 'error');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // 注册成功
+                    showMessage('注册成功！请登录', 'success');
+                    
+                    setTimeout(() => {
+                        switchForm('login');
+                        document.getElementById('loginEmail').value = email;
+                    }, 1500);
+                } else {
+                    // 注册失败
+                    showMessage(data.message || '注册失败，请重试', 'error');
+                }
+            } catch (apiError) {
+                console.warn('API连接失败，回退到本地存储模式:', apiError);
+                useLocalStorage = true;
             }
         } else {
-            // GitHub Pages模式：使用本地存储模拟注册
+            useLocalStorage = true;
+        }
+        
+        if (useLocalStorage) {
+            // 使用本地存储模拟注册
             const users = JSON.parse(localStorage.getItem('users') || '[]');
             
             // 检查邮箱是否已存在
@@ -454,7 +480,7 @@ async function handleRegister() {
         }
     } catch (error) {
         console.error('注册错误:', error);
-        showMessage('网络错误，请稍后重试', 'error');
+        showMessage('注册失败，请重试', 'error');
     } finally {
         // 恢复按钮状态
         hideLoadingState(submitBtn, '注册');
