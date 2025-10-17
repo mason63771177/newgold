@@ -164,29 +164,35 @@
             errorMessage.style.display = 'none';
             
             try {
-                const response = await fetch('/api/admin/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
+                // 纯前端验证 - 硬编码的管理员账号
+                const validAccounts = {
+                    'admin': 'admin123',
+                    'manager': 'manager123'
+                };
                 
-                const data = await response.json();
-                
-                if (response.ok) {
-                    // 登录成功，保存token并跳转
-                    localStorage.setItem('adminToken', data.token);
-                    localStorage.setItem('adminUser', JSON.stringify(data.user));
-                    window.location.href = '/admin.html';
+                // 验证用户名和密码
+                if (validAccounts[username] && validAccounts[username] === password) {
+                    // 登录成功，生成模拟token并保存用户信息
+                    const mockToken = 'mock-admin-token-' + Date.now();
+                    const userData = {
+                        username: username,
+                        role: username === 'admin' ? 'super_admin' : 'admin',
+                        permissions: username === 'admin' ? ['all'] : ['read', 'write']
+                    };
+                    
+                    localStorage.setItem('adminToken', mockToken);
+                    localStorage.setItem('adminUser', JSON.stringify(userData));
+                    
+                    // 跳转到管理后台主页
+                    window.location.href = 'admin.html';
                 } else {
                     // 显示错误信息
-                    errorMessage.textContent = data.message || '登录失败，请检查用户名和密码';
+                    errorMessage.textContent = '用户名或密码错误';
                     errorMessage.style.display = 'block';
                 }
             } catch (error) {
                 console.error('登录错误:', error);
-                errorMessage.textContent = '网络错误，请稍后重试';
+                errorMessage.textContent = '登录失败，请重试';
                 errorMessage.style.display = 'block';
             } finally {
                 // 恢复按钮状态
@@ -200,21 +206,9 @@
          */
         function checkLoginStatus() {
             const token = localStorage.getItem('adminToken');
-            if (token) {
-                // 验证token有效性
-                fetch('/api/admin/verify', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = '/admin.html';
-                    }
-                })
-                .catch(error => {
-                    console.log('Token验证失败:', error);
-                });
+            if (token && token.startsWith('mock-admin-token-')) {
+                // 已登录，直接跳转到管理后台
+                window.location.href = 'admin.html';
             }
         }
 
