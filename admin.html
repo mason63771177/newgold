@@ -741,10 +741,10 @@
         let isLoggedIn = false;
         let authToken = null;
         
-        // API基础URL
+        // API基础URL - 线上环境使用模拟数据
         const API_BASE_URL = window.location.hostname === 'localhost' 
             ? 'http://localhost:3000/api' 
-            : 'http://localhost:3000/api';
+            : null; // 线上环境不连接API，使用模拟数据
 
         /**
          * 页面初始化
@@ -1296,6 +1296,11 @@
          * API请求封装
          */
         async function apiRequest(endpoint, options = {}) {
+            // 如果是线上环境（API_BASE_URL为null），返回模拟数据
+            if (!API_BASE_URL) {
+                return getMockData(endpoint);
+            }
+            
             const url = `${API_BASE_URL}${endpoint}`;
             const config = {
                 headers: {
@@ -1318,6 +1323,101 @@
                 console.error('API请求错误:', error);
                 throw error;
             }
+        }
+
+        /**
+         * 获取模拟数据
+         */
+        function getMockData(endpoint) {
+            const mockData = {
+                '/admin/dashboard': {
+                    totalUsers: 1250,
+                    totalWallets: 980,
+                    totalTransactions: 3456,
+                    totalVolume: 125000.50,
+                    todayNewUsers: 45,
+                    todayTransactions: 128,
+                    todayVolume: 8500.25,
+                    yesterdayUsers: 38,
+                    yesterdayTransactions: 95,
+                    yesterdayVolume: 6200.80
+                },
+                '/admin/users': {
+                    users: [
+                        {
+                            id: 1,
+                            email: 'user1@example.com',
+                            status: 'active',
+                            balance: 1500.00,
+                            registeredAt: '2024-01-15T10:30:00Z',
+                            lastLogin: '2024-01-20T14:25:00Z',
+                            inviteCode: 'INV001'
+                        },
+                        {
+                            id: 2,
+                            email: 'user2@example.com',
+                            status: 'inactive',
+                            balance: 750.50,
+                            registeredAt: '2024-01-16T09:15:00Z',
+                            lastLogin: '2024-01-19T16:45:00Z',
+                            inviteCode: 'INV002'
+                        }
+                    ]
+                },
+                '/admin/wallets': {
+                    wallets: [
+                        {
+                            address: 'TXYZabc123def456ghi789jkl012mno345pqr678',
+                            userId: 1,
+                            balance: 1500.00,
+                            status: 'active',
+                            createdAt: '2024-01-15T10:30:00Z',
+                            lastActivity: '2024-01-20T14:25:00Z'
+                        },
+                        {
+                            address: 'TQRStuv789wxy012abc345def678ghi901jkl234',
+                            userId: 2,
+                            balance: 750.50,
+                            status: 'inactive',
+                            createdAt: '2024-01-16T09:15:00Z',
+                            lastActivity: '2024-01-19T16:45:00Z'
+                        }
+                    ]
+                },
+                '/admin/transactions': {
+                    transactions: [
+                        {
+                            hash: 'tx123abc456def789ghi012jkl345mno678pqr901',
+                            type: 'deposit',
+                            from: 'TXYZabc123def456ghi789jkl012mno345pqr678',
+                            to: 'TQRStuv789wxy012abc345def678ghi901jkl234',
+                            amount: 100.00,
+                            status: 'confirmed',
+                            timestamp: '2024-01-20T14:25:00Z'
+                        },
+                        {
+                            hash: 'tx456def789ghi012jkl345mno678pqr901stu234',
+                            type: 'withdraw',
+                            from: 'TQRStuv789wxy012abc345def678ghi901jkl234',
+                            to: 'TXYZabc123def456ghi789jkl012mno345pqr678',
+                            amount: 50.00,
+                            status: 'pending',
+                            timestamp: '2024-01-20T15:30:00Z'
+                        }
+                    ]
+                },
+                '/admin/monitoring': {
+                    monitoring: {
+                        serverStatus: '正常',
+                        dbStatus: '正常',
+                        networkStatus: '正常',
+                        cpuUsage: '45%',
+                        memoryUsage: '65%'
+                    }
+                }
+            };
+            
+            return Promise.resolve(mockData[endpoint] || {});
         }
 
         // 定期刷新数据
