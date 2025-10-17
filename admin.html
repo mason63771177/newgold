@@ -1298,7 +1298,10 @@
         async function apiRequest(endpoint, options = {}) {
             // 如果是线上环境（API_BASE_URL为null），返回模拟数据
             if (!API_BASE_URL) {
-                return getMockData(endpoint);
+                console.log('请求模拟数据:', endpoint);
+                const mockData = await getMockData(endpoint);
+                console.log('返回数据:', mockData);
+                return mockData;
             }
             
             const url = `${API_BASE_URL}${endpoint}`;
