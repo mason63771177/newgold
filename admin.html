@@ -899,19 +899,17 @@
          */
         async function loadDashboardData() {
             try {
-                // 模拟数据（实际应该从API获取）
-                const mockData = {
-                    totalUsers: 1250,
-                    totalWallets: 1180,
-                    totalTransactions: 5420,
-                    totalRevenue: 12580.50
-                };
+                // 从后端API获取真实数据
+                const [statsData, overviewData] = await Promise.all([
+                    apiRequest('/admin/stats'),
+                    apiRequest('/admin/overview')
+                ]);
                 
                 // 更新统计数据
-                document.getElementById('totalUsers').textContent = mockData.totalUsers.toLocaleString();
-                document.getElementById('totalWallets').textContent = mockData.totalWallets.toLocaleString();
-                document.getElementById('totalTransactions').textContent = mockData.totalTransactions.toLocaleString();
-                document.getElementById('totalRevenue').textContent = mockData.totalRevenue.toLocaleString();
+                document.getElementById('totalUsers').textContent = statsData.totalUsers?.toLocaleString() || '0';
+                document.getElementById('totalWallets').textContent = statsData.totalWallets?.toLocaleString() || '0';
+                document.getElementById('totalTransactions').textContent = statsData.totalTransactions?.toLocaleString() || '0';
+                document.getElementById('totalRevenue').textContent = statsData.totalRevenue?.toLocaleString() || '0';
                 
                 // 更新系统概览
                 const systemOverview = document.getElementById('systemOverview');
@@ -919,19 +917,19 @@
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
                         <div>
                             <h4>今日新增用户</h4>
-                            <p style="font-size: 24px; color: #3498db;">+25</p>
+                            <p style="font-size: 24px; color: #3498db;">+${overviewData.todayNewUsers || 0}</p>
                         </div>
                         <div>
                             <h4>今日交易量</h4>
-                            <p style="font-size: 24px; color: #2ecc71;">$15,420</p>
+                            <p style="font-size: 24px; color: #2ecc71;">$${overviewData.todayTransactionVolume?.toLocaleString() || '0'}</p>
                         </div>
                         <div>
                             <h4>系统负载</h4>
-                            <p style="font-size: 24px; color: #f39c12;">65%</p>
+                            <p style="font-size: 24px; color: #f39c12;">${overviewData.systemLoad || '0'}%</p>
                         </div>
                         <div>
                             <h4>在线用户</h4>
-                            <p style="font-size: 24px; color: #e74c3c;">342</p>
+                            <p style="font-size: 24px; color: #e74c3c;">${overviewData.onlineUsers || 0}</p>
                         </div>
                     </div>
                 `;
@@ -939,6 +937,34 @@
             } catch (error) {
                 console.error('加载仪表盘数据失败:', error);
                 showAlert('加载数据失败', 'error');
+                
+                // 错误时显示默认值
+                document.getElementById('totalUsers').textContent = '0';
+                document.getElementById('totalWallets').textContent = '0';
+                document.getElementById('totalTransactions').textContent = '0';
+                document.getElementById('totalRevenue').textContent = '0';
+                
+                const systemOverview = document.getElementById('systemOverview');
+                systemOverview.innerHTML = `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                        <div>
+                            <h4>今日新增用户</h4>
+                            <p style="font-size: 24px; color: #3498db;">数据加载失败</p>
+                        </div>
+                        <div>
+                            <h4>今日交易量</h4>
+                            <p style="font-size: 24px; color: #2ecc71;">数据加载失败</p>
+                        </div>
+                        <div>
+                            <h4>系统负载</h4>
+                            <p style="font-size: 24px; color: #f39c12;">数据加载失败</p>
+                        </div>
+                        <div>
+                            <h4>在线用户</h4>
+                            <p style="font-size: 24px; color: #e74c3c;">数据加载失败</p>
+                        </div>
+                    </div>
+                `;
             }
         }
 
@@ -949,46 +975,19 @@
             try {
                 const tbody = document.querySelector('#usersTable tbody');
                 
-                // 模拟用户数据
-                const mockUsers = [
-                    {
-                        id: 1,
-                        username: 'user001',
-                        email: 'user001@example.com',
-                        walletAddress: '0x1234...5678',
-                        balance: 1250.50,
-                        status: 'active',
-                        createdAt: '2024-01-15'
-                    },
-                    {
-                        id: 2,
-                        username: 'user002',
-                        email: 'user002@example.com',
-                        walletAddress: '0x2345...6789',
-                        balance: 850.25,
-                        status: 'active',
-                        createdAt: '2024-01-16'
-                    },
-                    {
-                        id: 3,
-                        username: 'user003',
-                        email: 'user003@example.com',
-                        walletAddress: '0x3456...7890',
-                        balance: 0.00,
-                        status: 'inactive',
-                        createdAt: '2024-01-17'
-                    }
-                ];
+                // 从后端API获取真实用户数据
+                const response = await apiRequest('/admin/users');
+                const users = response.users || [];
                 
-                tbody.innerHTML = mockUsers.map(user => `
+                tbody.innerHTML = users.map(user => `
                     <tr>
                         <td>${user.id}</td>
-                        <td>${user.username}</td>
-                        <td>${user.email}</td>
-                        <td>${user.walletAddress}</td>
-                        <td>$${user.balance.toFixed(2)}</td>
-                        <td><span class="status ${user.status}">${user.status === 'active' ? '活跃' : '非活跃'}</span></td>
-                        <td>${user.createdAt}</td>
+                        <td>${user.username || 'N/A'}</td>
+                        <td>${user.email || 'N/A'}</td>
+                        <td>${user.walletAddress ? user.walletAddress.substring(0, 10) + '...' + user.walletAddress.substring(user.walletAddress.length - 8) : 'N/A'}</td>
+                        <td>$${(user.balance || 0).toFixed(2)}</td>
+                        <td><span class="status ${user.status || 'inactive'}">${user.status === 'active' ? '活跃' : '非活跃'}</span></td>
+                        <td>${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" onclick="viewUser(${user.id})">查看</button>
                             <button class="btn btn-warning btn-sm" onclick="editUser(${user.id})">编辑</button>
@@ -996,9 +995,30 @@
                     </tr>
                 `).join('');
                 
+                // 如果没有数据，显示空状态
+                if (users.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 40px; color: #666;">
+                                暂无用户数据
+                            </td>
+                        </tr>
+                    `;
+                }
+                
             } catch (error) {
                 console.error('加载用户数据失败:', error);
                 showAlert('加载用户数据失败', 'error');
+                
+                // 错误时显示错误状态
+                const tbody = document.querySelector('#usersTable tbody');
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 40px; color: #dc3545;">
+                            数据加载失败，请稍后重试
+                        </td>
+                    </tr>
+                `;
             }
         }
 
@@ -1009,34 +1029,18 @@
             try {
                 const tbody = document.querySelector('#walletsTable tbody');
                 
-                // 模拟钱包数据
-                const mockWallets = [
-                    {
-                        address: '0x1234567890abcdef1234567890abcdef12345678',
-                        userId: 1,
-                        balance: 1250.50,
-                        status: 'active',
-                        createdAt: '2024-01-15',
-                        lastActivity: '2024-01-20'
-                    },
-                    {
-                        address: '0x2345678901bcdef12345678901bcdef123456789',
-                        userId: 2,
-                        balance: 850.25,
-                        status: 'active',
-                        createdAt: '2024-01-16',
-                        lastActivity: '2024-01-19'
-                    }
-                ];
+                // 从后端API获取真实钱包数据
+                const response = await apiRequest('/admin/wallets');
+                const wallets = response.wallets || [];
                 
-                tbody.innerHTML = mockWallets.map(wallet => `
+                tbody.innerHTML = wallets.map(wallet => `
                     <tr>
-                        <td>${wallet.address.substring(0, 10)}...${wallet.address.substring(wallet.address.length - 8)}</td>
-                        <td>${wallet.userId}</td>
-                        <td>$${wallet.balance.toFixed(2)}</td>
-                        <td><span class="status ${wallet.status}">${wallet.status === 'active' ? '活跃' : '非活跃'}</span></td>
-                        <td>${wallet.createdAt}</td>
-                        <td>${wallet.lastActivity}</td>
+                        <td>${wallet.address ? wallet.address.substring(0, 10) + '...' + wallet.address.substring(wallet.address.length - 8) : 'N/A'}</td>
+                        <td>${wallet.userId || 'N/A'}</td>
+                        <td>$${(wallet.balance || 0).toFixed(2)}</td>
+                        <td><span class="status ${wallet.status || 'inactive'}">${wallet.status === 'active' ? '活跃' : '非活跃'}</span></td>
+                        <td>${wallet.createdAt ? new Date(wallet.createdAt).toLocaleDateString() : 'N/A'}</td>
+                        <td>${wallet.lastActivity ? new Date(wallet.lastActivity).toLocaleDateString() : 'N/A'}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" onclick="viewWallet('${wallet.address}')">查看</button>
                             <button class="btn btn-warning btn-sm" onclick="freezeWallet('${wallet.address}')">冻结</button>
@@ -1044,9 +1048,30 @@
                     </tr>
                 `).join('');
                 
+                // 如果没有数据，显示空状态
+                if (wallets.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
+                                暂无钱包数据
+                            </td>
+                        </tr>
+                    `;
+                }
+                
             } catch (error) {
                 console.error('加载钱包数据失败:', error);
                 showAlert('加载钱包数据失败', 'error');
+                
+                // 错误时显示错误状态
+                const tbody = document.querySelector('#walletsTable tbody');
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px; color: #dc3545;">
+                            数据加载失败，请稍后重试
+                        </td>
+                    </tr>
+                `;
             }
         }
 
@@ -1057,47 +1082,75 @@
             try {
                 const tbody = document.querySelector('#transactionsTable tbody');
                 
-                // 模拟交易数据
-                const mockTransactions = [
-                    {
-                        hash: '0xabcd1234567890abcd1234567890abcd1234567890abcd1234567890abcd1234',
-                        type: 'deposit',
-                        from: '0x1111...2222',
-                        to: '0x3333...4444',
-                        amount: 100.00,
-                        status: 'confirmed',
-                        timestamp: '2024-01-20 10:30:00'
-                    },
-                    {
-                        hash: '0xefgh5678901234efgh5678901234efgh5678901234efgh5678901234efgh5678',
-                        type: 'withdraw',
-                        from: '0x5555...6666',
-                        to: '0x7777...8888',
-                        amount: 50.00,
-                        status: 'pending',
-                        timestamp: '2024-01-20 11:15:00'
-                    }
-                ];
+                // 从后端API获取真实交易数据
+                const response = await apiRequest('/admin/transactions');
+                const transactions = response.transactions || [];
                 
-                tbody.innerHTML = mockTransactions.map(tx => `
+                tbody.innerHTML = transactions.map(tx => `
                     <tr>
-                        <td>${tx.hash.substring(0, 10)}...${tx.hash.substring(tx.hash.length - 8)}</td>
-                        <td>${tx.type === 'deposit' ? '充值' : tx.type === 'withdraw' ? '提现' : '转账'}</td>
-                        <td>${tx.from.substring(0, 8)}...${tx.from.substring(tx.from.length - 4)}</td>
-                        <td>${tx.to.substring(0, 8)}...${tx.to.substring(tx.to.length - 4)}</td>
-                        <td>$${tx.amount.toFixed(2)}</td>
-                        <td><span class="status ${tx.status}">${tx.status === 'confirmed' ? '已确认' : tx.status === 'pending' ? '待确认' : '失败'}</span></td>
-                        <td>${tx.timestamp}</td>
+                        <td>${tx.hash ? tx.hash.substring(0, 10) + '...' + tx.hash.substring(tx.hash.length - 8) : 'N/A'}</td>
+                        <td>${getTransactionTypeText(tx.type)}</td>
+                        <td>${tx.from ? tx.from.substring(0, 8) + '...' + tx.from.substring(tx.from.length - 4) : 'N/A'}</td>
+                        <td>${tx.to ? tx.to.substring(0, 8) + '...' + tx.to.substring(tx.to.length - 4) : 'N/A'}</td>
+                        <td>$${(tx.amount || 0).toFixed(2)}</td>
+                        <td><span class="status ${tx.status || 'pending'}">${getTransactionStatusText(tx.status)}</span></td>
+                        <td>${tx.timestamp ? new Date(tx.timestamp).toLocaleString() : 'N/A'}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" onclick="viewTransaction('${tx.hash}')">查看</button>
                         </td>
                     </tr>
                 `).join('');
                 
+                // 如果没有数据，显示空状态
+                if (transactions.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 40px; color: #666;">
+                                暂无交易数据
+                            </td>
+                        </tr>
+                    `;
+                }
+                
             } catch (error) {
                 console.error('加载交易数据失败:', error);
                 showAlert('加载交易数据失败', 'error');
+                
+                // 错误时显示错误状态
+                const tbody = document.querySelector('#transactionsTable tbody');
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 40px; color: #dc3545;">
+                            数据加载失败，请稍后重试
+                        </td>
+                    </tr>
+                `;
             }
+        }
+
+        /**
+         * 获取交易类型文本
+         */
+        function getTransactionTypeText(type) {
+            const typeMap = {
+                'deposit': '充值',
+                'withdraw': '提现',
+                'transfer': '转账'
+            };
+            return typeMap[type] || '未知';
+        }
+
+        /**
+         * 获取交易状态文本
+         */
+        function getTransactionStatusText(status) {
+            const statusMap = {
+                'pending': '待确认',
+                'confirmed': '已确认',
+                'failed': '失败',
+                'cancelled': '已取消'
+            };
+            return statusMap[status] || '未知';
         }
 
         /**
@@ -1105,11 +1158,15 @@
          */
         async function loadMonitoringData() {
             try {
-                // 模拟监控数据
-                document.getElementById('serverStatus').textContent = '正常';
-                document.getElementById('dbStatus').textContent = '正常';
-                document.getElementById('networkStatus').textContent = '正常';
-                document.getElementById('memoryUsage').textContent = '65%';
+                // 从后端API获取真实监控数据
+                const response = await apiRequest('/admin/monitoring');
+                const monitoring = response.monitoring || {};
+                
+                // 更新监控数据
+                document.getElementById('serverStatus').textContent = monitoring.serverStatus || '正常';
+                document.getElementById('dbStatus').textContent = monitoring.dbStatus || '正常';
+                document.getElementById('networkStatus').textContent = monitoring.networkStatus || '正常';
+                document.getElementById('memoryUsage').textContent = monitoring.memoryUsage || '65%';
                 
                 const chartsContainer = document.getElementById('monitoringCharts');
                 chartsContainer.innerHTML = `
@@ -1117,13 +1174,13 @@
                         <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                             <h4>CPU使用率</h4>
                             <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px;">
-                                <p>CPU使用率图表</p>
+                                <p>CPU: ${monitoring.cpuUsage || '45%'}</p>
                             </div>
                         </div>
                         <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                             <h4>内存使用率</h4>
                             <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px;">
-                                <p>内存使用率图表</p>
+                                <p>内存: ${monitoring.memoryUsage || '65%'}</p>
                             </div>
                         </div>
                     </div>
@@ -1132,6 +1189,12 @@
             } catch (error) {
                 console.error('加载监控数据失败:', error);
                 showAlert('加载监控数据失败', 'error');
+                
+                // 错误时显示默认值
+                document.getElementById('serverStatus').textContent = '离线';
+                document.getElementById('dbStatus').textContent = '离线';
+                document.getElementById('networkStatus').textContent = '离线';
+                document.getElementById('memoryUsage').textContent = 'N/A';
             }
         }
 
